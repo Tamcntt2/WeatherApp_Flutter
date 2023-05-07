@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/models/forecast.dart';
+import 'package:weather_app/utils/epoch_time.dart';
 import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
 
@@ -6,9 +8,9 @@ import '../utils/ui_utils.dart';
 import 'my_separator.dart';
 
 class MyColumnChart extends StatelessWidget {
-  List<int> listDegrees;
+  List<Daily> listDaily;
 
-  MyColumnChart(this.listDegrees, {super.key});
+  MyColumnChart({required this.listDaily});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,10 @@ class MyColumnChart extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemCount: 7,
                 itemBuilder: (BuildContext context, int index) {
-                  return ItemColumnChart(index, listDegrees[index]);
+                  return ItemColumnChart(
+                      index: index,
+                      timestamps: listDaily[index].dt!,
+                      humidity: listDaily[index].humidity!);
                 }),
           ),
         ],
@@ -31,10 +36,12 @@ class MyColumnChart extends StatelessWidget {
 }
 
 class ItemColumnChart extends StatelessWidget {
+  int timestamps;
+  int humidity;
   int index;
-  int degrees;
 
-  ItemColumnChart(this.index, this.degrees, {super.key});
+  ItemColumnChart(
+      {required this.index, required this.timestamps, required this.humidity});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +51,7 @@ class ItemColumnChart extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            'SUN',
+            '${EpochTime.getWeekDay(timestamps)}',
             style: AppStyles.h5.copyWith(
                 color: index == 0 ? Colors.white : AppColors.lightGrey),
           ),
@@ -59,10 +66,10 @@ class ItemColumnChart extends StatelessWidget {
                   Column(
                     children: [
                       Container(
-                        height: 200 / 100 * (100 - degrees),
+                        height: 200 / 100 * (100 - humidity),
                       ),
                       Container(
-                        height: 200 / 100 * degrees,
+                        height: 200 / 100 * humidity,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                               colors: index.floor().isEven
@@ -91,7 +98,7 @@ class ItemColumnChart extends StatelessWidget {
                 height: 10,
               ),
               Text(
-                '$degrees%',
+                '$humidity%',
                 style: AppStyles.h4.copyWith(color: Colors.white),
               )
             ],

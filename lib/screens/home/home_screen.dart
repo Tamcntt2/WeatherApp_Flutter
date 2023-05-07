@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/screens/home/temperature_page.dart';
-import 'package:weather_app/screens/home/precipitation_page.dart';
+import 'package:weather_app/screens/home/humidity_page.dart';
 import 'package:weather_app/screens/home/radar_page.dart';
 import 'package:weather_app/screens/home/today_page.dart';
 
@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
             body: TabBarView(children: [
               TodayPage(),
               TemperaturePage(),
-              PrecipitationPage(),
+              HumidityPage(),
               RadarPage()
             ]),
           ),
