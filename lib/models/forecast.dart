@@ -64,11 +64,11 @@ class Daily {
   double? dewPoint;
   double? windSpeed;
   int? windDeg;
-  double? windGust;
+  dynamic windGust;
   List<Weather2>? weather;
   int? clouds;
-  double? pop;
-  double? uvi;
+  dynamic pop;
+  dynamic uvi;
 
   Daily(
       {this.dt,
@@ -228,19 +228,19 @@ class Temp {
 
 class Hourly {
   int? dt;
-  double? temp;
-  double? feelsLike;
+  dynamic temp;
+  dynamic feelsLike;
   int? pressure;
   int? humidity;
   double? dewPoint;
-  double? uvi;
+  dynamic uvi;
   int? clouds;
   int? visibility;
   double? windSpeed;
   int? windDeg;
-  double? windGust;
+  dynamic windGust;
   List<Weather1>? weather;
-  double? pop;
+  dynamic pop;
 
   Hourly(
       {this.dt,
@@ -328,17 +328,17 @@ class Current {
   int? dt;
   int? sunrise;
   int? sunset;
-  double? temp;
-  double? feelsLike;
+  dynamic temp;
+  dynamic feelsLike;
   int? pressure;
   int? humidity;
   double? dewPoint;
-  double? uvi;
+  dynamic uvi;
   int? clouds;
   int? visibility;
   double? windSpeed;
   int? windDeg;
-  double? windGust;
+  dynamic windGust;
   List<Weather>? weather;
 
   Current(

@@ -412,9 +412,8 @@ class Details extends StatelessWidget {
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Image.network(
               'http://openweathermap.org/img/wn/${current?.weather?[0].icon}@4x.png',
-              width: 250,
-              height: 180,
-              color: Colors.transparent,
+              width: 180,
+              height: 130,
             ),
             SizedBox(
               width: 130,

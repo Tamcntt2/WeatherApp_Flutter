@@ -21,6 +21,8 @@ class UIUtils {
     }
     return result;
   }
+
+  static String keyGoogleMap = 'AIzaSyC4w2mDNzjs2tkCp5f_EO_n6BNBa3erKxE';
 }
 
 
