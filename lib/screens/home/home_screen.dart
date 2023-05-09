@@ -4,6 +4,8 @@ import 'package:weather_app/screens/home/humidity_page.dart';
 import 'package:weather_app/screens/home/radar_page.dart';
 import 'package:weather_app/screens/home/today_page.dart';
 
+import 'my_drawer.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -55,10 +57,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             drawer: const Drawer(
-                child: Icon(
-              Icons.menu,
-              size: 24,
-            )),
+              child: MyDrawer(),
+            ),
             body: TabBarView(children: [
               TodayPage(),
               TemperaturePage(),

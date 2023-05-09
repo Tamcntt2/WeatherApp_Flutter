@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:weather_app/bloc/weather_bloc.dart';
+import 'package:weather_app/utils/epoch_time.dart';
 import 'package:weather_app/utils/ui_utils.dart';
 import 'package:weather_app/values/app_assets.dart';
 import 'package:weather_app/values/app_colors.dart';
@@ -54,7 +55,7 @@ class TodayView extends StatelessWidget {
         Details(forecast: forecast),
         AirQuality(31),
         const CoronavirusLastest(),
-        const SunMoon(),
+        SunMoon(forecast: forecast),
       ]),
     );
   }
@@ -190,15 +191,17 @@ class _NextDayForecastState extends State<NextDayForecast> {
             expandedHeaderPadding: const EdgeInsets.only(top: 0),
             elevation: 0,
             dividerColor: Colors.transparent,
-            children: _isOpen.map<ExpansionPanel>((bool item) {
+            children: _isOpen.asMap().entries.map<ExpansionPanel>((item) {
+              print(item.key);
               return ExpansionPanel(
                 backgroundColor: Colors.transparent,
                 canTapOnHeader: true,
                 headerBuilder: (BuildContext context, bool isExpanded) {
-                  return const DayCollapseForecast();
+                  return DayCollapseForecast(
+                      index: item.key, forecast: forecast);
                 },
-                body: const DayExpandForecast(),
-                isExpanded: item,
+                body: DayExpandForecast(index: item.key, forecast: forecast),
+                isExpanded: item.value,
               );
             }).toList(),
             expansionCallback: (panelIndex, isExpanded) {
@@ -235,49 +238,78 @@ class _NextDayForecastState extends State<NextDayForecast> {
 }
 
 class DayExpandForecast extends StatelessWidget {
-  const DayExpandForecast({Key? key}) : super(key: key);
+  Forecast forecast;
+  int index;
+
+  DayExpandForecast({super.key, required this.forecast, required this.index});
 
   @override
   Widget build(BuildContext context) {
+    bool _isToday = index == 0;
+    List<Hourly>? listHourlyAll = forecast.hourly;
+    int dtCurrent = forecast.current!.dt!;
+    int hourCurrent = EpochTime.getDateTime(dtCurrent).hour;
+    int start = _isToday ? 0 : index * 24 - hourCurrent;
+    int end = 24 - hourCurrent + index * 24;
+    List<Hourly> listHourly = [];
+    for (int i = start; i <= end; i++) {
+      listHourly.add(listHourlyAll![i]);
+    }
+
     return SizedBox(
       height: 100,
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: 24,
+          itemCount: listHourly.length,
           itemBuilder: (BuildContext context, int index) {
-            return const ItemDayExpandForecast();
+            return ItemDayExpandForecast(
+                hourly: listHourly[index], isCurrent: _isToday && index == 0);
           }),
     );
   }
 }
 
 class ItemDayExpandForecast extends StatelessWidget {
-  const ItemDayExpandForecast({Key? key}) : super(key: key);
+  Hourly hourly;
+  bool isCurrent;
+
+  ItemDayExpandForecast(
+      {super.key, required this.hourly, required this.isCurrent});
 
   @override
   Widget build(BuildContext context) {
+    DateTime dateSelected = EpochTime.getDateTime(hourly.dt!);
+    String textHour = dateSelected.hour == 0
+        ? '00 AM'
+        : DateFormat('hh aaa').format(dateSelected);
     return Container(
       height: 90,
       width: 40,
       margin: const EdgeInsets.only(right: 14),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xff36373C), Color(0xff2A2C32)],
-          )),
+          border: isCurrent
+              ? Border.all(color: Colors.white)
+              : Border.all(color: Colors.transparent),
+          color: isCurrent ? const Color(0xff686975) : const Color(0xff3A3D4B),
+          gradient: isCurrent
+              ? null
+              : const LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0xff36373C), Color(0xff2A2C32)],
+                )),
       child:
           Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        Image.asset(
-          AppAssets.sunCloudy,
+        Image.network(
+          'http://openweathermap.org/img/wn/${hourly.weather![0].icon}@4x.png',
           height: 20,
           width: 25,
         ),
         Column(
           children: [
             Text(
-              '71°',
+              '${hourly.temp!.round()}°',
               style: AppStyles.h4
                   .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
             ),
@@ -285,7 +317,7 @@ class ItemDayExpandForecast extends StatelessWidget {
               height: 5,
             ),
             Text(
-              '6 AM',
+              textHour,
               style: AppStyles.h6.copyWith(color: AppColors.lightGrey),
             )
           ],
@@ -296,10 +328,16 @@ class ItemDayExpandForecast extends StatelessWidget {
 }
 
 class DayCollapseForecast extends StatelessWidget {
-  const DayCollapseForecast({Key? key}) : super(key: key);
+  Forecast forecast;
+  int index;
+
+  DayCollapseForecast({super.key, required this.forecast, required this.index});
 
   @override
   Widget build(BuildContext context) {
+    Daily daily = forecast.daily![index];
+    int? dt = daily.dt;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -310,26 +348,30 @@ class DayCollapseForecast extends StatelessWidget {
               size: 15,
               color: AppColors.lightGrey,
             ),
-            Padding(
+            Container(
               padding: const EdgeInsets.only(left: 8),
+              width: 60,
               child: Text(
-                'Today',
+                index == 0
+                    ? 'Today'
+                    : DateFormat('EEEE').format(EpochTime.getDateTime(dt!)),
                 style: AppStyles.h4.copyWith(color: Colors.white),
               ),
             )
           ],
         ),
-        Image.asset(
-          AppAssets.sunCloudy,
-          height: 19,
-          width: 24,
+        Image.network(
+          'http://openweathermap.org/img/wn/${daily.weather![0].icon}@4x.png',
+          height: 35,
+          width: 35,
         ),
         Row(
           children: [
-            Text('86°', style: AppStyles.h4.copyWith(color: Colors.white)),
+            Text('${daily.temp!.max!.round()}°',
+                style: AppStyles.h4.copyWith(color: Colors.white)),
             Padding(
               padding: const EdgeInsets.only(left: 23, right: 0),
-              child: Text('67°',
+              child: Text('${daily.temp!.min!.round()}°',
                   style: AppStyles.h4.copyWith(color: Colors.white)),
             ),
           ],
@@ -714,7 +756,9 @@ class CoronavirusLastest extends StatelessWidget {
 }
 
 class SunMoon extends StatelessWidget {
-  const SunMoon({Key? key}) : super(key: key);
+  Forecast forecast;
+
+  SunMoon({super.key, required this.forecast});
 
   @override
   Widget build(BuildContext context) {
@@ -732,7 +776,7 @@ class SunMoon extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Sun & Moon',
+          Text('Sun',
               style: AppStyles.h3
                   .copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
           Container(
@@ -741,7 +785,9 @@ class SunMoon extends StatelessWidget {
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Column(
               children: [
-                Text('05:57 AM',
+                Text(
+                    DateFormat('hh:mm aaa').format(
+                        EpochTime.getDateTime(forecast.current!.sunrise!)),
                     style: AppStyles.h3.copyWith(color: Colors.white)),
                 Container(
                   height: 10,
@@ -753,7 +799,9 @@ class SunMoon extends StatelessWidget {
             const SizedBox(height: 60, width: 90, child: Placeholder()),
             Column(
               children: [
-                Text('06:12 PM',
+                Text(
+                    DateFormat('hh:mm aaa').format(
+                        EpochTime.getDateTime(forecast.current!.sunset!)),
                     style: AppStyles.h3.copyWith(color: Colors.white)),
                 Container(
                   height: 10,
@@ -770,31 +818,31 @@ class SunMoon extends StatelessWidget {
           Container(
             height: 20,
           ),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Column(
-              children: [
-                Text('10:09 AM',
-                    style: AppStyles.h3.copyWith(color: Colors.white)),
-                Container(
-                  height: 10,
-                ),
-                Text('Moon rise',
-                    style: AppStyles.h3.copyWith(color: AppColors.lightGrey))
-              ],
-            ),
-            const SizedBox(height: 60, width: 90, child: Placeholder()),
-            Column(
-              children: [
-                Text('23:18 PM',
-                    style: AppStyles.h3.copyWith(color: Colors.white)),
-                Container(
-                  height: 10,
-                ),
-                Text('Moon set',
-                    style: AppStyles.h3.copyWith(color: AppColors.lightGrey))
-              ],
-            ),
-          ]),
+          // Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          //   Column(
+          //     children: [
+          //       Text('10:09 AM',
+          //           style: AppStyles.h3.copyWith(color: Colors.white)),
+          //       Container(
+          //         height: 10,
+          //       ),
+          //       Text('Moon rise',
+          //           style: AppStyles.h3.copyWith(color: AppColors.lightGrey))
+          //     ],
+          //   ),
+          //   const SizedBox(height: 60, width: 90, child: Placeholder()),
+          //   Column(
+          //     children: [
+          //       Text('23:18 PM',
+          //           style: AppStyles.h3.copyWith(color: Colors.white)),
+          //       Container(
+          //         height: 10,
+          //       ),
+          //       Text('Moon set',
+          //           style: AppStyles.h3.copyWith(color: AppColors.lightGrey))
+          //     ],
+          //   ),
+          // ]),
         ],
       ),
     );
