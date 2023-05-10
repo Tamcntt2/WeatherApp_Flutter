@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/screens/search/search_screen.dart';
 import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
 
@@ -51,9 +52,18 @@ class DrawerLocation extends StatelessWidget {
                   style: TextStyle(color: AppColors.lightGrey),
                 ),
               ),
-              Text(
-                'More',
-                style: AppStyles.h3.copyWith(color: Colors.blue),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SearchScreen(),
+                      ));
+                },
+                child: Text(
+                  'More',
+                  style: AppStyles.h3.copyWith(color: Colors.blue),
+                ),
               )
             ],
           ),

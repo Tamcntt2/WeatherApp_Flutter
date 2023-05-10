@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:weather_app/screens/stepper/stepper_page_4.dart';
 import 'package:weather_app/utils/ui_utils.dart';
 import 'package:weather_app/values/app_assets.dart';
 import 'package:weather_app/values/app_styles.dart';
+
+import '../home/home_screen.dart';
 
 class StepperPage3 extends StatelessWidget {
   const StepperPage3({Key? key}) : super(key: key);
@@ -14,26 +17,38 @@ class StepperPage3 extends StatelessWidget {
     String title = 'Weather Around\nthe World';
     String describe = 'Add any location you want and \nswipe easily to chnage.';
     String image = AppAssets.stepper3;
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xff2C2D35), Color(0xff484B5B)],
-        ),
-      ),
-      child: Column(children: [
-        Expanded(
-            child: Center(
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xff2C2D35), Color(0xff484B5B)],
+            ),
+          ),
+          child: Column(children: [
+            Expanded(
+                child: Center(
               child: SizedBox(
                 height: 300,
                 width: 300,
                 child: Stack(
                   children: [
-                    const Positioned(
+                    Positioned(
                       top: 0,
                       right: 0,
-                      child: Text(
-                        'Skip',
-                        style: TextStyle(color: Colors.white, fontSize: 14),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomeScreen(),
+                              ),
+                              (route) => false);
+                        },
+                        child: Text(
+                          'Skip',
+                          style: TextStyle(color: Colors.white, fontSize: 14),
+                        ),
                       ),
                     ),
                     Image.asset(image),
@@ -61,8 +76,8 @@ class StepperPage3 extends StatelessWidget {
                 ),
               ),
             )),
-        Expanded(
-            child: Stack(
+            Expanded(
+                child: Stack(
               children: [
                 Transform.scale(
                     scale: 1.25,
@@ -108,8 +123,18 @@ class StepperPage3 extends StatelessWidget {
                               colors: [Color(0xff484B5B), Color(0xff2C2D35)],
                             ),
                           ),
-                          child: const Icon(Icons.arrow_forward_outlined,
-                              color: Colors.white),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => StepperPage4(),
+                                  ),
+                                  (route) => false);
+                            },
+                            child: const Icon(Icons.arrow_forward_outlined,
+                                color: Colors.white),
+                          ),
                         ),
                         // progressColor: Colors.green,
                         circularStrokeCap: CircularStrokeCap.round,
@@ -123,7 +148,9 @@ class StepperPage3 extends StatelessWidget {
               ],
               //
             ))
-      ]),
+          ]),
+        ),
+      ),
     );
   }
 }

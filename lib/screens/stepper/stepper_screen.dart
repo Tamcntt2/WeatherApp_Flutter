@@ -6,9 +6,6 @@ class StepperScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
-        child: Scaffold(
-      body: StepperPage1(),
-    ));
+    return StepperPage1();
   }
 }
