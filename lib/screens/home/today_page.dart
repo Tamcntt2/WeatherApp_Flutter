@@ -775,7 +775,7 @@ class SunMoon extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Sun',
+          Text('Sun & Moon',
               style: AppStyles.h3
                   .copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
           Container(
@@ -817,31 +817,35 @@ class SunMoon extends StatelessWidget {
           Container(
             height: 20,
           ),
-          // Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          //   Column(
-          //     children: [
-          //       Text('10:09 AM',
-          //           style: AppStyles.h3.copyWith(color: Colors.white)),
-          //       Container(
-          //         height: 10,
-          //       ),
-          //       Text('Moon rise',
-          //           style: AppStyles.h3.copyWith(color: AppColors.lightGrey))
-          //     ],
-          //   ),
-          //   const SizedBox(height: 60, width: 90, child: Placeholder()),
-          //   Column(
-          //     children: [
-          //       Text('23:18 PM',
-          //           style: AppStyles.h3.copyWith(color: Colors.white)),
-          //       Container(
-          //         height: 10,
-          //       ),
-          //       Text('Moon set',
-          //           style: AppStyles.h3.copyWith(color: AppColors.lightGrey))
-          //     ],
-          //   ),
-          // ]),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Column(
+              children: [
+                Text(
+                    DateFormat('hh:mm aaa').format(
+                        EpochTime.getDateTime(forecast.daily![0].moonrise!)),
+                    style: AppStyles.h3.copyWith(color: Colors.white)),
+                Container(
+                  height: 10,
+                ),
+                Text('Moon rise',
+                    style: AppStyles.h3.copyWith(color: AppColors.lightGrey))
+              ],
+            ),
+            const SizedBox(height: 60, width: 90, child: Placeholder()),
+            Column(
+              children: [
+                Text(
+                    DateFormat('hh:mm aaa').format(
+                        EpochTime.getDateTime(forecast.daily![0].moonset!)),
+                    style: AppStyles.h3.copyWith(color: Colors.white)),
+                Container(
+                  height: 10,
+                ),
+                Text('Moon set',
+                    style: AppStyles.h3.copyWith(color: AppColors.lightGrey))
+              ],
+            ),
+          ]),
         ],
       ),
     );
