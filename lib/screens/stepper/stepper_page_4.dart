@@ -4,6 +4,8 @@ import 'package:weather_app/utils/ui_utils.dart';
 import 'package:weather_app/values/app_assets.dart';
 import 'package:weather_app/values/app_styles.dart';
 
+import '../home/home_screen.dart';
+
 class StepperPage4 extends StatelessWidget {
   const StepperPage4({Key? key}) : super(key: key);
 
@@ -14,26 +16,38 @@ class StepperPage4 extends StatelessWidget {
     String title = 'Detailed Hourly \nForecast';
     String describe = 'Get in - depth weather \ninformation.';
     String image = AppAssets.stepper4;
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xff2C2D35), Color(0xff484B5B)],
-        ),
-      ),
-      child: Column(children: [
-        Expanded(
-            child: Center(
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xff2C2D35), Color(0xff484B5B)],
+            ),
+          ),
+          child: Column(children: [
+            Expanded(
+                child: Center(
               child: SizedBox(
                 height: 300,
                 width: 300,
                 child: Stack(
                   children: [
-                    const Positioned(
+                    Positioned(
                       top: 0,
                       right: 0,
-                      child: Text(
-                        'Skip',
-                        style: TextStyle(color: Colors.white, fontSize: 14),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomeScreen(),
+                              ),
+                              (route) => false);
+                        },
+                        child: Text(
+                          'Skip',
+                          style: TextStyle(color: Colors.white, fontSize: 14),
+                        ),
                       ),
                     ),
                     Image.asset(image),
@@ -61,8 +75,8 @@ class StepperPage4 extends StatelessWidget {
                 ),
               ),
             )),
-        Expanded(
-            child: Stack(
+            Expanded(
+                child: Stack(
               children: [
                 Transform.scale(
                     scale: 1.25,
@@ -108,8 +122,18 @@ class StepperPage4 extends StatelessWidget {
                               colors: [Color(0xff484B5B), Color(0xff2C2D35)],
                             ),
                           ),
-                          child: const Icon(Icons.arrow_forward_outlined,
-                              color: Colors.white),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HomeScreen(),
+                                  ),
+                                  (route) => false);
+                            },
+                            child: const Icon(Icons.arrow_forward_outlined,
+                                color: Colors.white),
+                          ),
                         ),
                         // progressColor: Colors.green,
                         circularStrokeCap: CircularStrokeCap.round,
@@ -123,7 +147,9 @@ class StepperPage4 extends StatelessWidget {
               ],
               //
             ))
-      ]),
+          ]),
+        ),
+      ),
     );
   }
 }

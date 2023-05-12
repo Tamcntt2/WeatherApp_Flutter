@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/values/app_assets.dart';
+import 'package:weather_app/utils/ui_utils.dart';
 import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
 
+import '../models/forecast.dart';
+import '../utils/epoch_time.dart';
+
 class NextDayDetailsForecast extends StatelessWidget {
-  const NextDayDetailsForecast({Key? key}) : super(key: key);
+  Forecast forecast;
+
+  NextDayDetailsForecast({required this.forecast});
 
   @override
   Widget build(BuildContext context) {
@@ -16,16 +21,19 @@ class NextDayDetailsForecast extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           padding: const EdgeInsets.only(right: 14),
           scrollDirection: Axis.vertical,
-          itemCount: 7,
+          itemCount: 5,
           itemBuilder: (BuildContext context, int index) {
-            return ItemDayDetailsForecast();
+            Daily daily = forecast.daily![index];
+            return ItemDayDetailsForecast(daily: daily);
           }),
     );
   }
 }
 
 class ItemDayDetailsForecast extends StatelessWidget {
-  const ItemDayDetailsForecast({Key? key}) : super(key: key);
+  Daily daily;
+
+  ItemDayDetailsForecast({required this.daily});
 
   @override
   Widget build(BuildContext context) {
@@ -45,18 +53,20 @@ class ItemDayDetailsForecast extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
-              'SUN',
+              '${EpochTime.getWeekDay(daily.dt!)}',
               style: AppStyles.h4.copyWith(color: AppColors.lightGrey),
             ),
             Text(
-              'SEP 12',
+              '${EpochTime.getMonth(daily.dt!)} ${EpochTime.getDateTime(daily.dt!).day}',
               style: AppStyles.h4.copyWith(color: Colors.white),
             ),
           ],
         ),
         Row(
           children: [
-            Image.asset(AppAssets.sunCloudy, height: 30),
+            Image.network(
+                'http://openweathermap.org/img/wn/${daily.weather![0].icon}@4x.png',
+                height: 40),
             Container(
               width: 10,
             ),
@@ -65,11 +75,11 @@ class ItemDayDetailsForecast extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  'Thunderstorms',
+                  UIUtils.capitalizeAllWord(daily.weather![0].description!),
                   style: AppStyles.h4.copyWith(color: AppColors.yellow),
                 ),
                 Text(
-                  'ssw 11 km/h',
+                  'wind ${daily.windSpeed!.round()} km/h',
                   style: AppStyles.h4.copyWith(color: AppColors.lightGrey),
                 )
               ],
@@ -84,7 +94,7 @@ class ItemDayDetailsForecast extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  '33° / 28°',
+                  '${daily.temp!.min!.round()}° / ${daily.temp!.max!.round()}°',
                   style: AppStyles.h4.copyWith(color: Colors.white),
                 ),
                 Row(
@@ -98,7 +108,7 @@ class ItemDayDetailsForecast extends StatelessWidget {
                       width: 10,
                     ),
                     Text(
-                      '30%',
+                      '${daily.humidity}%',
                       style: AppStyles.h4.copyWith(color: Colors.white),
                     )
                   ],
