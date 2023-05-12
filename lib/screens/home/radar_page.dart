@@ -11,14 +11,15 @@ class RadarPage extends StatefulWidget {
 class _RadarPageState extends State<RadarPage> {
   late GoogleMapController mapController;
 
-  void _onMapCreated(GoogleMapController controller){
+  void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
+
   @override
   Widget build(BuildContext context) {
     return GoogleMap(
-      onMapCreated: _onMapCreated,
+        onMapCreated: _onMapCreated,
         initialCameraPosition:
-            CameraPosition(target: LatLng(37, -122), zoom: 12));
+            CameraPosition(target: LatLng(105.847130, 21.030653), zoom: 12));
   }
 }
