@@ -54,7 +54,7 @@ class TodayView extends StatelessWidget {
         NextDayForecast(forecast: forecast),
         Details(forecast: forecast),
         AirQuality(31),
-        const CoronavirusLastest(),
+        // const CoronavirusLastest(),
         SunMoon(forecast: forecast),
       ]),
     );
@@ -130,8 +130,8 @@ class ItemHourForecast extends StatelessWidget {
             child: Transform.scale(
               scale: 1.5,
               alignment: Alignment.center,
-              child: Image.network(
-                'http://openweathermap.org/img/wn/${hourly.weather?[0].icon}@4x.png',
+              child: Image.asset(
+                AppAssets.iconWeather[hourly.weather?[0].icon]!,
                 width: 24,
                 height: 18,
                 color: Colors.transparent,
@@ -301,8 +301,8 @@ class ItemDayExpandForecast extends StatelessWidget {
                 )),
       child:
           Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        Image.network(
-          'http://openweathermap.org/img/wn/${hourly.weather![0].icon}@4x.png',
+        Image.asset(
+          AppAssets.iconWeather[hourly.weather![0].icon]!,
           height: 20,
           width: 25,
         ),
@@ -360,8 +360,8 @@ class DayCollapseForecast extends StatelessWidget {
             )
           ],
         ),
-        Image.network(
-          'http://openweathermap.org/img/wn/${daily.weather![0].icon}@4x.png',
+        Image.asset(
+          AppAssets.iconWeather[daily.weather![0].icon]!,
           height: 35,
           width: 35,
         ),
@@ -410,8 +410,8 @@ class Details extends StatelessWidget {
                     color: Colors.white, fontWeight: FontWeight.bold)),
           ),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Image.network(
-              'http://openweathermap.org/img/wn/${current?.weather?[0].icon}@4x.png',
+            Image.asset(
+              AppAssets.iconWeather[current?.weather?[0].icon]!,
               width: 180,
               height: 130,
             ),
@@ -795,7 +795,14 @@ class SunMoon extends StatelessWidget {
                     style: AppStyles.h3.copyWith(color: AppColors.lightGrey))
               ],
             ),
-            const SizedBox(height: 60, width: 90, child: Placeholder()),
+            SizedBox(
+                height: 60,
+                width: 90,
+                child: Image.asset(
+                  AppAssets.sunAni,
+                  width: 90,
+                  height: 60,
+                )),
             Column(
               children: [
                 Text(
@@ -831,7 +838,14 @@ class SunMoon extends StatelessWidget {
                     style: AppStyles.h3.copyWith(color: AppColors.lightGrey))
               ],
             ),
-            const SizedBox(height: 60, width: 90, child: Placeholder()),
+            SizedBox(
+                height: 60,
+                width: 90,
+                child: Image.asset(
+                  AppAssets.moonAni,
+                  width: 90,
+                  height: 60,
+                )),
             Column(
               children: [
                 Text(
@@ -910,8 +924,8 @@ class TodayForecast extends StatelessWidget {
                 Transform.scale(
                   scale: 1.5,
                   alignment: Alignment.center,
-                  child: Image.network(
-                    'http://openweathermap.org/img/wn/${current?.weather?[0].icon}@4x.png',
+                  child: Image.asset(
+                    AppAssets.iconWeather[current?.weather?[0].icon]!,
                     width: 120,
                     height: 95,
                   ),

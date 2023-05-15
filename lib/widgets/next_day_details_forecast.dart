@@ -5,6 +5,7 @@ import 'package:weather_app/values/app_styles.dart';
 
 import '../models/forecast.dart';
 import '../utils/epoch_time.dart';
+import '../values/app_assets.dart';
 
 class NextDayDetailsForecast extends StatelessWidget {
   Forecast forecast;
@@ -64,8 +65,7 @@ class ItemDayDetailsForecast extends StatelessWidget {
         ),
         Row(
           children: [
-            Image.network(
-                'http://openweathermap.org/img/wn/${daily.weather![0].icon}@4x.png',
+            Image.asset(AppAssets.iconWeather[daily.weather![0].icon]!,
                 height: 40),
             Container(
               width: 10,

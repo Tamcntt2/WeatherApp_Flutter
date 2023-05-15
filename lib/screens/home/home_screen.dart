@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
             appBar: AppBar(
               title: const Center(
                   child: Text(
-                'Tamil Nadu, Chennai',
+                'Ha Noi, Viet Nam',
                 style: TextStyle(color: Colors.white, fontSize: 14),
               )),
               elevation: 0,

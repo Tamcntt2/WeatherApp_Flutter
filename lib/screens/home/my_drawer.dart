@@ -76,7 +76,7 @@ class DrawerLocation extends StatelessWidget {
             size: 19,
           ),
           title: Text(
-            'Chennai, TN',
+            'Ha Noi, Viet Nam',
             style: AppStyles.h3
                 .copyWith(fontWeight: FontWeight.bold, color: Colors.white),
           ),
