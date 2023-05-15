@@ -56,4 +56,5 @@ class ApiProvider {
       throw Exception('Failed to load data from API');
     }
   }
+
 }
