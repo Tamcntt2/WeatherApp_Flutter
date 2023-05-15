@@ -10,7 +10,7 @@ import 'demo_data.dart';
 import 'demo_data2.dart';
 
 class ApiProvider {
-  Future<Forecast> fetchForecast() async {
+  Future<Forecast> fetchForecastOneCall() async {
     //   String key = '1b5dcb72d707f1eca07003b425497af6';
     //   double lat = 21.030653;
     //   double lon = 105.847130;
@@ -42,7 +42,7 @@ class ApiProvider {
     return ForecastDaily.fromJson(data2);
   }
 
-  Future<List<MyLocation2>> fetchLocationFromAddress(String text) async {
+  Future<List<MyLocation2>> fetchListLocationFromAddress(String text) async {
     var recipesUrl = Uri.parse(
         'https://nominatim.openstreetmap.org/search?format=json&city=$text&addressdetail=1');
     final response = await http.get(recipesUrl);
@@ -56,5 +56,7 @@ class ApiProvider {
       throw Exception('Failed to load data from API');
     }
   }
+
+
 
 }

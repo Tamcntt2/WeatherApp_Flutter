@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:intl/intl.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:weather_app/models/location2.dart';
 import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
 
 import '../../models/location.dart';
+import '../../resources/api_repository.dart';
 
 class SearchScreen extends StatelessWidget {
   @override
@@ -57,8 +57,6 @@ class SearchScreen extends StatelessWidget {
       )),
     );
   }
-
-
 }
 
 class SearchView extends StatefulWidget {
@@ -120,11 +118,12 @@ class _SearchViewState extends State<SearchView> {
           },
           itemBuilder: (context, suggestion) {
             return ListTile(
-              title: Text(suggestion),
+              title: Text(suggestion.displayName!),
             );
           },
           onSuggestionSelected: (suggestion) {
-            this._textFieldController.text = suggestion;
+            this._textFieldController.text = suggestion.displayName!;
+            // ... open overview
           }),
     );
   }
@@ -209,50 +208,10 @@ class ItemLocation extends StatelessWidget {
 }
 
 class StateService {
-  static final List<String> states = [
-    'ANDAMAN AND NICOBAR ISLANDS',
-    'ANDHRA PRADESH',
-    'ARUNACHAL PRADESH',
-    'ASSAM',
-    'BIHAR',
-    'CHATTISGARH',
-    'CHANDIGARH',
-    'DAMAN AND DIU',
-    'DELHI',
-    'DADRA AND NAGAR HAVELI',
-    'GOA',
-    'GUJARAT',
-    'HIMACHAL PRADESH',
-    'HARYANA',
-    'JAMMU AND KASHMIR',
-    'JHARKHAND',
-    'KERALA',
-    'KARNATAKA',
-    'LAKSHADWEEP',
-    'MEGHALAYA',
-    'MAHARASHTRA',
-    'MANIPUR',
-    'MADHYA PRADESH',
-    'MIZORAM',
-    'NAGALAND',
-    'ORISSA',
-    'PUNJAB',
-    'PONDICHERRY',
-    'RAJASTHAN',
-    'SIKKIM',
-    'TAMIL NADU',
-    'TRIPURA',
-    'UTTARAKHAND',
-    'UTTAR PRADESH',
-    'WEST BENGAL',
-    'TELANGANA',
-    'LADAKH'
-  ];
-
-  static List<String> getSuggestions(String query) {
-    List<String> matches = [];
-    matches.addAll(states);
-    matches.retainWhere((s) => s.toLowerCase().contains(query.toLowerCase()));
-    return matches;
+  static Future<List<MyLocation2>> getSuggestions(String query) async {
+    final ApiRepository apiRepository = ApiRepository();
+    final List<MyLocation2> locations =
+        await apiRepository.fetchListLocationFromAddress(query);
+    return locations;
   }
 }

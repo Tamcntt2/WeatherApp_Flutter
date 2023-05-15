@@ -15,7 +15,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   Future<void> _onFetchWeather(
       WeatherFetched event, Emitter<WeatherState> emit) async {
     emit(WeatherLoading());
-    final Forecast forecast = await apiRepository.fetchForecast();
+    final Forecast forecast = await apiRepository.fetchForecastOneCall();
     // final ForecastDaily forecastDaily =
     //     await apiRepository.fetchForecastDaily();
     emit(WeatherLoaded(forecast: forecast));
