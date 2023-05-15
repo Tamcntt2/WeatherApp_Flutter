@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
 
 import '../../models/location.dart';
 
 class SearchScreen extends StatelessWidget {
-  const SearchScreen({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -27,10 +27,22 @@ class SearchScreen extends StatelessWidget {
           ),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(
-              'Location',
-              style: AppStyles.h2
-                  .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+            Row(
+              children: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                    )),
+                Text(
+                  'Location',
+                  style: AppStyles.h2.copyWith(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
             Container(
               height: 10,
@@ -45,6 +57,8 @@ class SearchScreen extends StatelessWidget {
       )),
     );
   }
+
+
 }
 
 class SearchView extends StatefulWidget {
@@ -56,6 +70,7 @@ class _SearchViewState extends State<SearchView> {
   final TextEditingController _textFieldController = TextEditingController();
 
   final _focusNode = FocusNode();
+
   // String _text = '';
 
   @override
