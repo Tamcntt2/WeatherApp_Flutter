@@ -132,15 +132,16 @@ class _SearchViewState extends State<SearchView> {
 class LocationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    List<MyLocation> listLocation = [];
-    listLocation.add(MyLocation(
-        name: 'Hà Nội', latitude: 21.030653, longtitude: 105.847130));
+    // List<MyLocation> listLocation = [];
+    // listLocation.add(MyLocation(
+    //     name: 'Hà Nội', latitude: 21.030653, longtitude: 105.847130));
 
     return ListView.builder(
         scrollDirection: Axis.vertical,
-        itemCount: listLocation.length,
+        // itemCount: listLocation.length,
         itemBuilder: (BuildContext context, int index) {
-          return ItemLocation(listLocation[index], index == 0);
+          return Placeholder();
+          // return ItemLocation(listLocation[index], index == 0);
         });
   }
 }
@@ -169,7 +170,7 @@ class ItemLocation extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    location.name,
+                    '${location.address!.city}, ${location.address!.country}',
                     style: AppStyles.h2.copyWith(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),

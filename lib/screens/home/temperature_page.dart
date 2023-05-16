@@ -28,6 +28,7 @@ class TemperaturePage extends StatelessWidget {
 
 class TemperatureView extends StatelessWidget {
   Forecast forecast;
+  bool _isOverview = false;
 
   TemperatureView({required this.forecast});
 
@@ -82,8 +83,6 @@ class TemperatureChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Container(
         padding: EdgeInsets.only(top: 35),
         decoration: BoxDecoration(

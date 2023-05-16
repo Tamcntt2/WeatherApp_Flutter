@@ -1,4 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:weather_app/models/location.dart';
 
 import '../models/air_quality.dart';
 import '../models/forecast.dart';

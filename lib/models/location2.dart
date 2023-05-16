@@ -1,4 +1,4 @@
-class MyLocation2 {
+class MyLocation2 { // Location from nominatim: get list location from address
   int? placeId;
   String? licence;
   String? osmType;

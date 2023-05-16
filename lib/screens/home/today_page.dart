@@ -35,7 +35,7 @@ class _TodayPageState extends State<TodayPage> {
         } else if (state is WeatherLoaded) {
           forecast = state.forecast!;
           airQuality = state.airQuality!;
-          return TodayView(forecast: forecast, airQuality: airQuality);
+          return ForecastTodayView(forecast: forecast, airQuality: airQuality);
         } else {
           return Container();
         }
@@ -44,11 +44,11 @@ class _TodayPageState extends State<TodayPage> {
   }
 }
 
-class TodayView extends StatelessWidget {
+class ForecastTodayView extends StatelessWidget {
   final Forecast forecast;
   final AirQuality airQuality;
 
-  const TodayView(
+  const ForecastTodayView(
       {super.key, required this.forecast, required this.airQuality});
 
   @override
@@ -168,7 +168,7 @@ class _NextDayForecastState extends State<NextDayForecast> {
     List<Daily>? listDaily = forecast.daily;
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.only(left: 23, right: 23, top: 10, bottom: 25),
+      padding: const EdgeInsets.only(left: 23, right: 23, top: 10, bottom: 20),
       margin: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -179,7 +179,7 @@ class _NextDayForecastState extends State<NextDayForecast> {
       ),
       child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
         Padding(
-          padding: const EdgeInsets.only(right: 15),
+          padding: const EdgeInsets.only(right: 15, top: 10),
           child: Text(
             'High    |    Low',
             style: AppStyles.h5.copyWith(color: AppColors.lightGrey),
@@ -220,19 +220,28 @@ class _NextDayForecastState extends State<NextDayForecast> {
           //       return isExpand ? const ItemDayExpandForecast() : ItemDayCollapseForecast();
           //     }),
         ),
-        Row(
-          children: [
-            Text(
-              'Show more ',
-              style: AppStyles.h4.copyWith(color: Colors.white),
-            ),
-            const Icon(
-              Icons.expand_more_outlined,
-              size: 10,
-              color: Colors.white,
-            ),
-          ],
-        )
+        // InkWell(
+        //   onTap: () {
+        //     setState(() {
+        //       for(bool i in _isOpen) {
+        //         i = true;
+        //       }
+        //     });
+        //   },
+        //   child: Row(
+        //     children: [
+        //       Text(
+        //         'Show more ',
+        //         style: AppStyles.h4.copyWith(color: Colors.white),
+        //       ),
+        //       const Icon(
+        //         Icons.expand_more_outlined,
+        //         size: 10,
+        //         color: Colors.white,
+        //       ),
+        //     ],
+        //   ),
+        // )
       ]),
     );
   }
@@ -922,14 +931,10 @@ class TodayForecast extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Transform.scale(
-                  scale: 1.5,
-                  alignment: Alignment.center,
-                  child: Image.asset(
-                    AppAssets.iconWeather[current?.weather?[0].icon]!,
-                    width: 120,
-                    height: 95,
-                  ),
+                Image.asset(
+                  AppAssets.iconWeather[current?.weather?[0].icon]!,
+                  width: 150,
+                  height: 120,
                 ),
                 ShaderMask(
                   shaderCallback: (Rect bounds) {
