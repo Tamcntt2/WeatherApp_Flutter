@@ -10,7 +10,9 @@ import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
 
 import '../../bloc/weather_state.dart';
+import '../../models/air_quality.dart';
 import '../../models/forecast.dart';
+import '../../resources/api_repository.dart';
 import '../../widgets/my_separator.dart';
 
 class TodayPage extends StatefulWidget {
@@ -22,6 +24,7 @@ class TodayPage extends StatefulWidget {
 
 class _TodayPageState extends State<TodayPage> {
   late Forecast forecast;
+  late AirQuality airQuality;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,8 @@ class _TodayPageState extends State<TodayPage> {
           return const BuildLoading();
         } else if (state is WeatherLoaded) {
           forecast = state.forecast!;
-          return TodayView(forecast: forecast);
+          airQuality = state.airQuality!;
+          return TodayView(forecast: forecast, airQuality: airQuality);
         } else {
           return Container();
         }
@@ -42,8 +46,10 @@ class _TodayPageState extends State<TodayPage> {
 
 class TodayView extends StatelessWidget {
   final Forecast forecast;
+  final AirQuality airQuality;
 
-  const TodayView({super.key, required this.forecast});
+  const TodayView(
+      {super.key, required this.forecast, required this.airQuality});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +59,7 @@ class TodayView extends StatelessWidget {
         NextHourForecast(forecast: forecast),
         NextDayForecast(forecast: forecast),
         Details(forecast: forecast),
-        AirQuality(31),
+        AirQualityView(airQuality.listt![0].components!.pm10!),
         // const CoronavirusLastest(),
         SunMoon(forecast: forecast),
       ]),
@@ -127,15 +133,10 @@ class ItemHourForecast extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 8, bottom: 16),
-            child: Transform.scale(
-              scale: 1.5,
-              alignment: Alignment.center,
-              child: Image.asset(
-                AppAssets.iconWeather[hourly.weather?[0].icon]!,
-                width: 24,
-                height: 18,
-                color: Colors.transparent,
-              ),
+            child: Image.asset(
+              AppAssets.iconWeather[hourly.weather![0].icon]!,
+              width: 24,
+              height: 18,
             ),
           ),
           Text('${hourly.temp?.round()}°',
@@ -467,10 +468,10 @@ class ItemDetail extends StatelessWidget {
   }
 }
 
-class AirQuality extends StatelessWidget {
-  double valuePM22;
+class AirQualityView extends StatelessWidget {
+  final double valuePM10;
 
-  AirQuality(this.valuePM22, {super.key});
+  AirQualityView(this.valuePM10);
 
   @override
   Widget build(BuildContext context) {
@@ -509,20 +510,20 @@ class AirQuality extends StatelessWidget {
                 height: 110,
                 child: Stack(
                   children: [
-                    CirclePointer(valuePM22),
+                    CirclePointer(valuePM10),
                     Center(
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              '$valuePM22',
+                              '${valuePM10.round()}',
                               style: const TextStyle(
                                   fontSize: 32,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              getTextAirQuality(valuePM22),
+                              getTextAirQuality(valuePM10),
                               style: AppStyles.h5.copyWith(color: Colors.white),
                             )
                           ]),
@@ -576,7 +577,7 @@ class AirQuality extends StatelessWidget {
     if (valuePM22 <= 35.4) return 'Moderate';
     if (valuePM22 <= 55.4) return 'Unhealthy for Sensitive Groups';
     if (valuePM22 <= 150.4) return 'Unhealthy';
-    if (valuePM22 <= 250.4) return 'Very Unhealthy';
+    if (valuePM22 <= 250) return 'Very Unhealthy';
     return 'Hazardous';
   }
 }

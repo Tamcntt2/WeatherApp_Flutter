@@ -1,3 +1,4 @@
+import 'package:weather_app/models/air_quality.dart';
 import 'package:weather_app/models/forecast.dart';
 import 'package:weather_app/models/forecast_daily.dart';
 import 'package:weather_app/models/location2.dart';
@@ -17,5 +18,9 @@ class ApiRepository {
 
   Future<List<MyLocation2>> fetchListLocationFromAddress(String text) {
     return _provider.fetchListLocationFromAddress(text);
+  }
+
+  Future<AirQuality> fetchAirQuality() {
+    return _provider.fetchAirQuality();
   }
 }

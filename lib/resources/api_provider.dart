@@ -4,6 +4,7 @@ import 'package:weather_app/models/forecast.dart';
 import 'package:http/http.dart' as http;
 import 'package:weather_app/utils/ui_utils.dart';
 
+import '../models/air_quality.dart';
 import '../models/forecast_daily.dart';
 import '../models/location2.dart';
 import 'demo_data.dart';
@@ -57,6 +58,18 @@ class ApiProvider {
     }
   }
 
-
-
+  Future<AirQuality> fetchAirQuality() async {
+    String key = 'bf94bd3a7d84cc009f132207bdea82e6';
+    double lat = 21.030653;
+    double lon = 105.847130;
+    var recipesUrl = Uri.parse(
+        'https://api.openweathermap.org/data/2.5/air_pollution?lat=$lat&lon=$lon&appid=$key');
+    final response = await http.get(recipesUrl);
+    if (response.statusCode == 200) {
+      final body = json.decode(response.body);
+      return AirQuality.fromJson(body);
+    } else {
+      throw Exception('Failed to load data from API');
+    }
+  }
 }

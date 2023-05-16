@@ -1,6 +1,7 @@
 import 'package:weather_app/bloc/weather_event.dart';
 import 'package:weather_app/bloc/weather_state.dart';
 import 'package:bloc/bloc.dart';
+import 'package:weather_app/models/air_quality.dart';
 import 'package:weather_app/models/forecast.dart';
 
 import '../resources/api_repository.dart';
@@ -16,8 +17,10 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       WeatherFetched event, Emitter<WeatherState> emit) async {
     emit(WeatherLoading());
     final Forecast forecast = await apiRepository.fetchForecastOneCall();
+    final AirQuality airQuality = await apiRepository.fetchAirQuality();
+
     // final ForecastDaily forecastDaily =
     //     await apiRepository.fetchForecastDaily();
-    emit(WeatherLoaded(forecast: forecast));
+    emit(WeatherLoaded(forecast: forecast, airQuality: airQuality));
   }
 }
