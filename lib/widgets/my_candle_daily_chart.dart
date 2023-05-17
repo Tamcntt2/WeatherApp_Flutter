@@ -7,10 +7,10 @@ import '../utils/epoch_time.dart';
 import '../utils/ui_utils.dart';
 import 'my_separator.dart';
 
-class MyCandleChart extends StatelessWidget {
+class MyCandleDailyChart extends StatelessWidget {
   Forecast forecast;
 
-  MyCandleChart({required this.forecast});
+  MyCandleDailyChart({required this.forecast});
 
   @override
   Widget build(BuildContext context) {

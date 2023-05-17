@@ -12,6 +12,7 @@ import 'package:weather_app/screens/home/today_page.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:weather_app/utils/current_location.dart';
 import 'package:http/http.dart' as http;
+import 'package:weather_app/utils/ui_utils.dart';
 
 import 'my_drawer.dart';
 
@@ -50,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     textAddress = '';
                   }
                   return Text(
-                    textAddress,
+                    UIUtils.convertNameCity(textAddress),
                     style: TextStyle(color: Colors.white, fontSize: 14),
                   );
                 },

@@ -5,12 +5,12 @@ import 'package:permission_handler/permission_handler.dart';
 import 'app.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Thêm dòng này
+  WidgetsFlutterBinding.ensureInitialized();
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
 
   var initializationSettingsAndroid =
-  new AndroidInitializationSettings('@mipmap/ic_launcher');
+      new AndroidInitializationSettings('@mipmap/ic_launcher');
 
   var initializationSettingsIOS = DarwinInitializationSettings(
     requestAlertPermission: true,
@@ -25,5 +25,5 @@ Future<void> main() async {
 
   // await _requestPermissions();
 
-  runApp( MyApp());
+  runApp(MyApp());
 }

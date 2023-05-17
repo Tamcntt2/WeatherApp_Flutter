@@ -422,8 +422,8 @@ class Details extends StatelessWidget {
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Image.asset(
               AppAssets.iconWeather[current?.weather?[0].icon]!,
-              width: 180,
-              height: 130,
+              width: 150,
+              height: 120,
             ),
             SizedBox(
               width: 130,
@@ -531,9 +531,14 @@ class AirQualityView extends StatelessWidget {
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
                             ),
-                            Text(
-                              getTextAirQuality(valuePM10),
-                              style: AppStyles.h5.copyWith(color: Colors.white),
+                            Container(
+                              width: 75,
+                              child: Text(
+                                textAlign: TextAlign.center,
+                                getTextAirQuality(valuePM10),
+                                style:
+                                    AppStyles.h5.copyWith(color: Colors.white),
+                              ),
                             )
                           ]),
                     )

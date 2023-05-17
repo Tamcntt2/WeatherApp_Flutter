@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:weather_app/screens/search/search_screen.dart';
+import 'package:weather_app/utils/ui_utils.dart';
 import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
 import 'package:http/http.dart' as http;
@@ -92,7 +93,7 @@ class DrawerLocation extends StatelessWidget {
                   textAddress = '';
                 }
                 return Text(
-                  textAddress,
+                  UIUtils.convertNameCity(textAddress),
                   style: AppStyles.h3.copyWith(
                       fontWeight: FontWeight.bold, color: Colors.white),
                 );

@@ -22,7 +22,12 @@ class UIUtils {
     return result;
   }
 
+  static String convertNameCity(String value) {
+    String name =
+        capitalizeAllWord(value.toLowerCase().replaceAll('thành phố ', ''));
+
+    return name;
+  }
+
   static String keyGoogleMap = 'AIzaSyC4w2mDNzjs2tkCp5f_EO_n6BNBa3erKxE';
 }
-
-

@@ -1,3 +1,4 @@
+// 5 day / 3 hour
 class ForecastDaily {
   String? cod;
   int? message;
