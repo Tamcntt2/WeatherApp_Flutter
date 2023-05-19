@@ -12,6 +12,7 @@ class AppAssets {
   static const String wind = '${imagePath}wind.png';
   static const String sunAni = '${imagePath}sun_animation.png';
   static const String moonAni = '${imagePath}moon_animation.png';
+  static const String google = '${imagePath}google.png';
 
   static const String iconPath = 'assets/icon_weather/';
   static const Map<String, String> iconWeather = {

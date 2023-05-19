@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:weather_app/bloc/weather_bloc.dart';
+import 'package:weather_app/models/forecast_daily.dart';
 import 'package:weather_app/utils/epoch_time.dart';
 import 'package:weather_app/utils/ui_utils.dart';
 import 'package:weather_app/values/app_assets.dart';
@@ -12,7 +13,6 @@ import 'package:weather_app/values/app_styles.dart';
 import '../../bloc/weather_state.dart';
 import '../../models/air_quality.dart';
 import '../../models/forecast.dart';
-import '../../resources/api_repository.dart';
 import '../../widgets/my_separator.dart';
 
 class TodayPage extends StatefulWidget {
@@ -25,6 +25,7 @@ class TodayPage extends StatefulWidget {
 class _TodayPageState extends State<TodayPage> {
   late Forecast forecast;
   late AirQuality airQuality;
+  late ForecastDaily forecastDaily;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,11 @@ class _TodayPageState extends State<TodayPage> {
         } else if (state is WeatherLoaded) {
           forecast = state.forecast!;
           airQuality = state.airQuality!;
-          return ForecastTodayView(forecast: forecast, airQuality: airQuality);
+          forecastDaily = state.forecastDaily!;
+          return ForecastTodayView(
+              forecast: forecast,
+              airQuality: airQuality,
+              forecastDaily: forecastDaily);
         } else {
           return Container();
         }
@@ -47,9 +52,13 @@ class _TodayPageState extends State<TodayPage> {
 class ForecastTodayView extends StatelessWidget {
   final Forecast forecast;
   final AirQuality airQuality;
+  final ForecastDaily forecastDaily;
 
   const ForecastTodayView(
-      {super.key, required this.forecast, required this.airQuality});
+      {super.key,
+      required this.forecast,
+      required this.airQuality,
+      required this.forecastDaily});
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +66,7 @@ class ForecastTodayView extends StatelessWidget {
       child: Column(children: [
         TodayForecast(forecast: forecast),
         NextHourForecast(forecast: forecast),
-        NextDayForecast(forecast: forecast),
+        NextDayForecast(forecastDaily: forecastDaily, forecast: forecast),
         Details(forecast: forecast),
         AirQualityView(airQuality.listt![0].components!.pm10!),
         // const CoronavirusLastest(),
@@ -148,24 +157,26 @@ class ItemHourForecast extends StatelessWidget {
 }
 
 class NextDayForecast extends StatefulWidget {
+  ForecastDaily forecastDaily;
   Forecast forecast;
 
-  NextDayForecast({super.key, required this.forecast});
+  NextDayForecast(
+      {super.key, required this.forecastDaily, required this.forecast});
 
   @override
   State<NextDayForecast> createState() =>
-      _NextDayForecastState(forecast: forecast);
+      _NextDayForecastState(forecastDaily: forecastDaily, forecast: forecast);
 }
 
 class _NextDayForecastState extends State<NextDayForecast> {
+  ForecastDaily forecastDaily;
   Forecast forecast;
   final List<bool> _isOpen = [false, false, false, false, false];
 
-  _NextDayForecastState({required this.forecast});
+  _NextDayForecastState({required this.forecastDaily, required this.forecast});
 
   @override
   Widget build(BuildContext context) {
-    List<Daily>? listDaily = forecast.daily;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(left: 23, right: 23, top: 10, bottom: 20),
@@ -201,7 +212,8 @@ class _NextDayForecastState extends State<NextDayForecast> {
                   return DayCollapseForecast(
                       index: item.key, forecast: forecast);
                 },
-                body: DayExpandForecast(index: item.key, forecast: forecast),
+                body: DayExpandForecast(
+                    index: item.key, forecastDaily: forecastDaily),
                 isExpanded: item.value,
               );
             }).toList(),
@@ -248,23 +260,30 @@ class _NextDayForecastState extends State<NextDayForecast> {
 }
 
 class DayExpandForecast extends StatelessWidget {
-  Forecast forecast;
+  ForecastDaily forecastDaily;
   int index;
 
-  DayExpandForecast({super.key, required this.forecast, required this.index});
+  DayExpandForecast(
+      {super.key, required this.forecastDaily, required this.index});
 
   @override
   Widget build(BuildContext context) {
     bool _isToday = index == 0;
-    List<Hourly>? listHourlyAll = forecast.hourly;
-    int dtCurrent = forecast.current!.dt!;
-    int hourCurrent = EpochTime.getDateTime(dtCurrent).hour;
-    int start = _isToday ? 0 : index * 24 - hourCurrent;
-    int end = 24 - hourCurrent + index * 24;
-    List<Hourly> listHourly = [];
-    for (int i = start; i <= end; i++) {
-      listHourly.add(listHourlyAll![i]);
+    DateTime dtNow = DateTime.now();
+    DateTime dtBegin =
+        DateTime(dtNow.year, dtNow.month, dtNow.day + index, 0, dtNow.minute);
+    DateTime dtEnd =
+        DateTime(dtNow.year, dtNow.month, dtNow.day + index, 24, dtNow.minute);
+    List<Hourly3> listHourlyAll = forecastDaily.listDaily!;
+    List<Hourly3> listHourly = [];
+    for (int i = 0; i <= listHourlyAll!.length; i++) {
+      DateTime dt = EpochTime.getDateTime(listHourlyAll[i].dt!);
+      if (dt.isBefore(dtBegin)) continue;
+      if (dt.isAfter(dtEnd)) break;
+      listHourly.add(listHourlyAll[i]);
     }
+
+    print('$index:$listHourly}');
 
     return SizedBox(
       height: 100,
@@ -280,7 +299,7 @@ class DayExpandForecast extends StatelessWidget {
 }
 
 class ItemDayExpandForecast extends StatelessWidget {
-  Hourly hourly;
+  Hourly3 hourly;
   bool isCurrent;
 
   ItemDayExpandForecast(
@@ -319,7 +338,7 @@ class ItemDayExpandForecast extends StatelessWidget {
         Column(
           children: [
             Text(
-              '${hourly.temp!.round()}°',
+              '${hourly.main!.temp!.round()}°',
               style: AppStyles.h4
                   .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
             ),

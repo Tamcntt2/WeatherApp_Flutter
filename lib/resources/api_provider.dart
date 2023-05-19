@@ -25,11 +25,8 @@ class ApiProvider {
     return Forecast.fromJson(data);
   }
 
-  Future<ForecastDaily> fetchForecastDaily() async {
-    // chua dung
+  Future<ForecastDaily> fetchForecastDaily(double lat, double lon) async {
     // String key = 'bf94bd3a7d84cc009f132207bdea82e6';
-    // double lat = 21.030653;
-    // double lon = 105.847130;
     // var recipesUrl = Uri.parse(
     //     'https://api.openweathermap.org/data/2.5/forecast?lat=$lat&lon=$lon&appid=$key&units=metric');
     // final response = await http.get(recipesUrl);

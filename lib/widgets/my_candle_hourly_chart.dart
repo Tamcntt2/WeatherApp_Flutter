@@ -101,9 +101,10 @@ class ItemCandleChart extends StatelessWidget {
                         ),
                       ),
                       Expanded(
-                        key: key,
+                        // key: key,
                         child: Center(
                           child: Container(
+
                             decoration: BoxDecoration(
                                 color: index == 0
                                     ? Color(0xffF1B289)
@@ -160,6 +161,13 @@ class DrawLine extends StatelessWidget {
     for (int i = 0; i < listPoint.length - 1; i++) {
       LinePainter(p1: listPoint[i], p2: listPoint[i + 1]);
     }
-    return Container();
+    return Stack(
+      children: [
+        for (int i = 0; i < listPoint.length - 1; i++)
+          CustomPaint(
+            painter: LinePainter(p1: listPoint[i], p2: listPoint[i + 1]),
+          )
+      ],
+    );
   }
 }

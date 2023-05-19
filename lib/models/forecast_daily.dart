@@ -3,7 +3,7 @@ class ForecastDaily {
   String? cod;
   int? message;
   int? cnt;
-  List<ListDaily>? listDaily;
+  List<Hourly3>? listDaily;
   City? city;
 
   ForecastDaily({this.cod, this.message, this.cnt, this.listDaily, this.city});
@@ -12,7 +12,9 @@ class ForecastDaily {
     cod = json["cod"];
     message = json["message"];
     cnt = json["cnt"];
-    listDaily = json["list_daily"] == null ? null : (json["list_daily"] as List).map((e) => ListDaily.fromJson(e)).toList();
+    listDaily = json["list_daily"] == null
+        ? null
+        : (json["list_daily"] as List).map((e) => Hourly3.fromJson(e)).toList();
     city = json["city"] == null ? null : City.fromJson(json["city"]);
   }
 
@@ -25,10 +27,10 @@ class ForecastDaily {
     _data["cod"] = cod;
     _data["message"] = message;
     _data["cnt"] = cnt;
-    if(listDaily != null) {
+    if (listDaily != null) {
       _data["list_daily"] = listDaily?.map((e) => e.toJson()).toList();
     }
-    if(city != null) {
+    if (city != null) {
       _data["city"] = city?.toJson();
     }
     return _data;
@@ -38,15 +40,16 @@ class ForecastDaily {
     String? cod,
     int? message,
     int? cnt,
-    List<ListDaily>? listDaily,
+    List<Hourly3>? listDaily,
     City? city,
-  }) => ForecastDaily(
-    cod: cod ?? this.cod,
-    message: message ?? this.message,
-    cnt: cnt ?? this.cnt,
-    listDaily: listDaily ?? this.listDaily,
-    city: city ?? this.city,
-  );
+  }) =>
+      ForecastDaily(
+        cod: cod ?? this.cod,
+        message: message ?? this.message,
+        cnt: cnt ?? this.cnt,
+        listDaily: listDaily ?? this.listDaily,
+        city: city ?? this.city,
+      );
 }
 
 class City {
@@ -59,7 +62,15 @@ class City {
   int? sunrise;
   int? sunset;
 
-  City({this.id, this.name, this.coord, this.country, this.population, this.timezone, this.sunrise, this.sunset});
+  City(
+      {this.id,
+      this.name,
+      this.coord,
+      this.country,
+      this.population,
+      this.timezone,
+      this.sunrise,
+      this.sunset});
 
   City.fromJson(Map<String, dynamic> json) {
     id = json["id"];
@@ -80,7 +91,7 @@ class City {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["id"] = id;
     _data["name"] = name;
-    if(coord != null) {
+    if (coord != null) {
       _data["coord"] = coord?.toJson();
     }
     _data["country"] = country;
@@ -100,16 +111,17 @@ class City {
     int? timezone,
     int? sunrise,
     int? sunset,
-  }) => City(
-    id: id ?? this.id,
-    name: name ?? this.name,
-    coord: coord ?? this.coord,
-    country: country ?? this.country,
-    population: population ?? this.population,
-    timezone: timezone ?? this.timezone,
-    sunrise: sunrise ?? this.sunrise,
-    sunset: sunset ?? this.sunset,
-  );
+  }) =>
+      City(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        coord: coord ?? this.coord,
+        country: country ?? this.country,
+        population: population ?? this.population,
+        timezone: timezone ?? this.timezone,
+        sunrise: sunrise ?? this.sunrise,
+        sunset: sunset ?? this.sunset,
+      );
 }
 
 class Coord {
@@ -137,13 +149,14 @@ class Coord {
   Coord copyWith({
     double? lat,
     double? lon,
-  }) => Coord(
-    lat: lat ?? this.lat,
-    lon: lon ?? this.lon,
-  );
+  }) =>
+      Coord(
+        lat: lat ?? this.lat,
+        lon: lon ?? this.lon,
+      );
 }
 
-class ListDaily {
+class Hourly3 {
   int? dt;
   Main? main;
   List<Weather>? weather;
@@ -154,12 +167,23 @@ class ListDaily {
   Sys? sys;
   String? dtTxt;
 
-  ListDaily({this.dt, this.main, this.weather, this.clouds, this.wind, this.visibility, this.pop, this.sys, this.dtTxt});
+  Hourly3(
+      {this.dt,
+      this.main,
+      this.weather,
+      this.clouds,
+      this.wind,
+      this.visibility,
+      this.pop,
+      this.sys,
+      this.dtTxt});
 
-  ListDaily.fromJson(Map<String, dynamic> json) {
+  Hourly3.fromJson(Map<String, dynamic> json) {
     dt = json["dt"];
     main = json["main"] == null ? null : Main.fromJson(json["main"]);
-    weather = json["weather"] == null ? null : (json["weather"] as List).map((e) => Weather.fromJson(e)).toList();
+    weather = json["weather"] == null
+        ? null
+        : (json["weather"] as List).map((e) => Weather.fromJson(e)).toList();
     clouds = json["clouds"] == null ? null : Clouds.fromJson(json["clouds"]);
     wind = json["wind"] == null ? null : Wind.fromJson(json["wind"]);
     visibility = json["visibility"];
@@ -168,35 +192,35 @@ class ListDaily {
     dtTxt = json["dt_txt"];
   }
 
-  static List<ListDaily> fromList(List<Map<String, dynamic>> list) {
-    return list.map((map) => ListDaily.fromJson(map)).toList();
+  static List<Hourly3> fromList(List<Map<String, dynamic>> list) {
+    return list.map((map) => Hourly3.fromJson(map)).toList();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["dt"] = dt;
-    if(main != null) {
+    if (main != null) {
       _data["main"] = main?.toJson();
     }
-    if(weather != null) {
+    if (weather != null) {
       _data["weather"] = weather?.map((e) => e.toJson()).toList();
     }
-    if(clouds != null) {
+    if (clouds != null) {
       _data["clouds"] = clouds?.toJson();
     }
-    if(wind != null) {
+    if (wind != null) {
       _data["wind"] = wind?.toJson();
     }
     _data["visibility"] = visibility;
     _data["pop"] = pop;
-    if(sys != null) {
+    if (sys != null) {
       _data["sys"] = sys?.toJson();
     }
     _data["dt_txt"] = dtTxt;
     return _data;
   }
 
-  ListDaily copyWith({
+  Hourly3 copyWith({
     int? dt,
     Main? main,
     List<Weather>? weather,
@@ -206,17 +230,18 @@ class ListDaily {
     int? pop,
     Sys? sys,
     String? dtTxt,
-  }) => ListDaily(
-    dt: dt ?? this.dt,
-    main: main ?? this.main,
-    weather: weather ?? this.weather,
-    clouds: clouds ?? this.clouds,
-    wind: wind ?? this.wind,
-    visibility: visibility ?? this.visibility,
-    pop: pop ?? this.pop,
-    sys: sys ?? this.sys,
-    dtTxt: dtTxt ?? this.dtTxt,
-  );
+  }) =>
+      Hourly3(
+        dt: dt ?? this.dt,
+        main: main ?? this.main,
+        weather: weather ?? this.weather,
+        clouds: clouds ?? this.clouds,
+        wind: wind ?? this.wind,
+        visibility: visibility ?? this.visibility,
+        pop: pop ?? this.pop,
+        sys: sys ?? this.sys,
+        dtTxt: dtTxt ?? this.dtTxt,
+      );
 }
 
 class Sys {
@@ -240,15 +265,16 @@ class Sys {
 
   Sys copyWith({
     String? pod,
-  }) => Sys(
-    pod: pod ?? this.pod,
-  );
+  }) =>
+      Sys(
+        pod: pod ?? this.pod,
+      );
 }
 
 class Wind {
-  double? speed;
+  dynamic speed;
   int? deg;
-  double? gust;
+  dynamic? gust;
 
   Wind({this.speed, this.deg, this.gust});
 
@@ -271,14 +297,15 @@ class Wind {
   }
 
   Wind copyWith({
-    double? speed,
+    dynamic? speed,
     int? deg,
-    double? gust,
-  }) => Wind(
-    speed: speed ?? this.speed,
-    deg: deg ?? this.deg,
-    gust: gust ?? this.gust,
-  );
+    dynamic? gust,
+  }) =>
+      Wind(
+        speed: speed ?? this.speed,
+        deg: deg ?? this.deg,
+        gust: gust ?? this.gust,
+      );
 }
 
 class Clouds {
@@ -302,9 +329,10 @@ class Clouds {
 
   Clouds copyWith({
     int? all,
-  }) => Clouds(
-    all: all ?? this.all,
-  );
+  }) =>
+      Clouds(
+        all: all ?? this.all,
+      );
 }
 
 class Weather {
@@ -340,26 +368,36 @@ class Weather {
     String? main,
     String? description,
     String? icon,
-  }) => Weather(
-    id: id ?? this.id,
-    main: main ?? this.main,
-    description: description ?? this.description,
-    icon: icon ?? this.icon,
-  );
+  }) =>
+      Weather(
+        id: id ?? this.id,
+        main: main ?? this.main,
+        description: description ?? this.description,
+        icon: icon ?? this.icon,
+      );
 }
 
 class Main {
-  double? temp;
-  double? feelsLike;
-  double? tempMin;
-  double? tempMax;
+  dynamic? temp;
+  dynamic? feelsLike;
+  dynamic? tempMin;
+  dynamic? tempMax;
   int? pressure;
   int? seaLevel;
   int? grndLevel;
   int? humidity;
-  double? tempKf;
+  dynamic? tempKf;
 
-  Main({this.temp, this.feelsLike, this.tempMin, this.tempMax, this.pressure, this.seaLevel, this.grndLevel, this.humidity, this.tempKf});
+  Main(
+      {this.temp,
+      this.feelsLike,
+      this.tempMin,
+      this.tempMax,
+      this.pressure,
+      this.seaLevel,
+      this.grndLevel,
+      this.humidity,
+      this.tempKf});
 
   Main.fromJson(Map<String, dynamic> json) {
     temp = json["temp"];
@@ -392,24 +430,25 @@ class Main {
   }
 
   Main copyWith({
-    double? temp,
-    double? feelsLike,
-    double? tempMin,
-    double? tempMax,
+    dynamic? temp,
+    dynamic? feelsLike,
+    dynamic? tempMin,
+    dynamic? tempMax,
     int? pressure,
     int? seaLevel,
     int? grndLevel,
     int? humidity,
-    double? tempKf,
-  }) => Main(
-    temp: temp ?? this.temp,
-    feelsLike: feelsLike ?? this.feelsLike,
-    tempMin: tempMin ?? this.tempMin,
-    tempMax: tempMax ?? this.tempMax,
-    pressure: pressure ?? this.pressure,
-    seaLevel: seaLevel ?? this.seaLevel,
-    grndLevel: grndLevel ?? this.grndLevel,
-    humidity: humidity ?? this.humidity,
-    tempKf: tempKf ?? this.tempKf,
-  );
+    dynamic? tempKf,
+  }) =>
+      Main(
+        temp: temp ?? this.temp,
+        feelsLike: feelsLike ?? this.feelsLike,
+        tempMin: tempMin ?? this.tempMin,
+        tempMax: tempMax ?? this.tempMax,
+        pressure: pressure ?? this.pressure,
+        seaLevel: seaLevel ?? this.seaLevel,
+        grndLevel: grndLevel ?? this.grndLevel,
+        humidity: humidity ?? this.humidity,
+        tempKf: tempKf ?? this.tempKf,
+      );
 }

@@ -14,7 +14,7 @@ import 'package:weather_app/utils/current_location.dart';
 import 'package:http/http.dart' as http;
 import 'package:weather_app/utils/ui_utils.dart';
 
-import 'my_drawer.dart';
+import '../drawer/my_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

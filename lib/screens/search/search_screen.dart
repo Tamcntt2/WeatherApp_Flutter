@@ -91,12 +91,12 @@ class _SearchViewState extends State<SearchView> {
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide.none,
                 borderRadius:
-                    BorderRadius.circular(20), // thiết lập border radius
+                    BorderRadius.circular(20),
               ),
               border: OutlineInputBorder(
                 borderSide: BorderSide.none,
                 borderRadius:
-                    BorderRadius.circular(20), // thiết lập border radius
+                    BorderRadius.circular(20),
               ),
               prefixIcon: Icon(Icons.search),
               suffixIcon: TextButton(

@@ -7,6 +7,7 @@ import 'package:weather_app/models/air_quality.dart';
 import 'package:weather_app/models/forecast.dart';
 import 'package:weather_app/models/location.dart';
 
+import '../models/forecast_daily.dart';
 import '../resources/api_repository.dart';
 import '../utils/current_location.dart';
 
@@ -23,12 +24,15 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     Position position = await CurrentLocation.getCurrentLocation();
     double lat = position.latitude;
     double lon = position.longitude;
-    final Forecast forecast = await apiRepository.fetchForecastOneCall(
-        lat, lon);
-    final AirQuality airQuality = await apiRepository.fetchAirQuality(
-        lat, lon);
+    final Forecast forecast =
+        await apiRepository.fetchForecastOneCall(lat, lon);
+    final AirQuality airQuality = await apiRepository.fetchAirQuality(lat, lon);
+    final ForecastDaily forecastDaily =
+        await apiRepository.fetchForecastDaily(lat, lon);
 
     emit(WeatherLoaded(
-        forecast: forecast, airQuality: airQuality));
+        forecast: forecast,
+        airQuality: airQuality,
+        forecastDaily: forecastDaily));
   }
 }

@@ -13,8 +13,8 @@ class ApiRepository {
     return _provider.fetchForecastOneCall(lat, lon);
   }
 
-  Future<ForecastDaily> fetchForecastDaily() {
-    return _provider.fetchForecastDaily();
+  Future<ForecastDaily> fetchForecastDaily(double lat, double lon) {
+    return _provider.fetchForecastDaily(lat, lon);
   }
 
   Future<List<MyLocation2>> fetchListLocationFromAddress(String text) {
