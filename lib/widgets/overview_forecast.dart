@@ -110,23 +110,40 @@ class ForecastView extends StatelessWidget {
                   color: Colors.white,
                   size: 17,
                 )),
-            FutureBuilder(
-              builder: (context, snapshot) {
-                String textAddress;
-                if (snapshot.hasData) {
-                  textAddress =
-                      '${snapshot.data!.address!.city}, ${snapshot.data!.address!.country}';
+            BlocBuilder<WeatherBloc, WeatherState>(
+              builder: (context, state) {
+                if (state is WeatherInitial || state is WeatherLoading) {
+                  return Container();
+                } else if (state is WeatherLoaded) {
+                  MyLocation myLocation = state.myLocation!;
+                  String textAddress =
+                      '${myLocation.address!.city}, ${myLocation.address!.country}';
+                  return Text(
+                    UIUtils.convertNameCity(textAddress),
+                    style: TextStyle(color: Colors.white, fontSize: 14),
+                  );
                 } else {
-                  textAddress = '';
+                  return Container();
                 }
-                return Text(
-                  UIUtils.convertNameCity(textAddress),
-                  style: AppStyles.h3.copyWith(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                );
               },
-              future: _fetchCurrentAddress(),
             ),
+            // FutureBuilder(
+            //   builder: (context, snapshot) {
+            //     String textAddress;
+            //     if (snapshot.hasData) {
+            //       textAddress =
+            //           '${snapshot.data!.address!.city}, ${snapshot.data!.address!.country}';
+            //     } else {
+            //       textAddress = '';
+            //     }
+            //     return Text(
+            //       UIUtils.convertNameCity(textAddress),
+            //       style: AppStyles.h3.copyWith(
+            //           color: Colors.white, fontWeight: FontWeight.bold),
+            //     );
+            //   },
+            //   future: _fetchCurrentAddress(),
+            // ),
             IconButton(
                 onPressed: () {
                   // ...
@@ -149,18 +166,18 @@ class ForecastView extends StatelessWidget {
     );
   }
 
-  Future<MyLocation> _fetchCurrentAddress() async {
-    print('lat: $lat, lon: $lon');
-    var recipesUrl = Uri.parse(
-        'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=$lat&lon=$lon');
-    final response = await http.get(recipesUrl);
-    if (response.statusCode == 200) {
-      final body = json.decode(response.body);
-      return MyLocation.fromJson(body);
-    } else {
-      throw Exception('Failed to load data from API');
-    }
-  }
+  // Future<MyLocation> _fetchCurrentAddress() async {
+  //   print('lat: $lat, lon: $lon');
+  //   var recipesUrl = Uri.parse(
+  //       'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=$lat&lon=$lon');
+  //   final response = await http.get(recipesUrl);
+  //   if (response.statusCode == 200) {
+  //     final body = json.decode(response.body);
+  //     return MyLocation.fromJson(body);
+  //   } else {
+  //     throw Exception('Failed to load data from API');
+  //   }
+  // }
 }
 
 class BuildLoading extends StatelessWidget {

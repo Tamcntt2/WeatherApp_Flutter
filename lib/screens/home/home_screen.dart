@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator_platform_interface/src/models/position.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -14,6 +15,8 @@ import 'package:weather_app/utils/current_location.dart';
 import 'package:http/http.dart' as http;
 import 'package:weather_app/utils/ui_utils.dart';
 
+import '../../bloc/weather_bloc.dart';
+import '../../bloc/weather_state.dart';
 import '../drawer/my_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -41,22 +44,40 @@ class _HomeScreenState extends State<HomeScreen> {
             backgroundColor: Colors.transparent,
             appBar: AppBar(
               title: Center(
-                  child: FutureBuilder(
-                builder: (context, snapshot) {
-                  String textAddress;
-                  if (snapshot.hasData) {
-                    textAddress =
-                        '${snapshot.data!.address!.city}, ${snapshot.data!.address!.country}';
-                  } else {
-                    textAddress = '';
-                  }
-                  return Text(
-                    UIUtils.convertNameCity(textAddress),
-                    style: TextStyle(color: Colors.white, fontSize: 14),
-                  );
-                },
-                future: _fetchCurrentAddress(),
-              )),
+                child: BlocBuilder<WeatherBloc, WeatherState>(
+                  builder: (context, state) {
+                    if (state is WeatherInitial || state is WeatherLoading) {
+                      return Container();
+                    } else if (state is WeatherLoaded) {
+                      MyLocation myLocation = state.myLocation!;
+                      String textAddress =
+                          '${myLocation.address!.city}, ${myLocation.address!.country}';
+                      return Text(
+                        UIUtils.convertNameCity(textAddress),
+                        style: TextStyle(color: Colors.white, fontSize: 14),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
+                //     child: FutureBuilder(
+                //   builder: (context, snapshot) {
+                //     String textAddress;
+                //     if (snapshot.hasData) {
+                //       textAddress =
+                //           '${snapshot.data!.address!.city}, ${snapshot.data!.address!.country}';
+                //     } else {
+                //       textAddress = '';
+                //     }
+                //     return Text(
+                //       UIUtils.convertNameCity(textAddress),
+                //       style: TextStyle(color: Colors.white, fontSize: 14),
+                //     );
+                //   },
+                //   future: _fetchCurrentAddress(),
+                // )
+              ),
               elevation: 0,
               backgroundColor: Colors.transparent,
               actions: [
@@ -137,19 +158,19 @@ class _HomeScreenState extends State<HomeScreen> {
     await Permission.notification.request();
   }
 
-  Future<MyLocation> _fetchCurrentAddress() async {
-    Position position = await CurrentLocation.getCurrentLocation();
-    double lat = position.latitude;
-    double lon = position.longitude;
-    print('lat: $lat, lon: $lon');
-    var recipesUrl = Uri.parse(
-        'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=$lat&lon=$lon');
-    final response = await http.get(recipesUrl);
-    if (response.statusCode == 200) {
-      final body = json.decode(response.body);
-      return MyLocation.fromJson(body);
-    } else {
-      throw Exception('Failed to load data from API');
-    }
-  }
+// Future<MyLocation> _fetchCurrentAddress() async {
+//   Position position = await CurrentLocation.getCurrentLocation();
+//   double lat = position.latitude;
+//   double lon = position.longitude;
+//   print('lat: $lat, lon: $lon');
+//   var recipesUrl = Uri.parse(
+//       'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=$lat&lon=$lon');
+//   final response = await http.get(recipesUrl);
+//   if (response.statusCode == 200) {
+//     final body = json.decode(response.body);
+//     return MyLocation.fromJson(body);
+//   } else {
+//     throw Exception('Failed to load data from API');
+//   }
+// }
 }

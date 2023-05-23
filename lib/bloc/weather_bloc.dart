@@ -30,11 +30,14 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     final AirQuality airQuality = await apiRepository.fetchAirQuality(lat, lon);
     final ForecastDaily forecastDaily =
         await apiRepository.fetchForecastDaily(lat, lon);
+    final MyLocation myLocation =
+        await apiRepository.fetchAddressFromLocation(lat, lon);
 
     emit(WeatherLoaded(
         forecast: forecast,
         airQuality: airQuality,
-        forecastDaily: forecastDaily));
+        forecastDaily: forecastDaily,
+        myLocation: myLocation));
   }
 
   Future<void> _onFetchWeatherLocation(
@@ -47,10 +50,12 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     final AirQuality airQuality = await apiRepository.fetchAirQuality(lat, lon);
     final ForecastDaily forecastDaily =
         await apiRepository.fetchForecastDaily(lat, lon);
+    final MyLocation myLocation =
+    await apiRepository.fetchAddressFromLocation(lat, lon);
 
     emit(WeatherLoaded(
         forecast: forecast,
         airQuality: airQuality,
-        forecastDaily: forecastDaily));
+        forecastDaily: forecastDaily, myLocation: myLocation));
   }
 }

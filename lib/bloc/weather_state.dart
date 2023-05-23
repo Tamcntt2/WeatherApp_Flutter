@@ -12,8 +12,9 @@ class WeatherState extends Equatable {
   final Forecast? forecast;
   final ForecastDaily? forecastDaily;
   final AirQuality? airQuality;
+  final MyLocation? myLocation;
 
-  WeatherState({this.forecastDaily, this.forecast, this.airQuality});
+  WeatherState({this.forecastDaily, this.forecast, this.airQuality,  this.myLocation});
 
   @override
   // TODO: implement props
@@ -25,7 +26,7 @@ class WeatherInitial extends WeatherState {}
 class WeatherLoading extends WeatherState {}
 
 class WeatherLoaded extends WeatherState {
-  WeatherLoaded({super.forecast, super.forecastDaily, super.airQuality});
+  WeatherLoaded({super.forecast, super.forecastDaily, super.airQuality, super.myLocation});
 }
 
 class WeatherError extends WeatherState {

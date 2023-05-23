@@ -69,7 +69,7 @@ class ApiProvider {
 
   Future<MyLocation> fetchAddressFromLocation(double lat, double lon) async {
     var recipesUrl = Uri.parse(
-        'https://nominatim.openstreetmap.org/reverse?format=jsonv2?lat=$lat&lon=$lon');
+        'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=$lat&lon=$lon');
     final response = await http.get(recipesUrl);
     if (response.statusCode == 200) {
       final body = json.decode(response.body);
