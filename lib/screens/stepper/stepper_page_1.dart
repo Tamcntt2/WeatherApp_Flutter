@@ -35,7 +35,7 @@ class StepperPage1 extends StatelessWidget {
                     Positioned(
                       top: 0,
                       right: 0,
-                      child: InkWell(
+                      child: GestureDetector(
                         onTap: () {
                           Navigator.pushAndRemoveUntil(
                               context,

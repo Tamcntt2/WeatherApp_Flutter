@@ -2,62 +2,81 @@ import 'package:flutter/material.dart';
 import 'package:weather_app/models/forecast.dart';
 import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
+import 'package:weather_app/widgets/line_painter.dart';
 
 import '../utils/epoch_time.dart';
 import '../utils/ui_utils.dart';
 import 'my_separator.dart';
 
-class MyCandleChart extends StatelessWidget {
+class MyCandleHourlyChart extends StatefulWidget {
   Forecast forecast;
 
-  MyCandleChart({required this.forecast});
+  MyCandleHourlyChart({required this.forecast});
+
+  @override
+  State<MyCandleHourlyChart> createState() => _MyCandleHourlyChartState();
+}
+
+class _MyCandleHourlyChartState extends State<MyCandleHourlyChart> {
+  final List<GlobalKey> listPointKey = List.generate(7, (index) => GlobalKey());
+  List<Offset> listPoint = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      for (dynamic key in listPointKey) {
+        RenderBox box = key.currentContext?.findRenderObject() as RenderBox;
+        Offset center = box.localToGlobal(box.size.center(Offset.zero));
+        listPoint.add(center);
+      }
+      print(listPoint.toString());
+      setState(() {});
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<Daily>? listDaily = forecast.daily;
-    List<int> listLow = [];
-    List<int> listHigh = [];
+    List<Hourly>? listHourly = widget.forecast.hourly;
+    List<int> listTemp = [];
     int count = 7;
     for (int i = 0; i < count; i++) {
-      listLow.add(listDaily![i].temp!.min!.round());
-      listHigh.add(listDaily[i].temp!.max!.round());
+      listTemp.add(listHourly![i].temp!.round());
     }
-    int tempMax =
-        listHigh.reduce((value, element) => value > element ? value : element);
-    return Container(
-      child: Column(
-        children: [
-          Container(
-            height: 300,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 7,
-                itemBuilder: (BuildContext context, int index) {
-                  return ItemCandleChart(
-                    index: index,
-                    tempMax: tempMax,
-                    daily: listDaily![index],
-                  );
-                }),
-          ),
-        ],
+    return Stack(children: [
+      SizedBox(
+        height: 300,
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 7,
+            itemBuilder: (BuildContext context, int index) {
+              return ItemCandleChart(
+                key: listPointKey[index],
+                index: index,
+                hourly: listHourly![index],
+              );
+            }),
       ),
-    );
+      DrawLine(listPoint)
+      // Text(
+      //   listPoint.length.toString(),
+      //   style: TextStyle(fontSize: 30),
+      // )
+    ]);
   }
 }
 
 class ItemCandleChart extends StatelessWidget {
-  int tempMax;
-  Daily daily;
+  Hourly hourly;
   int index;
 
-  ItemCandleChart(
-      {required this.index, required this.tempMax, required this.daily});
+  ItemCandleChart({super.key, required this.index, required this.hourly});
 
   @override
   Widget build(BuildContext context) {
-    int tempHigh = daily.temp!.max!.round();
-    int tempLow = daily.temp!.min!.round();
+    int temp = hourly.temp!.round();
+    DateTime date = EpochTime.getDateTime(hourly.dt!);
     return Container(
       width: (UIUtils.getScreenSize(context).width - 40) / 7,
       child: Column(
@@ -71,19 +90,21 @@ class ItemCandleChart extends StatelessWidget {
                     children: [
                       Container(
                         margin: EdgeInsets.only(bottom: 10),
-                        height: 180.0 / tempMax * (tempMax - tempHigh) + 20,
+                        height: 230.0 / 70 * (70 - temp),
                         child: Align(
                           alignment: Alignment.bottomCenter,
                           child: Text(
-                            '$tempHigh°',
+                            '$temp°',
                             style: AppStyles.h5
                                 .copyWith(color: AppColors.lightGrey),
                           ),
                         ),
                       ),
                       Expanded(
+                        // key: key,
                         child: Center(
                           child: Container(
+
                             decoration: BoxDecoration(
                                 color: index == 0
                                     ? Color(0xffF1B289)
@@ -96,12 +117,8 @@ class ItemCandleChart extends StatelessWidget {
                       ),
                       Container(
                         margin: EdgeInsets.only(top: 10),
-                        height: 180.0 / tempMax * tempLow + 20,
-                        child: Text(
-                          '$tempLow°',
-                          style:
-                              AppStyles.h5.copyWith(color: AppColors.lightGrey),
-                        ),
+                        height: 230.0 / 70 * temp - 5,
+                        child: Container(),
                       )
                     ],
                   ),
@@ -123,12 +140,34 @@ class ItemCandleChart extends StatelessWidget {
             ],
           ),
           Text(
-            EpochTime.getWeekDay(daily.dt ?? 0),
+            '${date.hour}h',
             style: AppStyles.h5.copyWith(
                 color: index == 0 ? Colors.white : AppColors.lightGrey),
           ),
         ],
       ),
+    );
+  }
+}
+
+class DrawLine extends StatelessWidget {
+  List<Offset> listPoint;
+
+  DrawLine(this.listPoint);
+
+  @override
+  Widget build(BuildContext context) {
+    // print(listPoint.length);
+    for (int i = 0; i < listPoint.length - 1; i++) {
+      LinePainter(p1: listPoint[i], p2: listPoint[i + 1]);
+    }
+    return Stack(
+      children: [
+        for (int i = 0; i < listPoint.length - 1; i++)
+          CustomPaint(
+            painter: LinePainter(p1: listPoint[i], p2: listPoint[i + 1]),
+          )
+      ],
     );
   }
 }

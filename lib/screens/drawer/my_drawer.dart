@@ -1,7 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:weather_app/screens/search/search_screen.dart';
+import 'package:weather_app/utils/ui_utils.dart';
 import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
+import 'package:http/http.dart' as http;
+
+import '../../models/location.dart';
+import '../../utils/current_location.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({Key? key}) : super(key: key);
@@ -69,20 +77,53 @@ class DrawerLocation extends StatelessWidget {
           ),
         ),
         ListTile(
-          horizontalTitleGap: 0,
-          leading: const Icon(
-            Icons.location_on,
-            color: Colors.white,
-            size: 19,
-          ),
-          title: Text(
-            'Chennai, TN',
-            style: AppStyles.h3
-                .copyWith(fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-        ),
+            horizontalTitleGap: 0,
+            leading: const Icon(
+              Icons.location_on,
+              color: Colors.white,
+              size: 19,
+            ),
+            title: FutureBuilder(
+              builder: (context, snapshot) {
+                String textAddress;
+                if (snapshot.hasData) {
+                  textAddress =
+                      '${snapshot.data!.address!.city}, ${snapshot.data!.address!.country}';
+                } else {
+                  textAddress = '';
+                }
+                return Text(
+                  UIUtils.convertNameCity(textAddress),
+                  style: AppStyles.h3.copyWith(
+                      fontWeight: FontWeight.bold, color: Colors.white),
+                );
+              },
+              future: _fetchCurrentAddress(),
+            )
+            // title: Text(
+            // 'Ha Noi, Viet Nam',
+            // style: AppStyles.h3
+            //     .copyWith(fontWeight: FontWeight.bold, color: Colors.white),
+            // ),
+            ),
       ],
     );
+  }
+
+  Future<MyLocation> _fetchCurrentAddress() async {
+    Position position = await CurrentLocation.getCurrentLocation();
+    double lat = position.latitude;
+    double lon = position.longitude;
+    print('lat: $lat, lon: $lon');
+    var recipesUrl = Uri.parse(
+        'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=$lat&lon=$lon');
+    final response = await http.get(recipesUrl);
+    if (response.statusCode == 200) {
+      final body = json.decode(response.body);
+      return MyLocation.fromJson(body);
+    } else {
+      throw Exception('Failed to load data from API');
+    }
   }
 }
 

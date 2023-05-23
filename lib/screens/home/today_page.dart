@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:weather_app/bloc/weather_bloc.dart';
+import 'package:weather_app/models/forecast_daily.dart';
 import 'package:weather_app/utils/epoch_time.dart';
 import 'package:weather_app/utils/ui_utils.dart';
 import 'package:weather_app/values/app_assets.dart';
@@ -10,6 +11,7 @@ import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
 
 import '../../bloc/weather_state.dart';
+import '../../models/air_quality.dart';
 import '../../models/forecast.dart';
 import '../../widgets/my_separator.dart';
 
@@ -22,6 +24,8 @@ class TodayPage extends StatefulWidget {
 
 class _TodayPageState extends State<TodayPage> {
   late Forecast forecast;
+  late AirQuality airQuality;
+  late ForecastDaily forecastDaily;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +35,12 @@ class _TodayPageState extends State<TodayPage> {
           return const BuildLoading();
         } else if (state is WeatherLoaded) {
           forecast = state.forecast!;
-          return TodayView(forecast: forecast);
+          airQuality = state.airQuality!;
+          forecastDaily = state.forecastDaily!;
+          return ForecastTodayView(
+              forecast: forecast,
+              airQuality: airQuality,
+              forecastDaily: forecastDaily);
         } else {
           return Container();
         }
@@ -40,10 +49,16 @@ class _TodayPageState extends State<TodayPage> {
   }
 }
 
-class TodayView extends StatelessWidget {
+class ForecastTodayView extends StatelessWidget {
   final Forecast forecast;
+  final AirQuality airQuality;
+  final ForecastDaily forecastDaily;
 
-  const TodayView({super.key, required this.forecast});
+  const ForecastTodayView(
+      {super.key,
+      required this.forecast,
+      required this.airQuality,
+      required this.forecastDaily});
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +66,10 @@ class TodayView extends StatelessWidget {
       child: Column(children: [
         TodayForecast(forecast: forecast),
         NextHourForecast(forecast: forecast),
-        NextDayForecast(forecast: forecast),
+        NextDayForecast(forecastDaily: forecastDaily, forecast: forecast),
         Details(forecast: forecast),
-        AirQuality(31),
-        const CoronavirusLastest(),
+        AirQualityView(airQuality.listt![0].components!.pm10!),
+        // const CoronavirusLastest(),
         SunMoon(forecast: forecast),
       ]),
     );
@@ -127,15 +142,10 @@ class ItemHourForecast extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 8, bottom: 16),
-            child: Transform.scale(
-              scale: 1.5,
-              alignment: Alignment.center,
-              child: Image.network(
-                'http://openweathermap.org/img/wn/${hourly.weather?[0].icon}@4x.png',
-                width: 24,
-                height: 18,
-                color: Colors.transparent,
-              ),
+            child: Image.asset(
+              AppAssets.iconWeather[hourly.weather![0].icon]!,
+              width: 24,
+              height: 18,
             ),
           ),
           Text('${hourly.temp?.round()}°',
@@ -147,27 +157,29 @@ class ItemHourForecast extends StatelessWidget {
 }
 
 class NextDayForecast extends StatefulWidget {
+  ForecastDaily forecastDaily;
   Forecast forecast;
 
-  NextDayForecast({super.key, required this.forecast});
+  NextDayForecast(
+      {super.key, required this.forecastDaily, required this.forecast});
 
   @override
   State<NextDayForecast> createState() =>
-      _NextDayForecastState(forecast: forecast);
+      _NextDayForecastState(forecastDaily: forecastDaily, forecast: forecast);
 }
 
 class _NextDayForecastState extends State<NextDayForecast> {
+  ForecastDaily forecastDaily;
   Forecast forecast;
   final List<bool> _isOpen = [false, false, false, false, false];
 
-  _NextDayForecastState({required this.forecast});
+  _NextDayForecastState({required this.forecastDaily, required this.forecast});
 
   @override
   Widget build(BuildContext context) {
-    List<Daily>? listDaily = forecast.daily;
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.only(left: 23, right: 23, top: 10, bottom: 25),
+      padding: const EdgeInsets.only(left: 23, right: 23, top: 10, bottom: 20),
       margin: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -178,7 +190,7 @@ class _NextDayForecastState extends State<NextDayForecast> {
       ),
       child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
         Padding(
-          padding: const EdgeInsets.only(right: 15),
+          padding: const EdgeInsets.only(right: 15, top: 10),
           child: Text(
             'High    |    Low',
             style: AppStyles.h5.copyWith(color: AppColors.lightGrey),
@@ -200,7 +212,8 @@ class _NextDayForecastState extends State<NextDayForecast> {
                   return DayCollapseForecast(
                       index: item.key, forecast: forecast);
                 },
-                body: DayExpandForecast(index: item.key, forecast: forecast),
+                body: DayExpandForecast(
+                    index: item.key, forecastDaily: forecastDaily),
                 isExpanded: item.value,
               );
             }).toList(),
@@ -219,42 +232,58 @@ class _NextDayForecastState extends State<NextDayForecast> {
           //       return isExpand ? const ItemDayExpandForecast() : ItemDayCollapseForecast();
           //     }),
         ),
-        Row(
-          children: [
-            Text(
-              'Show more ',
-              style: AppStyles.h4.copyWith(color: Colors.white),
-            ),
-            const Icon(
-              Icons.expand_more_outlined,
-              size: 10,
-              color: Colors.white,
-            ),
-          ],
-        )
+        // InkWell(
+        //   onTap: () {
+        //     setState(() {
+        //       for(bool i in _isOpen) {
+        //         i = true;
+        //       }
+        //     });
+        //   },
+        //   child: Row(
+        //     children: [
+        //       Text(
+        //         'Show more ',
+        //         style: AppStyles.h4.copyWith(color: Colors.white),
+        //       ),
+        //       const Icon(
+        //         Icons.expand_more_outlined,
+        //         size: 10,
+        //         color: Colors.white,
+        //       ),
+        //     ],
+        //   ),
+        // )
       ]),
     );
   }
 }
 
 class DayExpandForecast extends StatelessWidget {
-  Forecast forecast;
+  ForecastDaily forecastDaily;
   int index;
 
-  DayExpandForecast({super.key, required this.forecast, required this.index});
+  DayExpandForecast(
+      {super.key, required this.forecastDaily, required this.index});
 
   @override
   Widget build(BuildContext context) {
     bool _isToday = index == 0;
-    List<Hourly>? listHourlyAll = forecast.hourly;
-    int dtCurrent = forecast.current!.dt!;
-    int hourCurrent = EpochTime.getDateTime(dtCurrent).hour;
-    int start = _isToday ? 0 : index * 24 - hourCurrent;
-    int end = 24 - hourCurrent + index * 24;
-    List<Hourly> listHourly = [];
-    for (int i = start; i <= end; i++) {
-      listHourly.add(listHourlyAll![i]);
+    DateTime dtNow = DateTime.now();
+    DateTime dtBegin =
+        DateTime(dtNow.year, dtNow.month, dtNow.day + index, 0, dtNow.minute);
+    DateTime dtEnd =
+        DateTime(dtNow.year, dtNow.month, dtNow.day + index, 24, dtNow.minute);
+    List<Hourly3> listHourlyAll = forecastDaily.listDaily!;
+    List<Hourly3> listHourly = [];
+    for (int i = 0; i <= listHourlyAll!.length; i++) {
+      DateTime dt = EpochTime.getDateTime(listHourlyAll[i].dt!);
+      if (dt.isBefore(dtBegin)) continue;
+      if (dt.isAfter(dtEnd)) break;
+      listHourly.add(listHourlyAll[i]);
     }
+
+    print('$index:$listHourly}');
 
     return SizedBox(
       height: 100,
@@ -270,7 +299,7 @@ class DayExpandForecast extends StatelessWidget {
 }
 
 class ItemDayExpandForecast extends StatelessWidget {
-  Hourly hourly;
+  Hourly3 hourly;
   bool isCurrent;
 
   ItemDayExpandForecast(
@@ -301,15 +330,15 @@ class ItemDayExpandForecast extends StatelessWidget {
                 )),
       child:
           Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        Image.network(
-          'http://openweathermap.org/img/wn/${hourly.weather![0].icon}@4x.png',
+        Image.asset(
+          AppAssets.iconWeather[hourly.weather![0].icon]!,
           height: 20,
           width: 25,
         ),
         Column(
           children: [
             Text(
-              '${hourly.temp!.round()}°',
+              '${hourly.main!.temp!.round()}°',
               style: AppStyles.h4
                   .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
             ),
@@ -360,8 +389,8 @@ class DayCollapseForecast extends StatelessWidget {
             )
           ],
         ),
-        Image.network(
-          'http://openweathermap.org/img/wn/${daily.weather![0].icon}@4x.png',
+        Image.asset(
+          AppAssets.iconWeather[daily.weather![0].icon]!,
           height: 35,
           width: 35,
         ),
@@ -410,10 +439,10 @@ class Details extends StatelessWidget {
                     color: Colors.white, fontWeight: FontWeight.bold)),
           ),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Image.network(
-              'http://openweathermap.org/img/wn/${current?.weather?[0].icon}@4x.png',
-              width: 180,
-              height: 130,
+            Image.asset(
+              AppAssets.iconWeather[current?.weather?[0].icon]!,
+              width: 150,
+              height: 120,
             ),
             SizedBox(
               width: 130,
@@ -467,10 +496,10 @@ class ItemDetail extends StatelessWidget {
   }
 }
 
-class AirQuality extends StatelessWidget {
-  double valuePM22;
+class AirQualityView extends StatelessWidget {
+  final double valuePM10;
 
-  AirQuality(this.valuePM22, {super.key});
+  AirQualityView(this.valuePM10);
 
   @override
   Widget build(BuildContext context) {
@@ -509,21 +538,26 @@ class AirQuality extends StatelessWidget {
                 height: 110,
                 child: Stack(
                   children: [
-                    CirclePointer(valuePM22),
+                    CirclePointer(valuePM10),
                     Center(
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              '$valuePM22',
+                              '${valuePM10.round()}',
                               style: const TextStyle(
                                   fontSize: 32,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
                             ),
-                            Text(
-                              getTextAirQuality(valuePM22),
-                              style: AppStyles.h5.copyWith(color: Colors.white),
+                            Container(
+                              width: 75,
+                              child: Text(
+                                textAlign: TextAlign.center,
+                                getTextAirQuality(valuePM10),
+                                style:
+                                    AppStyles.h5.copyWith(color: Colors.white),
+                              ),
                             )
                           ]),
                     )
@@ -576,7 +610,7 @@ class AirQuality extends StatelessWidget {
     if (valuePM22 <= 35.4) return 'Moderate';
     if (valuePM22 <= 55.4) return 'Unhealthy for Sensitive Groups';
     if (valuePM22 <= 150.4) return 'Unhealthy';
-    if (valuePM22 <= 250.4) return 'Very Unhealthy';
+    if (valuePM22 <= 250) return 'Very Unhealthy';
     return 'Hazardous';
   }
 }
@@ -795,7 +829,14 @@ class SunMoon extends StatelessWidget {
                     style: AppStyles.h3.copyWith(color: AppColors.lightGrey))
               ],
             ),
-            const SizedBox(height: 60, width: 90, child: Placeholder()),
+            SizedBox(
+                height: 60,
+                width: 90,
+                child: Image.asset(
+                  AppAssets.sunAni,
+                  width: 90,
+                  height: 60,
+                )),
             Column(
               children: [
                 Text(
@@ -831,7 +872,14 @@ class SunMoon extends StatelessWidget {
                     style: AppStyles.h3.copyWith(color: AppColors.lightGrey))
               ],
             ),
-            const SizedBox(height: 60, width: 90, child: Placeholder()),
+            SizedBox(
+                height: 60,
+                width: 90,
+                child: Image.asset(
+                  AppAssets.moonAni,
+                  width: 90,
+                  height: 60,
+                )),
             Column(
               children: [
                 Text(
@@ -907,14 +955,10 @@ class TodayForecast extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Transform.scale(
-                  scale: 1.5,
-                  alignment: Alignment.center,
-                  child: Image.network(
-                    'http://openweathermap.org/img/wn/${current?.weather?[0].icon}@4x.png',
-                    width: 120,
-                    height: 95,
-                  ),
+                Image.asset(
+                  AppAssets.iconWeather[current?.weather?[0].icon]!,
+                  width: 150,
+                  height: 120,
                 ),
                 ShaderMask(
                   shaderCallback: (Rect bounds) {
