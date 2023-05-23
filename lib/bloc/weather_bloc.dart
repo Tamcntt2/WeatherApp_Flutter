@@ -15,15 +15,33 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   final ApiRepository apiRepository = ApiRepository();
 
   WeatherBloc() : super(WeatherState()) {
-    on<WeatherFetched>(_onFetchWeather);
+    on<WeatherCurrentFetched>(_onFetchWeather);
+    on<WeatherLocationFetched>(_onFetchWeatherLocation);
   }
 
   Future<void> _onFetchWeather(
-      WeatherFetched event, Emitter<WeatherState> emit) async {
+      WeatherCurrentFetched event, Emitter<WeatherState> emit) async {
     emit(WeatherLoading());
     Position position = await CurrentLocation.getCurrentLocation();
     double lat = position.latitude;
     double lon = position.longitude;
+    final Forecast forecast =
+        await apiRepository.fetchForecastOneCall(lat, lon);
+    final AirQuality airQuality = await apiRepository.fetchAirQuality(lat, lon);
+    final ForecastDaily forecastDaily =
+        await apiRepository.fetchForecastDaily(lat, lon);
+
+    emit(WeatherLoaded(
+        forecast: forecast,
+        airQuality: airQuality,
+        forecastDaily: forecastDaily));
+  }
+
+  Future<void> _onFetchWeatherLocation(
+      WeatherLocationFetched event, Emitter<WeatherState> emit) async {
+    emit(WeatherLoading());
+    double lat = event.lat;
+    double lon = event.lon;
     final Forecast forecast =
         await apiRepository.fetchForecastOneCall(lat, lon);
     final AirQuality airQuality = await apiRepository.fetchAirQuality(lat, lon);

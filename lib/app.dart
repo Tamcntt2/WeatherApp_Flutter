@@ -11,6 +11,7 @@ import 'package:weather_app/screens/drawer/register.dart';
 import 'package:weather_app/screens/home/home_screen.dart';
 import 'package:weather_app/screens/splash/splash_screen.dart';
 import 'package:weather_app/screens/stepper/stepper_screen.dart';
+import 'package:weather_app/widgets/overview_forecast.dart';
 
 import 'bloc/weather_state.dart';
 
@@ -25,7 +26,9 @@ class _MyAppState extends State<MyApp> {
     return BlocProvider(
         create: (BuildContext context) {
           WeatherBloc weatherBloc = WeatherBloc();
-          return weatherBloc..add(WeatherFetched());
+          return weatherBloc
+            ..add(WeatherLocationFetched(lat: 20.865139, lon: 106.683830));
+          // return weatherBloc..add(WeatherCurrentFetched());
         },
         child: BlocListener<WeatherBloc, WeatherState>(
             listener: (context, state) {
@@ -35,18 +38,19 @@ class _MyAppState extends State<MyApp> {
               }
             },
             child: MaterialApp(
-              home: FutureBuilder(
-                future: fetchSomething(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData && snapshot.data == true) {
-                    return StepperScreen();
-                  } else if (snapshot.hasData && snapshot.data == false) {
-                    return HomeScreen();
-                  } else {
-                    return SplashScreen();
-                  }
-                },
-              ),
+              home: OverviewLocation(lat: 20.865139, lon: 106.683830),
+              // home: FutureBuilder(
+              //   future: fetchSomething(),
+              //   builder: (context, snapshot) {
+              //     if (snapshot.hasData && snapshot.data == true) {
+              //       return StepperScreen();
+              //     } else if (snapshot.hasData && snapshot.data == false) {
+              //       return HomeScreen();
+              //     } else {
+              //       return SplashScreen();
+              //     }
+              //   },
+              // ),
               debugShowCheckedModeBanner: false,
             )));
   }
@@ -61,8 +65,6 @@ class _MyAppState extends State<MyApp> {
     }
     return isFirstTime;
   }
-
-
 }
 
 // class _MyAppState extends State<MyApp> {

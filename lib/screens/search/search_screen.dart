@@ -36,10 +36,11 @@ class SearchScreen extends StatelessWidget {
                     icon: Icon(
                       Icons.arrow_back_ios,
                       color: Colors.white,
+                      size: 17,
                     )),
                 Text(
                   'Location',
-                  style: AppStyles.h2.copyWith(
+                  style: AppStyles.h3.copyWith(
                       color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ],
