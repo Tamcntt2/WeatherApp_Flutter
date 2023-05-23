@@ -6,7 +6,7 @@ import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
 
 import '../../models/location.dart';
-import '../../resources/api_repository.dart';
+import '../../resources/api/api_repository.dart';
 
 class SearchScreen extends StatelessWidget {
   @override

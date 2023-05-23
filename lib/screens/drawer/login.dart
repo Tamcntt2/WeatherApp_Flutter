@@ -13,6 +13,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool _obscureText = true;
+  bool _isChecked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +104,37 @@ class _LoginState extends State<Login> {
                             Radius.circular(30),
                           ),
                         )),
+                  ),
+                  Container(
+                    height: 15,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Checkbox(
+                            value: _isChecked,
+                            side: BorderSide(color: Colors.white),
+                            activeColor: Colors.redAccent,
+                            checkColor: Colors.white,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                _isChecked = value!;
+                              });
+                            },
+                          ),
+                          Text(
+                            'Remember me',
+                            style: TextStyle(color: AppColors.lightGrey),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        'Forgot password',
+                        style: TextStyle(color: Colors.redAccent),
+                      )
+                    ],
                   ),
                   Container(
                     height: 30,

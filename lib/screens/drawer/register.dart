@@ -12,6 +12,7 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   bool _obscureText = true;
+  bool _obscureText2 = true;
   bool _isChecked = false;
 
   @override
@@ -161,16 +162,16 @@ class _RegisterState extends State<Register> {
                   Container(height: 15),
                   TextField(
                     style: TextStyle(color: Colors.white),
-                    obscureText: _obscureText,
+                    obscureText: _obscureText2,
                     decoration: InputDecoration(
                         hintText: 'Confirm Password',
                         suffixIcon: IconButton(
-                          icon: Icon(_obscureText
+                          icon: Icon(_obscureText2
                               ? Icons.visibility_off
                               : Icons.visibility),
                           onPressed: () {
                             setState(() {
-                              _obscureText = !_obscureText;
+                              _obscureText2 = !_obscureText2;
                             });
                           },
                         ),

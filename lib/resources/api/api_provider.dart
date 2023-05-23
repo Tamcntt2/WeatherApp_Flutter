@@ -4,9 +4,9 @@ import 'package:weather_app/models/forecast.dart';
 import 'package:http/http.dart' as http;
 import 'package:weather_app/models/location.dart';
 
-import '../models/air_quality.dart';
-import '../models/forecast_daily.dart';
-import '../models/location2.dart';
+import '../../models/air_quality.dart';
+import '../../models/forecast_daily.dart';
+import '../../models/location2.dart';
 import 'demo_data.dart';
 import 'demo_data2.dart';
 
@@ -54,8 +54,7 @@ class ApiProvider {
     }
   }
 
-  Future<AirQuality> fetchAirQuality(
-      double lat, double lon) async {
+  Future<AirQuality> fetchAirQuality(double lat, double lon) async {
     String key = 'bf94bd3a7d84cc009f132207bdea82e6';
     var recipesUrl = Uri.parse(
         'https://api.openweathermap.org/data/2.5/air_pollution?lat=$lat&lon=$lon&appid=$key');
@@ -68,8 +67,7 @@ class ApiProvider {
     }
   }
 
-  Future<MyLocation> fetchAddressFromLocation(
-      double lat, double lon) async {
+  Future<MyLocation> fetchAddressFromLocation(double lat, double lon) async {
     var recipesUrl = Uri.parse(
         'https://nominatim.openstreetmap.org/reverse?format=jsonv2?lat=$lat&lon=$lon');
     final response = await http.get(recipesUrl);

@@ -8,7 +8,7 @@ import 'package:weather_app/models/forecast.dart';
 import 'package:weather_app/models/location.dart';
 
 import '../models/forecast_daily.dart';
-import '../resources/api_repository.dart';
+import '../resources/api/api_repository.dart';
 import '../utils/current_location.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {

@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_app/bloc/weather_bloc.dart';
 import 'package:weather_app/bloc/weather_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather_app/screens/drawer/change_profile.dart';
 import 'package:weather_app/screens/drawer/login.dart';
 import 'package:weather_app/screens/drawer/register.dart';
 import 'package:weather_app/screens/home/home_screen.dart';
@@ -67,7 +68,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: Login(),
       debugShowCheckedModeBanner: false,
     );
