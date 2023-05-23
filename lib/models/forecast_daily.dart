@@ -12,9 +12,9 @@ class ForecastDaily {
     cod = json["cod"];
     message = json["message"];
     cnt = json["cnt"];
-    listDaily = json["list_daily"] == null
+    listDaily = json["list"] == null
         ? null
-        : (json["list_daily"] as List).map((e) => Hourly3.fromJson(e)).toList();
+        : (json["list"] as List).map((e) => Hourly3.fromJson(e)).toList();
     city = json["city"] == null ? null : City.fromJson(json["city"]);
   }
 
@@ -28,7 +28,7 @@ class ForecastDaily {
     _data["message"] = message;
     _data["cnt"] = cnt;
     if (listDaily != null) {
-      _data["list_daily"] = listDaily?.map((e) => e.toJson()).toList();
+      _data["list"] = listDaily?.map((e) => e.toJson()).toList();
     }
     if (city != null) {
       _data["city"] = city?.toJson();
@@ -125,8 +125,8 @@ class City {
 }
 
 class Coord {
-  double? lat;
-  double? lon;
+  dynamic lat;
+  dynamic lon;
 
   Coord({this.lat, this.lon});
 
@@ -147,8 +147,8 @@ class Coord {
   }
 
   Coord copyWith({
-    double? lat,
-    double? lon,
+    dynamic lat,
+    dynamic lon,
   }) =>
       Coord(
         lat: lat ?? this.lat,
@@ -163,7 +163,7 @@ class Hourly3 {
   Clouds? clouds;
   Wind? wind;
   int? visibility;
-  int? pop;
+  dynamic pop;
   Sys? sys;
   String? dtTxt;
 
@@ -227,7 +227,7 @@ class Hourly3 {
     Clouds? clouds,
     Wind? wind,
     int? visibility,
-    int? pop,
+    dynamic pop,
     Sys? sys,
     String? dtTxt,
   }) =>

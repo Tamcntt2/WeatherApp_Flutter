@@ -13,6 +13,7 @@ import 'package:weather_app/values/app_styles.dart';
 import '../../bloc/weather_state.dart';
 import '../../models/air_quality.dart';
 import '../../models/forecast.dart';
+import '../../models/forecast_daily.dart';
 import '../../widgets/my_separator.dart';
 
 class TodayPage extends StatefulWidget {
@@ -177,6 +178,33 @@ class _NextDayForecastState extends State<NextDayForecast> {
 
   @override
   Widget build(BuildContext context) {
+    // Map<int, List<Hourly3>> mapListHourly = {
+    //   for (var i in List<int>.generate(7, (i) => i + 1)) i: <Hourly3>[]
+    // };
+    // DateTime dateCurrent = EpochTime.getDateTime(forecast.current!.dt!);
+    // DateTime dateCompare = DateTime(
+    //     dateCurrent.year, dateCurrent.month, dateCurrent.day + 1, 0, 0, 0);
+    // List<Hourly3> list = forecastDaily.listDaily!;
+    // int index = 0;
+    //
+    // for (Hourly3 i in list) {
+    //   DateTime dateSelected = EpochTime.getDateTime(i.dt!);
+    //   if (dateSelected.isAfter(dateCompare)) {
+    //     index++;
+    //     dateCompare = dateCompare.add(Duration(days: 1));
+    //   }
+    //   print('$index - $dateSelected - $dateCompare');
+    //   mapListHourly[index]!.add(i);
+    // }
+
+    // for (int key in mapListHourly.keys) {
+    //   print('Key: $key');
+    //   List<Hourly3> values = mapListHourly[key]!;
+    //   for (Hourly3 value in values) {
+    //     print(value.toJson());
+    //   }
+    // }
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(left: 23, right: 23, top: 10, bottom: 20),
@@ -204,7 +232,7 @@ class _NextDayForecastState extends State<NextDayForecast> {
             elevation: 0,
             dividerColor: Colors.transparent,
             children: _isOpen.asMap().entries.map<ExpansionPanel>((item) {
-              print(item.key);
+              // print(item.key);
               return ExpansionPanel(
                 backgroundColor: Colors.transparent,
                 canTapOnHeader: true,
@@ -212,8 +240,11 @@ class _NextDayForecastState extends State<NextDayForecast> {
                   return DayCollapseForecast(
                       index: item.key, forecast: forecast);
                 },
+                // body: Container(),
                 body: DayExpandForecast(
-                    index: item.key, forecastDaily: forecastDaily),
+                    index: item.key,
+                    forecastDaily: forecastDaily,
+                    forecast: forecast),
                 isExpanded: item.value,
               );
             }).toList(),
@@ -262,28 +293,62 @@ class _NextDayForecastState extends State<NextDayForecast> {
 class DayExpandForecast extends StatelessWidget {
   ForecastDaily forecastDaily;
   int index;
+  Forecast forecast;
 
   DayExpandForecast(
-      {super.key, required this.forecastDaily, required this.index});
+      {super.key,
+      required this.forecastDaily,
+      required this.index,
+      required this.forecast});
 
   @override
   Widget build(BuildContext context) {
     bool _isToday = index == 0;
-    DateTime dtNow = DateTime.now();
-    DateTime dtBegin =
-        DateTime(dtNow.year, dtNow.month, dtNow.day + index, 0, dtNow.minute);
-    DateTime dtEnd =
-        DateTime(dtNow.year, dtNow.month, dtNow.day + index, 24, dtNow.minute);
-    List<Hourly3> listHourlyAll = forecastDaily.listDaily!;
+
+    if (index < 2) {
+      List<Hourly> listHourly = [];
+      DateTime dtNow = EpochTime.getDateTime(forecast.current!.dt!);
+      DateTime dtBegin = DateTime(
+          dtNow.year, dtNow.month, dtNow.day + index, 0, dtNow.minute - 1);
+      DateTime dtEnd = DateTime(
+          dtNow.year, dtNow.month, dtNow.day + index, 24, dtNow.minute + 1);
+      List<Hourly> listHourlyAll = forecast.hourly!;
+      for (int i = 0; i <= listHourlyAll.length; i++) {
+        DateTime dt = EpochTime.getDateTime(listHourlyAll[i].dt!);
+        if (dt.isBefore(dtBegin)) continue;
+        if (dt.isAfter(dtEnd)) break;
+        listHourly.add(listHourlyAll[i]);
+      }
+
+      return SizedBox(
+        height: 100,
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: listHourly.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ItemDayExpandForecast(
+                isCurrent: _isToday && index == 0,
+                hour: getStringHourItemDayExpand(listHourly[index].dt),
+                icon: listHourly[index].weather![0].icon!,
+                temp: listHourly[index].temp,
+              );
+            }),
+      );
+    }
+
     List<Hourly3> listHourly = [];
-    for (int i = 0; i <= listHourlyAll!.length; i++) {
+    DateTime dtNow = EpochTime.getDateTime(forecastDaily.listDaily![0].dt!);
+    DateTime dtBegin = DateTime(
+        dtNow.year, dtNow.month, dtNow.day + index, 0, dtNow.minute - 1);
+    DateTime dtEnd = DateTime(
+        dtNow.year, dtNow.month, dtNow.day + index, 24, dtNow.minute + 1);
+    List<Hourly3> listHourlyAll = forecastDaily.listDaily!;
+    for (int i = 0; i <= listHourlyAll.length; i++) {
       DateTime dt = EpochTime.getDateTime(listHourlyAll[i].dt!);
       if (dt.isBefore(dtBegin)) continue;
       if (dt.isAfter(dtEnd)) break;
       listHourly.add(listHourlyAll[i]);
     }
-
-    print('$index:$listHourly}');
 
     return SizedBox(
       height: 100,
@@ -292,25 +357,39 @@ class DayExpandForecast extends StatelessWidget {
           itemCount: listHourly.length,
           itemBuilder: (BuildContext context, int index) {
             return ItemDayExpandForecast(
-                hourly: listHourly[index], isCurrent: _isToday && index == 0);
+              isCurrent: _isToday && index == 0,
+              icon: listHourly[index].weather![0].icon!,
+              temp: listHourly[index].main!.temp,
+              hour: getStringHourItemDayExpand(listHourly[index].dt),
+            );
           }),
     );
+  }
+
+  String getStringHourItemDayExpand(int? dt) {
+    DateTime dateSelected = EpochTime.getDateTime(dt!);
+    String textHour = dateSelected.hour == 0
+        ? '00 AM'
+        : DateFormat('hh aaa').format(dateSelected);
+    return textHour;
   }
 }
 
 class ItemDayExpandForecast extends StatelessWidget {
-  Hourly3 hourly;
   bool isCurrent;
+  double temp;
+  String hour;
+  String icon;
 
   ItemDayExpandForecast(
-      {super.key, required this.hourly, required this.isCurrent});
+      {super.key,
+      required this.hour,
+      required this.temp,
+      required this.icon,
+      required this.isCurrent});
 
   @override
   Widget build(BuildContext context) {
-    DateTime dateSelected = EpochTime.getDateTime(hourly.dt!);
-    String textHour = dateSelected.hour == 0
-        ? '00 AM'
-        : DateFormat('hh aaa').format(dateSelected);
     return Container(
       height: 90,
       width: 40,
@@ -331,14 +410,14 @@ class ItemDayExpandForecast extends StatelessWidget {
       child:
           Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Image.asset(
-          AppAssets.iconWeather[hourly.weather![0].icon]!,
+          AppAssets.iconWeather[icon]!,
           height: 20,
           width: 25,
         ),
         Column(
           children: [
             Text(
-              '${hourly.main!.temp!.round()}°',
+              '${temp.round()}°',
               style: AppStyles.h4
                   .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
             ),
@@ -346,7 +425,7 @@ class ItemDayExpandForecast extends StatelessWidget {
               height: 5,
             ),
             Text(
-              textHour,
+              hour,
               style: AppStyles.h6.copyWith(color: AppColors.lightGrey),
             )
           ],
@@ -379,7 +458,7 @@ class DayCollapseForecast extends StatelessWidget {
             ),
             Container(
               padding: const EdgeInsets.only(left: 8),
-              width: 60,
+              width: 80,
               child: Text(
                 index == 0
                     ? 'Today'

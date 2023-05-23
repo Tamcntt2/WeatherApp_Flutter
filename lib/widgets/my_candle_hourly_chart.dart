@@ -58,7 +58,7 @@ class _MyCandleHourlyChartState extends State<MyCandleHourlyChart> {
               );
             }),
       ),
-      DrawLine(listPoint)
+      // DrawLine(listPoint)
       // Text(
       //   listPoint.length.toString(),
       //   style: TextStyle(fontSize: 30),

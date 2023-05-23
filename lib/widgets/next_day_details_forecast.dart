@@ -118,11 +118,11 @@ class ItemDayDetailsForecast extends StatelessWidget {
             Container(
               width: 24,
             ),
-            Icon(
-              Icons.arrow_forward_ios,
-              size: 15,
-              color: Colors.white,
-            )
+            // Icon(
+            //   Icons.arrow_forward_ios,
+            //   size: 15,
+            //   color: Colors.white,
+            // )
           ],
         )
       ]),

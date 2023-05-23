@@ -19,58 +19,58 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-// class _MyAppState extends State<MyApp> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocProvider(
-//         create: (BuildContext context) {
-//           WeatherBloc weatherBloc = WeatherBloc();
-//           return weatherBloc..add(WeatherFetched());
-//         },
-//         child: BlocListener<WeatherBloc, WeatherState>(
-//             listener: (context, state) {
-//               if (state is WeatherError) {
-//                 ScaffoldMessenger.of(context)
-//                     .showSnackBar(SnackBar(content: Text(state.message!)));
-//               }
-//             },
-//             child: MaterialApp(
-//               home: FutureBuilder(
-//                 future: fetchSomething(),
-//                 builder: (context, snapshot) {
-//                   if (snapshot.hasData && snapshot.data == true) {
-//                     return StepperScreen();
-//                   } else if (snapshot.hasData && snapshot.data == false) {
-//                     return HomeScreen();
-//                   } else {
-//                     return SplashScreen();
-//                   }
-//                 },
-//               ),
-//               debugShowCheckedModeBanner: false,
-//             )));
-//   }
-//
-//   Future<bool> fetchSomething() async {
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     await Future.delayed(Duration(seconds: 2));
-//     await prefs.setBool('isFirstTime', true);
-//     bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
-//     if (isFirstTime) {
-//       await prefs.setBool('isFirstTime', false);
-//     }
-//     return isFirstTime;
-//   }
-//
-//
-// }
-
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Login(),
-      debugShowCheckedModeBanner: false,
-    );
+    return BlocProvider(
+        create: (BuildContext context) {
+          WeatherBloc weatherBloc = WeatherBloc();
+          return weatherBloc..add(WeatherFetched());
+        },
+        child: BlocListener<WeatherBloc, WeatherState>(
+            listener: (context, state) {
+              if (state is WeatherError) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(state.message!)));
+              }
+            },
+            child: MaterialApp(
+              home: FutureBuilder(
+                future: fetchSomething(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data == true) {
+                    return StepperScreen();
+                  } else if (snapshot.hasData && snapshot.data == false) {
+                    return HomeScreen();
+                  } else {
+                    return SplashScreen();
+                  }
+                },
+              ),
+              debugShowCheckedModeBanner: false,
+            )));
   }
+
+  Future<bool> fetchSomething() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await Future.delayed(Duration(seconds: 2));
+    await prefs.setBool('isFirstTime', true);
+    bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
+    if (isFirstTime) {
+      await prefs.setBool('isFirstTime', false);
+    }
+    return isFirstTime;
+  }
+
+
 }
+
+// class _MyAppState extends State<MyApp> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: Login(),
+//       debugShowCheckedModeBanner: false,
+//     );
+//   }
+// }

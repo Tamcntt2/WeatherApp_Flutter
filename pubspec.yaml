@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   percent_indicator: ^4.2.3
-  syncfusion_flutter_gauges: ^21.1.41
+  syncfusion_flutter_gauges: ^21.2.5
   bloc: ^8.1.1
   flutter_bloc: ^8.1.2
   equatable: ^2.0.5
