@@ -26,9 +26,9 @@ class _MyAppState extends State<MyApp> {
     return BlocProvider(
         create: (BuildContext context) {
           WeatherBloc weatherBloc = WeatherBloc();
-          return weatherBloc
-            ..add(WeatherLocationFetched(lat: 20.865139, lon: 106.683830));
-          // return weatherBloc..add(WeatherCurrentFetched());
+          // return weatherBloc
+          //   ..add(WeatherLocationFetched(lat: 20.865139, lon: 106.683830));
+          return weatherBloc..add(WeatherCurrentFetched());
         },
         child: BlocListener<WeatherBloc, WeatherState>(
             listener: (context, state) {
@@ -38,19 +38,19 @@ class _MyAppState extends State<MyApp> {
               }
             },
             child: MaterialApp(
-              home: OverviewLocation(lat: 20.865139, lon: 106.683830),
-              // home: FutureBuilder(
-              //   future: fetchSomething(),
-              //   builder: (context, snapshot) {
-              //     if (snapshot.hasData && snapshot.data == true) {
-              //       return StepperScreen();
-              //     } else if (snapshot.hasData && snapshot.data == false) {
-              //       return HomeScreen();
-              //     } else {
-              //       return SplashScreen();
-              //     }
-              //   },
-              // ),
+              // home: OverviewLocation(lat: 20.865139, lon: 106.683830),
+              home: FutureBuilder(
+                future: fetchSomething(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data == true) {
+                    return StepperScreen();
+                  } else if (snapshot.hasData && snapshot.data == false) {
+                    return HomeScreen();
+                  } else {
+                    return SplashScreen();
+                  }
+                },
+              ),
               debugShowCheckedModeBanner: false,
             )));
   }

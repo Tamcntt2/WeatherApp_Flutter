@@ -34,24 +34,6 @@ class StepperPage2 extends StatelessWidget {
                 width: 300,
                 child: Stack(
                   children: [
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HomeScreen(),
-                              ),
-                              (route) => false);
-                        },
-                        child: Text(
-                          'Skip',
-                          style: TextStyle(color: Colors.white, fontSize: 14),
-                        ),
-                      ),
-                    ),
                     Image.asset(image),
                     Positioned(
                       bottom: 0,
@@ -70,6 +52,24 @@ class StepperPage2 extends StatelessWidget {
                             },
                             itemCount: countIndex,
                           ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomeScreen(),
+                              ),
+                              (route) => false);
+                        },
+                        child: Text(
+                          'Skip',
+                          style: TextStyle(color: Colors.white, fontSize: 14),
                         ),
                       ),
                     ),
