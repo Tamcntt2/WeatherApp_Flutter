@@ -61,7 +61,7 @@ class _TemperatureViewState extends State<TemperatureView> {
                 minWidth: 60,
                 fontSize: 10,
                 minHeight: 23,
-                initialLabelIndex: 1,
+                initialLabelIndex: _isSwitched,
                 cornerRadius: 20.0,
                 activeFgColor: Colors.white,
                 inactiveBgColor: Colors.white54,

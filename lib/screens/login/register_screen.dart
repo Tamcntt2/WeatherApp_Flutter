@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/screens/drawer/register.dart';
-import 'package:weather_app/values/app_assets.dart';
+import 'package:weather_app/screens/login/login_screen.dart';
 
 import '../../values/app_colors.dart';
 
-class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginState extends State<Login> {
+class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscureText = true;
+  bool _obscureText2 = true;
   bool _isChecked = false;
 
   @override
@@ -32,12 +32,70 @@ class _LoginState extends State<Login> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Log In',
+                'Sign Up',
                 style: TextStyle(color: Colors.white, fontSize: 30),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          style: TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                              hintText: 'First Name',
+                              hintStyle: TextStyle(
+                                  color: AppColors.lightGrey,
+                                  fontStyle: FontStyle.italic),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 0.5, color: Colors.redAccent),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(30),
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 0.5, color: Colors.redAccent),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(30),
+                                ),
+                              )),
+                        ),
+                      ),
+                      Container(
+                        width: 15,
+                      ),
+                      Expanded(
+                        child: TextField(
+                          style: TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                              hintText: 'Last Name',
+                              hintStyle: TextStyle(
+                                  color: AppColors.lightGrey,
+                                  fontStyle: FontStyle.italic),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 0.5, color: Colors.redAccent),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(30),
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 0.5, color: Colors.redAccent),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(30),
+                                ),
+                              )),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    height: 15,
+                  ),
                   TextField(
                     style: TextStyle(color: Colors.white),
                     decoration: InputDecoration(
@@ -71,10 +129,6 @@ class _LoginState extends State<Login> {
                     style: TextStyle(color: Colors.white),
                     obscureText: _obscureText,
                     decoration: InputDecoration(
-                        prefixIcon: Icon(
-                          Icons.lock,
-                          color: Colors.white,
-                        ),
                         hintText: 'Password',
                         suffixIcon: IconButton(
                           icon: Icon(_obscureText
@@ -105,35 +159,62 @@ class _LoginState extends State<Login> {
                           ),
                         )),
                   ),
+                  Container(height: 15),
+                  TextField(
+                    style: TextStyle(color: Colors.white),
+                    obscureText: _obscureText2,
+                    decoration: InputDecoration(
+                        hintText: 'Confirm Password',
+                        suffixIcon: IconButton(
+                          icon: Icon(_obscureText2
+                              ? Icons.visibility_off
+                              : Icons.visibility),
+                          onPressed: () {
+                            setState(() {
+                              _obscureText2 = !_obscureText2;
+                            });
+                          },
+                        ),
+                        hintStyle: TextStyle(
+                            color: AppColors.lightGrey,
+                            fontStyle: FontStyle.italic),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(width: 0.5, color: Colors.redAccent),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(30),
+                          ),
+                        ),
+                        suffixIconColor: Colors.white,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(width: 0.5, color: Colors.redAccent),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(30),
+                          ),
+                        )),
+                  ),
                   Container(
                     height: 15,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Checkbox(
-                            value: _isChecked,
-                            side: BorderSide(color: Colors.white),
-                            activeColor: Colors.redAccent,
-                            checkColor: Colors.white,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                _isChecked = value!;
-                              });
-                            },
-                          ),
-                          Text(
-                            'Remember me',
-                            style: TextStyle(color: AppColors.lightGrey),
-                          ),
-                        ],
+                      Checkbox(
+                        value: _isChecked,
+                        side: BorderSide(color: Colors.white),
+                        activeColor: Colors.redAccent,
+                        checkColor: Colors.white,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _isChecked = value!;
+                          });
+                        },
                       ),
                       Text(
-                        'Forgot password',
-                        style: TextStyle(color: Colors.redAccent),
-                      )
+                        'I Agree with privacy and policy',
+                        style: TextStyle(color: AppColors.lightGrey),
+                      ),
                     ],
                   ),
                   Container(
@@ -146,7 +227,7 @@ class _LoginState extends State<Login> {
                       alignment: Alignment.center,
                       padding: EdgeInsets.symmetric(vertical: 15),
                       child: Text(
-                        'Log in',
+                        'Sign up',
                         style: TextStyle(color: Colors.white),
                       ),
                       decoration: BoxDecoration(
@@ -158,42 +239,23 @@ class _LoginState extends State<Login> {
               ),
               Column(
                 children: [
-                  Text(
-                    'Or Sign in with',
-                    style: TextStyle(color: AppColors.lightGrey),
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(
-                            AppAssets.google,
-                          )),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.transparent)),
-                    ),
-                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Don\'t have an accout?',
+                        'Already have an accout?',
                         style: TextStyle(color: AppColors.lightGrey),
                       ),
                       TextButton(
                         child: Text(
-                          'Sign up',
+                          'Sign in',
                           style: TextStyle(color: Colors.redAccent),
                         ),
                         onPressed: () {
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Register(),
+                                builder: (context) => LoginScreen(),
                               ),
                               (route) => false);
                         },

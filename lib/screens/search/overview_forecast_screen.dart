@@ -14,26 +14,27 @@ import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
 import 'package:http/http.dart' as http;
 
-import '../../bloc/weather_state.dart';
-import '../../models/air_quality.dart';
-import '../../models/forecast.dart';
-import '../../models/forecast_daily.dart';
-import '../../widgets/my_separator.dart';
-import '../models/location.dart';
-import '../utils/current_location.dart';
+import '../../../bloc/weather_state.dart';
+import '../../../models/air_quality.dart';
+import '../../../models/forecast.dart';
+import '../../../models/forecast_daily.dart';
+import '../../../widgets/my_separator.dart';
+import '../../models/location.dart';
+import '../../utils/current_location.dart';
+import '../../utils/setting_utits.dart';
 
-class OverviewLocation extends StatefulWidget {
+class OverviewLocationScreen extends StatefulWidget {
   final double lat;
   final double lon;
 
-  OverviewLocation({required this.lat, required this.lon});
+  OverviewLocationScreen({required this.lat, required this.lon});
 
   @override
-  State<OverviewLocation> createState() =>
-      _OverviewLocationState(lat: lat, lon: lon);
+  State<OverviewLocationScreen> createState() =>
+      _OverviewLocationScreenState(lat: lat, lon: lon);
 }
 
-class _OverviewLocationState extends State<OverviewLocation> {
+class _OverviewLocationScreenState extends State<OverviewLocationScreen> {
   late Forecast forecast;
   late AirQuality airQuality;
   late ForecastDaily forecastDaily;
@@ -41,20 +42,64 @@ class _OverviewLocationState extends State<OverviewLocation> {
   final double lat;
   final double lon;
 
-  _OverviewLocationState({required this.lat, required this.lon});
+  _OverviewLocationScreenState({required this.lat, required this.lon});
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                colors: [Color(0xff484B5B), Color(0xff2C2D35)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter),
+      child: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+              colors: [Color(0xff484B5B), Color(0xff2C2D35)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter),
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+                size: 17,
+              ),
+            ),
+            actions: [
+              IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.more_vert,
+                  color: Colors.white,
+                  size: 17,
+                ),
+              )
+            ],
+            title: Center(
+              child: BlocBuilder<WeatherBloc, WeatherState>(
+                builder: (context, state) {
+                  if (state is WeatherInitial || state is WeatherLoading) {
+                    return Container();
+                  } else if (state is WeatherLoaded) {
+                    MyLocation myLocation = state.myLocation!;
+                    String textAddress =
+                        '${myLocation.address!.city}, ${myLocation.address!.country}';
+                    return Text(
+                      UIUtils.convertNameCity(textAddress),
+                      style: TextStyle(color: Colors.white, fontSize: 14),
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
+              ),
+            ),
           ),
-          child: BlocBuilder<WeatherBloc, WeatherState>(
+          body: BlocBuilder<WeatherBloc, WeatherState>(
             builder: (context, state) {
               if (state is WeatherInitial || state is WeatherLoading) {
                 return const BuildLoading();
@@ -98,63 +143,6 @@ class ForecastView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                  size: 17,
-                )),
-            BlocBuilder<WeatherBloc, WeatherState>(
-              builder: (context, state) {
-                if (state is WeatherInitial || state is WeatherLoading) {
-                  return Container();
-                } else if (state is WeatherLoaded) {
-                  MyLocation myLocation = state.myLocation!;
-                  String textAddress =
-                      '${myLocation.address!.city}, ${myLocation.address!.country}';
-                  return Text(
-                    UIUtils.convertNameCity(textAddress),
-                    style: TextStyle(color: Colors.white, fontSize: 14),
-                  );
-                } else {
-                  return Container();
-                }
-              },
-            ),
-            // FutureBuilder(
-            //   builder: (context, snapshot) {
-            //     String textAddress;
-            //     if (snapshot.hasData) {
-            //       textAddress =
-            //           '${snapshot.data!.address!.city}, ${snapshot.data!.address!.country}';
-            //     } else {
-            //       textAddress = '';
-            //     }
-            //     return Text(
-            //       UIUtils.convertNameCity(textAddress),
-            //       style: AppStyles.h3.copyWith(
-            //           color: Colors.white, fontWeight: FontWeight.bold),
-            //     );
-            //   },
-            //   future: _fetchCurrentAddress(),
-            // ),
-            IconButton(
-                onPressed: () {
-                  // ...
-                },
-                icon: Icon(
-                  Icons.more_vert,
-                  color: Colors.white,
-                  size: 17,
-                )),
-          ],
-        ),
         TodayForecast(forecast: forecast),
         NextHourForecast(forecast: forecast),
         NextDayForecast(forecastDaily: forecastDaily, forecast: forecast),
@@ -166,18 +154,18 @@ class ForecastView extends StatelessWidget {
     );
   }
 
-  // Future<MyLocation> _fetchCurrentAddress() async {
-  //   print('lat: $lat, lon: $lon');
-  //   var recipesUrl = Uri.parse(
-  //       'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=$lat&lon=$lon');
-  //   final response = await http.get(recipesUrl);
-  //   if (response.statusCode == 200) {
-  //     final body = json.decode(response.body);
-  //     return MyLocation.fromJson(body);
-  //   } else {
-  //     throw Exception('Failed to load data from API');
-  //   }
-  // }
+// Future<MyLocation> _fetchCurrentAddress() async {
+//   print('lat: $lat, lon: $lon');
+//   var recipesUrl = Uri.parse(
+//       'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=$lat&lon=$lon');
+//   final response = await http.get(recipesUrl);
+//   if (response.statusCode == 200) {
+//     final body = json.decode(response.body);
+//     return MyLocation.fromJson(body);
+//   } else {
+//     throw Exception('Failed to load data from API');
+//   }
+// }
 }
 
 class BuildLoading extends StatelessWidget {
@@ -252,7 +240,7 @@ class ItemHourForecast extends StatelessWidget {
               height: 18,
             ),
           ),
-          Text('${hourly.temp?.round()}°',
+          Text(SettingUtits.getDegreeUnit(hourly.temp, false),
               style: AppStyles.h4.copyWith(color: Colors.white))
         ]),
       ),
@@ -520,7 +508,7 @@ class ItemDayExpandForecast extends StatelessWidget {
         Column(
           children: [
             Text(
-              '${temp.round()}°',
+              SettingUtits.getDegreeUnit(temp, false),
               style: AppStyles.h4
                   .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
             ),
@@ -578,11 +566,11 @@ class DayCollapseForecast extends StatelessWidget {
         ),
         Row(
           children: [
-            Text('${daily.temp!.max!.round()}°',
+            Text(SettingUtits.getDegreeUnit(daily.temp!.max!, false),
                 style: AppStyles.h4.copyWith(color: Colors.white)),
             Padding(
               padding: const EdgeInsets.only(left: 23, right: 0),
-              child: Text('${daily.temp!.min!.round()}°',
+              child: Text(SettingUtits.getDegreeUnit(daily.temp!.min!, false),
                   style: AppStyles.h4.copyWith(color: Colors.white)),
             ),
           ],
@@ -633,9 +621,13 @@ class Details extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ItemDetail('Feels like', '${current?.feelsLike?.round()}°'),
+                  ItemDetail('Feels like',
+                      SettingUtits.getDegreeUnit(current?.feelsLike, true)),
                   ItemDetail('Humidity', '${current?.humidity}%'),
-                  ItemDetail('Visibility', '${current?.visibility} m'),
+                  ItemDetail(
+                      'Visibility',
+                      SettingUtits.getDistanceUnit(
+                          current?.visibility as double)),
                   ItemDetail('UV Index', '${current?.uvi?.round()}'),
                   ItemDetail('Dew point', '${current?.dewPoint?.round()}°'),
                 ],
@@ -1151,7 +1143,7 @@ class TodayForecast extends StatelessWidget {
                         .createShader(bounds);
                   },
                   child: Text(
-                    '${current?.temp?.round()}°',
+                    SettingUtits.getDegreeUnit(current?.temp, true),
                     style: const TextStyle(
                         fontSize: 48.0,
                         color: Colors.white,
@@ -1170,7 +1162,8 @@ class TodayForecast extends StatelessWidget {
                     style: AppStyles.h5.copyWith(color: AppColors.lightGrey),
                     children: <TextSpan>[
                       TextSpan(
-                          text: '${current?.feelsLike?.round()}°C',
+                          text: SettingUtits.getDegreeUnit(
+                              current?.feelsLike, true),
                           style: AppStyles.h5.copyWith(color: Colors.white)),
                     ],
                   ),
@@ -1192,11 +1185,11 @@ class TodayForecast extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ItemTodayForecast(AppAssets.sunCloudy, 'Wind speed',
-                  '${current?.windSpeed} m/s'),
+                  SettingUtits.getSpeedUnit(current?.windSpeed ?? 0)),
               Padding(
                 padding: const EdgeInsets.only(top: 16, bottom: 29),
                 child: ItemTodayForecast(AppAssets.sunCloudy, 'Wind gust',
-                    '${current?.windGust} m/s'),
+                    SettingUtits.getSpeedUnit(current?.windGust)),
               ),
             ],
           ),

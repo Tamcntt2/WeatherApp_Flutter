@@ -4,6 +4,7 @@ import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
 
 import '../utils/epoch_time.dart';
+import '../utils/setting_utits.dart';
 import '../utils/ui_utils.dart';
 import 'my_separator.dart';
 
@@ -75,7 +76,7 @@ class ItemCandleChart extends StatelessWidget {
                         child: Align(
                           alignment: Alignment.bottomCenter,
                           child: Text(
-                            '$tempHigh°',
+                            SettingUtits.getDegreeUnit(tempHigh * 1.0, false),
                             style: AppStyles.h5
                                 .copyWith(color: AppColors.lightGrey),
                           ),
@@ -98,7 +99,7 @@ class ItemCandleChart extends StatelessWidget {
                         margin: EdgeInsets.only(top: 10),
                         height: 180.0 / tempMax * tempLow + 20,
                         child: Text(
-                          '$tempLow°',
+                          SettingUtits.getDegreeUnit(tempLow * 1.0, false),
                           style:
                               AppStyles.h5.copyWith(color: AppColors.lightGrey),
                         ),

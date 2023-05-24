@@ -50,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       return Container();
                     } else if (state is WeatherLoaded) {
                       MyLocation myLocation = state.myLocation!;
+                      print(myLocation.toJson());
                       String textAddress =
                           '${myLocation.address!.city}, ${myLocation.address!.country}';
                       return Text(

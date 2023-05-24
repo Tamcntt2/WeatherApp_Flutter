@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:weather_app/screens/search/search_screen.dart';
+import 'package:weather_app/screens/setting/setting_screen.dart';
 import 'package:weather_app/utils/ui_utils.dart';
 import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
@@ -191,7 +192,13 @@ class DrawerTools extends StatelessWidget {
             style: AppStyles.h3
                 .copyWith(fontWeight: FontWeight.bold, color: Colors.white),
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SettingScreen(),
+                ));
+          },
         ),
         ListTile(
           leading: const Icon(

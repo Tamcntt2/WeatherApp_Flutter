@@ -57,7 +57,7 @@ class StepperPage3 extends StatelessWidget {
                     Positioned(
                       top: 0,
                       right: 0,
-                      child: ElevatedButton(
+                      child: TextButton(
                         onPressed: () {
                           Navigator.pushAndRemoveUntil(
                               context,

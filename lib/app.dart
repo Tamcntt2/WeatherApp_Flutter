@@ -5,13 +5,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_app/bloc/weather_bloc.dart';
 import 'package:weather_app/bloc/weather_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weather_app/screens/drawer/change_profile.dart';
-import 'package:weather_app/screens/drawer/login.dart';
-import 'package:weather_app/screens/drawer/register.dart';
+import 'package:weather_app/screens/login/login_screen.dart';
+import 'package:weather_app/screens/setting/default_location_setting_screen.dart';
+import 'package:weather_app/screens/setting/notification_setting_screen.dart';
+import 'package:weather_app/screens/setting/setting_screen.dart';
 import 'package:weather_app/screens/home/home_screen.dart';
+import 'package:weather_app/screens/search/search_screen.dart';
 import 'package:weather_app/screens/splash/splash_screen.dart';
 import 'package:weather_app/screens/stepper/stepper_screen.dart';
-import 'package:weather_app/widgets/overview_forecast.dart';
+import 'package:weather_app/screens/search/overview_forecast_screen.dart';
 
 import 'bloc/weather_state.dart';
 
@@ -38,7 +40,7 @@ class _MyAppState extends State<MyApp> {
               }
             },
             child: MaterialApp(
-              // home: OverviewLocation(lat: 20.865139, lon: 106.683830),
+              // home: OverviewLocationScreen(lat: 20.865139, lon: 106.683830),
               home: FutureBuilder(
                 future: fetchSomething(),
                 builder: (context, snapshot) {
@@ -71,7 +73,7 @@ class _MyAppState extends State<MyApp> {
 //   @override
 //   Widget build(BuildContext context) {
 //     return MaterialApp(
-//       home: Login(),
+//       home: SettingScreen(),
 //       debugShowCheckedModeBanner: false,
 //     );
 //   }

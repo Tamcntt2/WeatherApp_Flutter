@@ -13,7 +13,7 @@ class MyLocation {
   String? addresstype;
   String? name;
   String? displayName;
-  Address? address;
+  MyAddress? address;
   List<String>? boundingbox;
 
   MyLocation(
@@ -48,7 +48,7 @@ class MyLocation {
     name = json["name"];
     displayName = json["display_name"];
     address =
-        json["address"] == null ? null : Address.fromJson(json["address"]);
+        json["address"] == null ? null : MyAddress.fromJson(json["address"]);
     boundingbox = json["boundingbox"] == null
         ? null
         : List<String>.from(json["boundingbox"]);
@@ -96,7 +96,7 @@ class MyLocation {
     String? addresstype,
     String? name,
     String? displayName,
-    Address? address,
+    MyAddress? address,
     List<String>? boundingbox,
   }) =>
       MyLocation(
@@ -118,7 +118,7 @@ class MyLocation {
       );
 }
 
-class Address {
+class MyAddress {
   String? amenity;
   String? houseNumber;
   String? road;
@@ -130,7 +130,7 @@ class Address {
   String? country;
   String? countryCode;
 
-  Address(
+  MyAddress(
       {this.amenity,
       this.houseNumber,
       this.road,
@@ -142,7 +142,7 @@ class Address {
       this.country,
       this.countryCode});
 
-  Address.fromJson(Map<String, dynamic> json) {
+  MyAddress.fromJson(Map<String, dynamic> json) {
     amenity = json["amenity"];
     houseNumber = json["house_number"];
     road = json["road"];
@@ -155,8 +155,8 @@ class Address {
     countryCode = json["country_code"];
   }
 
-  static List<Address> fromList(List<Map<String, dynamic>> list) {
-    return list.map((map) => Address.fromJson(map)).toList();
+  static List<MyAddress> fromList(List<Map<String, dynamic>> list) {
+    return list.map((map) => MyAddress.fromJson(map)).toList();
   }
 
   Map<String, dynamic> toJson() {
@@ -174,7 +174,7 @@ class Address {
     return _data;
   }
 
-  Address copyWith({
+  MyAddress copyWith({
     String? amenity,
     String? houseNumber,
     String? road,
@@ -186,7 +186,7 @@ class Address {
     String? country,
     String? countryCode,
   }) =>
-      Address(
+      MyAddress(
         amenity: amenity ?? this.amenity,
         houseNumber: houseNumber ?? this.houseNumber,
         road: road ?? this.road,

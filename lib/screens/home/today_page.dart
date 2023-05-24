@@ -14,6 +14,7 @@ import '../../bloc/weather_state.dart';
 import '../../models/air_quality.dart';
 import '../../models/forecast.dart';
 import '../../models/forecast_daily.dart';
+import '../../utils/setting_utits.dart';
 import '../../widgets/my_separator.dart';
 
 class TodayPage extends StatefulWidget {
@@ -149,7 +150,7 @@ class ItemHourForecast extends StatelessWidget {
               height: 18,
             ),
           ),
-          Text('${hourly.temp?.round()}°',
+          Text(SettingUtits.getDegreeUnit(hourly.temp, false),
               style: AppStyles.h4.copyWith(color: Colors.white))
         ]),
       ),
@@ -417,7 +418,7 @@ class ItemDayExpandForecast extends StatelessWidget {
         Column(
           children: [
             Text(
-              '${temp.round()}°',
+              SettingUtits.getDegreeUnit(temp, false),
               style: AppStyles.h4
                   .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
             ),
@@ -475,11 +476,11 @@ class DayCollapseForecast extends StatelessWidget {
         ),
         Row(
           children: [
-            Text('${daily.temp!.max!.round()}°',
+            Text(SettingUtits.getDegreeUnit(daily.temp!.max!, false),
                 style: AppStyles.h4.copyWith(color: Colors.white)),
             Padding(
               padding: const EdgeInsets.only(left: 23, right: 0),
-              child: Text('${daily.temp!.min!.round()}°',
+              child: Text(SettingUtits.getDegreeUnit(daily.temp!.min!, false),
                   style: AppStyles.h4.copyWith(color: Colors.white)),
             ),
           ],
@@ -530,7 +531,8 @@ class Details extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ItemDetail('Feels like', '${current?.feelsLike?.round()}°'),
+                  ItemDetail('Feels like',
+                      SettingUtits.getDegreeUnit(current?.feelsLike, true)),
                   ItemDetail('Humidity', '${current?.humidity}%'),
                   ItemDetail('Visibility', '${current?.visibility} m'),
                   ItemDetail('UV Index', '${current?.uvi?.round()}'),
@@ -1048,7 +1050,7 @@ class TodayForecast extends StatelessWidget {
                         .createShader(bounds);
                   },
                   child: Text(
-                    '${current?.temp?.round()}°',
+                    SettingUtits.getDegreeUnit(current?.temp, true),
                     style: const TextStyle(
                         fontSize: 48.0,
                         color: Colors.white,
@@ -1067,7 +1069,8 @@ class TodayForecast extends StatelessWidget {
                     style: AppStyles.h5.copyWith(color: AppColors.lightGrey),
                     children: <TextSpan>[
                       TextSpan(
-                          text: '${current?.feelsLike?.round()}°C',
+                          text: SettingUtits.getDegreeUnit(
+                              current?.feelsLike, true),
                           style: AppStyles.h5.copyWith(color: Colors.white)),
                     ],
                   ),
@@ -1089,11 +1092,11 @@ class TodayForecast extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ItemTodayForecast(AppAssets.sunCloudy, 'Wind speed',
-                  '${current?.windSpeed} m/s'),
+                  SettingUtits.getSpeedUnit(current?.windSpeed ?? 0)),
               Padding(
                 padding: const EdgeInsets.only(top: 16, bottom: 29),
                 child: ItemTodayForecast(AppAssets.sunCloudy, 'Wind gust',
-                    '${current?.windGust} m/s'),
+                    SettingUtits.getSpeedUnit(current?.windGust)),
               ),
             ],
           ),

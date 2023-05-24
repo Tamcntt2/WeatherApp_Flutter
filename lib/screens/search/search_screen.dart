@@ -16,44 +16,55 @@ class SearchScreen extends StatelessWidget {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: SafeArea(
-          child: Scaffold(
-        body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                colors: [Color(0xff484B5B), Color(0xff2C2D35)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter),
+          child: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+              colors: [Color(0xff484B5B), Color(0xff2C2D35)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter),
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            actions: [
+              IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.more_vert,
+                    color: Colors.white,
+                    size: 17,
+                  )),
+            ],
+            leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                  size: 17,
+                )),
+            title: Center(
+              child: Text(
+                'Seacrh Location',
+                style: AppStyles.h3
+                    .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
           ),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Row(
-              children: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(
-                      Icons.arrow_back_ios,
-                      color: Colors.white,
-                      size: 17,
-                    )),
-                Text(
-                  'Location',
-                  style: AppStyles.h3.copyWith(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            Container(
-              height: 10,
-            ),
-            SearchView(),
-            Container(
-              height: 20,
-            ),
-            Expanded(child: LocationView())
-          ]),
+          body: Container(
+            padding: EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 10),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              SearchView(),
+              Container(
+                height: 20,
+              ),
+              Expanded(child: LocationView())
+            ]),
+          ),
         ),
       )),
     );
@@ -91,13 +102,11 @@ class _SearchViewState extends State<SearchView> {
               hintStyle: AppStyles.h3.copyWith(color: AppColors.lightGrey),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide.none,
-                borderRadius:
-                    BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20),
               ),
               border: OutlineInputBorder(
                 borderSide: BorderSide.none,
-                borderRadius:
-                    BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20),
               ),
               prefixIcon: Icon(Icons.search),
               suffixIcon: TextButton(

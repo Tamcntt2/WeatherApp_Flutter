@@ -4,7 +4,7 @@ import 'package:weather_app/values/app_colors.dart';
 
 import '../../values/app_styles.dart';
 
-class ChangeProfile extends StatelessWidget {
+class ChangeProfileScreen extends StatelessWidget {
   MyAccount account = MyAccount(
       photoUrl:
           'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkg-307JO6AHvZVx8999lW46CWnwCPcBqgMA&usqp=CAU',

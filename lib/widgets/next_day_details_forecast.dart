@@ -5,6 +5,7 @@ import 'package:weather_app/values/app_styles.dart';
 
 import '../models/forecast.dart';
 import '../utils/epoch_time.dart';
+import '../utils/setting_utits.dart';
 import '../values/app_assets.dart';
 
 class NextDayDetailsForecast extends StatelessWidget {
@@ -94,7 +95,7 @@ class ItemDayDetailsForecast extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  '${daily.temp!.min!.round()}° / ${daily.temp!.max!.round()}°',
+                  '${SettingUtits.getDegreeUnit(daily.temp!.min!, true)} / ${SettingUtits.getDegreeUnit(daily.temp!.max!, true)}',
                   style: AppStyles.h4.copyWith(color: Colors.white),
                 ),
                 Row(

@@ -5,6 +5,7 @@ import 'package:weather_app/values/app_styles.dart';
 import 'package:weather_app/widgets/line_painter.dart';
 
 import '../utils/epoch_time.dart';
+import '../utils/setting_utits.dart';
 import '../utils/ui_utils.dart';
 import 'my_separator.dart';
 
@@ -94,7 +95,7 @@ class ItemCandleChart extends StatelessWidget {
                         child: Align(
                           alignment: Alignment.bottomCenter,
                           child: Text(
-                            '$temp°',
+                            SettingUtits.getDegreeUnit(temp * 1.0, false),
                             style: AppStyles.h5
                                 .copyWith(color: AppColors.lightGrey),
                           ),
@@ -104,7 +105,6 @@ class ItemCandleChart extends StatelessWidget {
                         // key: key,
                         child: Center(
                           child: Container(
-
                             decoration: BoxDecoration(
                                 color: index == 0
                                     ? Color(0xffF1B289)
