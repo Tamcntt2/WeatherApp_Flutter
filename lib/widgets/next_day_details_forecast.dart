@@ -10,8 +10,9 @@ import '../values/app_assets.dart';
 
 class NextDayDetailsForecast extends StatelessWidget {
   Forecast forecast;
+  int checkDegree;
 
-  NextDayDetailsForecast({required this.forecast});
+  NextDayDetailsForecast({required this.forecast, required this.checkDegree});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,10 @@ class NextDayDetailsForecast extends StatelessWidget {
           itemCount: 5,
           itemBuilder: (BuildContext context, int index) {
             Daily daily = forecast.daily![index];
-            return ItemDayDetailsForecast(daily: daily);
+            return ItemDayDetailsForecast(
+              daily: daily,
+              checkDegree: checkDegree,
+            );
           }),
     );
   }
@@ -34,8 +38,9 @@ class NextDayDetailsForecast extends StatelessWidget {
 
 class ItemDayDetailsForecast extends StatelessWidget {
   Daily daily;
+  int checkDegree;
 
-  ItemDayDetailsForecast({required this.daily});
+  ItemDayDetailsForecast({required this.daily, required this.checkDegree});
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +100,7 @@ class ItemDayDetailsForecast extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  '${SettingUtits.getDegreeUnit(daily.temp!.min!, true)} / ${SettingUtits.getDegreeUnit(daily.temp!.max!, true)}',
+                  '${SettingUtits.getDegreeUnit(daily.temp!.min!, true, checkDegree)} / ${SettingUtits.getDegreeUnit(daily.temp!.max!, true, checkDegree)}',
                   style: AppStyles.h4.copyWith(color: Colors.white),
                 ),
                 Row(

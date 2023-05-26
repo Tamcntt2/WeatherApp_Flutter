@@ -11,16 +11,21 @@ import 'my_separator.dart';
 
 class MyCandleHourlyChart extends StatefulWidget {
   Forecast forecast;
+  int checkDegree;
 
-  MyCandleHourlyChart({required this.forecast});
+  MyCandleHourlyChart({required this.forecast, required this.checkDegree});
 
   @override
-  State<MyCandleHourlyChart> createState() => _MyCandleHourlyChartState();
+  State<MyCandleHourlyChart> createState() =>
+      _MyCandleHourlyChartState(checkDegree: checkDegree);
 }
 
 class _MyCandleHourlyChartState extends State<MyCandleHourlyChart> {
   final List<GlobalKey> listPointKey = List.generate(7, (index) => GlobalKey());
   List<Offset> listPoint = [];
+  int checkDegree;
+
+  _MyCandleHourlyChartState({required this.checkDegree});
 
   @override
   void initState() {
@@ -56,6 +61,7 @@ class _MyCandleHourlyChartState extends State<MyCandleHourlyChart> {
                 key: listPointKey[index],
                 index: index,
                 hourly: listHourly![index],
+                checkDegree: checkDegree,
               );
             }),
       ),
@@ -71,8 +77,13 @@ class _MyCandleHourlyChartState extends State<MyCandleHourlyChart> {
 class ItemCandleChart extends StatelessWidget {
   Hourly hourly;
   int index;
+  int checkDegree;
 
-  ItemCandleChart({super.key, required this.index, required this.hourly});
+  ItemCandleChart(
+      {super.key,
+      required this.index,
+      required this.hourly,
+      required this.checkDegree});
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +106,8 @@ class ItemCandleChart extends StatelessWidget {
                         child: Align(
                           alignment: Alignment.bottomCenter,
                           child: Text(
-                            SettingUtits.getDegreeUnit(temp * 1.0, false),
+                            SettingUtits.getDegreeUnit(
+                                temp * 1.0, false, checkDegree),
                             style: AppStyles.h5
                                 .copyWith(color: AppColors.lightGrey),
                           ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:weather_app/bloc/weather_bloc.dart';
-import 'package:weather_app/bloc/weather_state.dart';
+import 'package:weather_app/bloc/weather_bloc/weather_bloc.dart';
 
+import '../../bloc/weather_bloc/weather_state.dart';
 import '../../resources/api/demo_data.dart';
 
 class RadarPage extends StatefulWidget {

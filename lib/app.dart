@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:weather_app/bloc/weather_bloc.dart';
-import 'package:weather_app/bloc/weather_event.dart';
+import 'package:weather_app/bloc/weather_bloc/weather_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/screens/login/login_screen.dart';
 import 'package:weather_app/screens/setting/default_location_setting_screen.dart';
@@ -15,7 +14,8 @@ import 'package:weather_app/screens/splash/splash_screen.dart';
 import 'package:weather_app/screens/stepper/stepper_screen.dart';
 import 'package:weather_app/screens/search/overview_forecast_screen.dart';
 
-import 'bloc/weather_state.dart';
+import 'bloc/weather_bloc/weather_event.dart';
+import 'bloc/weather_bloc/weather_state.dart';
 
 class MyApp extends StatefulWidget {
   @override

@@ -1,9 +1,12 @@
+import 'package:shared_preferences/shared_preferences.dart';
+
 class SettingUtits {
-  static String getDegreeUnit(double cel, bool hint) {
-    int check = 1; // 1: C, 2: F, 3: K
-    if (check == 1) {
+  static String getDegreeUnit(double cel, bool hint, int check) {
+    // 0: C, 1: F, 2: K
+    print('Degree $check');
+    if (check == 0) {
       return '${cel.round().toString()}°' + (hint ? 'C' : '');
-    } else if (check == 2) {
+    } else if (check == 1) {
       double fah = cel * 9 / 5 + 32;
       return '${fah.round().toString()}°' + (hint ? 'F' : '');
     } else {
@@ -12,11 +15,11 @@ class SettingUtits {
     }
   }
 
-  static String getSpeedUnit(double ms) {
-    int check = 1; // 1: m/s, 2: km/h, 3: mph
-    if (check == 1) {
+  static String getSpeedUnit(double ms, int check) {
+    // 0: m/s, 1: km/h, 2: mph
+    if (check == 0) {
       return '${ms.toStringAsFixed(2)} m/s';
-    } else if (check == 2) {
+    } else if (check == 1) {
       double kmh = ms * 3.6;
       return '${kmh.toStringAsFixed(2)} km/h';
     } else {
@@ -25,9 +28,9 @@ class SettingUtits {
     }
   }
 
-  static String getDistanceUnit(double distance) {
-    int check = 2; // 1: m, 2: km
-    if (check == 1) {
+  static String getDistanceUnit(double distance, int check) {
+    // 0: m, 1: km
+    if (check == 0) {
       return '$distance m';
     } else {
       return '${distance / 1000} km';

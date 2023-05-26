@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:weather_app/screens/setting/default_location_setting_screen.dart';
 import 'package:weather_app/screens/setting/notification_setting_screen.dart';
+import 'package:weather_app/utils/setting_utits.dart';
 import 'package:weather_app/utils/ui_utils.dart';
 import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
@@ -91,9 +93,55 @@ class UnitSetting extends StatefulWidget {
 }
 
 class _UnitSettingState extends State<UnitSetting> {
-  int _indexDegree = 0;
-  int _indexSpeed = 0;
-  int _indexDistance = 0;
+  late int _indexDegree;
+
+  late int _indexSpeed;
+
+  late int _indexDistance;
+
+  Future<void> setDegreeSP(int degree) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('degree', degree);
+  }
+
+  Future<void> getDegreeSP() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _indexDegree = prefs.getInt('degree') ?? 0;
+    });
+  }
+
+  Future<void> setSpeedSP(int degree) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('speed', degree);
+  }
+
+  Future<void> getSpeedSP() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _indexSpeed = prefs.getInt('speed') ?? 0;
+    });
+  }
+
+  Future<void> setDistanceSP(int degree) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('distance', degree);
+  }
+
+  Future<void> getDistanceSP() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _indexDistance = prefs.getInt('distance') ?? 0;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getDistanceSP();
+    getSpeedSP();
+    getDegreeSP();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,6 +178,7 @@ class _UnitSettingState extends State<UnitSetting> {
             labels: ['Celsius', 'Fahrenheit', 'Kelvin'],
             onToggle: (index) {
               setState(() {
+                setDegreeSP(index!);
                 _indexDegree = index!;
               });
             },
@@ -161,7 +210,8 @@ class _UnitSettingState extends State<UnitSetting> {
             labels: ['m/s', 'km/h', 'mph'],
             onToggle: (index) {
               setState(() {
-                _indexDegree = index!;
+                setSpeedSP(index!);
+                _indexSpeed = index!;
               });
             },
           ),
@@ -191,7 +241,8 @@ class _UnitSettingState extends State<UnitSetting> {
             labels: ['m', 'km'],
             onToggle: (index) {
               setState(() {
-                _indexDegree = index!;
+                setDistanceSP(index!);
+                _indexDistance = index!;
               });
             },
           ),

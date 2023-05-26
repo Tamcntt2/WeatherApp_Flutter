@@ -5,8 +5,8 @@ import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
 import 'package:weather_app/widgets/my_candle_daily_chart.dart';
 
-import '../../bloc/weather_bloc.dart';
-import '../../bloc/weather_state.dart';
+import '../../bloc/weather_bloc/weather_bloc.dart';
+import '../../bloc/weather_bloc/weather_state.dart';
 import '../../models/forecast.dart';
 import '../../widgets/my_candle_hourly_chart.dart';
 import '../../widgets/next_day_details_forecast.dart';
@@ -14,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TemperaturePage extends StatelessWidget {
   late Forecast forecast;
+  late int checkDegree;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,11 @@ class TemperaturePage extends StatelessWidget {
         return BuildLoading();
       } else if (state is WeatherLoaded) {
         forecast = state.forecast!;
-        return TemperatureView(forecast: forecast);
+        checkDegree = state.checkDegree!;
+        return TemperatureView(
+          forecast: forecast,
+          checkDegree: checkDegree,
+        );
       } else {
         return Container();
       }
@@ -32,16 +37,21 @@ class TemperaturePage extends StatelessWidget {
 
 class TemperatureView extends StatefulWidget {
   Forecast forecast;
+  int checkDegree;
 
-  TemperatureView({required this.forecast});
+  TemperatureView({required this.forecast, required this.checkDegree});
 
   @override
-  State<TemperatureView> createState() => _TemperatureViewState();
+  State<TemperatureView> createState() =>
+      _TemperatureViewState(checkDegree: checkDegree);
 }
 
 class _TemperatureViewState extends State<TemperatureView> {
   bool _isOverview = false;
   int _isSwitched = 1;
+  int checkDegree;
+
+  _TemperatureViewState({required this.checkDegree});
 
   @override
   Widget build(BuildContext context) {
@@ -85,8 +95,14 @@ class _TemperatureViewState extends State<TemperatureView> {
           ),
           // TemperatureHourlyChart(forecast: widget.forecast),
           _isSwitched == 1
-              ? TemperatureDailyChart(forecast: widget.forecast)
-              : TemperatureHourlyChart(forecast: widget.forecast),
+              ? TemperatureDailyChart(
+                  forecast: widget.forecast,
+                  checkDegree: checkDegree,
+                )
+              : TemperatureHourlyChart(
+                  forecast: widget.forecast,
+                  checkDegree: checkDegree,
+                ),
           Container(
             height: 20,
           ),
@@ -98,7 +114,8 @@ class _TemperatureViewState extends State<TemperatureView> {
           Container(
             height: 20,
           ),
-          NextDayDetailsForecast(forecast: widget.forecast),
+          NextDayDetailsForecast(
+              forecast: widget.forecast, checkDegree: checkDegree),
         ]),
       ),
     );
@@ -118,8 +135,9 @@ class BuildLoading extends StatelessWidget {
 
 class TemperatureHourlyChart extends StatelessWidget {
   Forecast forecast;
+  int checkDegree;
 
-  TemperatureHourlyChart({required this.forecast});
+  TemperatureHourlyChart({required this.forecast, required this.checkDegree});
 
   @override
   Widget build(BuildContext context) {
@@ -131,14 +149,18 @@ class TemperatureHourlyChart extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter),
             borderRadius: BorderRadius.circular(10)),
-        child: MyCandleHourlyChart(forecast: forecast));
+        child: MyCandleHourlyChart(
+          forecast: forecast,
+          checkDegree: checkDegree,
+        ));
   }
 }
 
 class TemperatureDailyChart extends StatelessWidget {
   Forecast forecast;
+  int checkDegree;
 
-  TemperatureDailyChart({required this.forecast});
+  TemperatureDailyChart({required this.forecast, required this.checkDegree});
 
   @override
   Widget build(BuildContext context) {
@@ -150,6 +172,9 @@ class TemperatureDailyChart extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter),
             borderRadius: BorderRadius.circular(10)),
-        child: MyCandleDailyChart(forecast: forecast));
+        child: MyCandleDailyChart(
+          forecast: forecast,
+          checkDegree: checkDegree,
+        ));
   }
 }

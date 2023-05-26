@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
-import 'package:weather_app/bloc/weather_bloc.dart';
+import 'package:weather_app/bloc/weather_bloc/weather_bloc.dart';
 import 'package:weather_app/models/forecast_daily.dart';
 import 'package:weather_app/utils/epoch_time.dart';
 import 'package:weather_app/utils/ui_utils.dart';
@@ -14,11 +14,11 @@ import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../bloc/weather_state.dart';
 import '../../../models/air_quality.dart';
 import '../../../models/forecast.dart';
 import '../../../models/forecast_daily.dart';
 import '../../../widgets/my_separator.dart';
+import '../../bloc/weather_bloc/weather_state.dart';
 import '../../models/location.dart';
 import '../../utils/current_location.dart';
 import '../../utils/setting_utits.dart';
@@ -38,6 +38,9 @@ class _OverviewLocationScreenState extends State<OverviewLocationScreen> {
   late Forecast forecast;
   late AirQuality airQuality;
   late ForecastDaily forecastDaily;
+  late int checkDegree;
+  late int checkSpeed;
+  late int checkDistance;
 
   final double lat;
   final double lon;
@@ -107,12 +110,19 @@ class _OverviewLocationScreenState extends State<OverviewLocationScreen> {
                 forecast = state.forecast!;
                 airQuality = state.airQuality!;
                 forecastDaily = state.forecastDaily!;
+                checkDistance = state.checkDistance!;
+                checkSpeed = state.checkSpeed!;
+                checkDegree = state.checkDegree!;
                 return ForecastView(
-                    lat: lat,
-                    lon: lon,
-                    forecast: forecast,
-                    airQuality: airQuality,
-                    forecastDaily: forecastDaily);
+                  lat: lat,
+                  lon: lon,
+                  forecast: forecast,
+                  airQuality: airQuality,
+                  forecastDaily: forecastDaily,
+                  checkDegree: checkDegree,
+                  checkDistance: checkDistance,
+                  checkSpeed: checkSpeed,
+                );
               } else {
                 return Container();
               }
@@ -130,6 +140,9 @@ class ForecastView extends StatelessWidget {
   final ForecastDaily forecastDaily;
   final double lat;
   final double lon;
+  final int checkDegree;
+  final int checkDistance;
+  final int checkSpeed;
 
   const ForecastView(
       {super.key,
@@ -137,16 +150,34 @@ class ForecastView extends StatelessWidget {
       required this.airQuality,
       required this.forecastDaily,
       required this.lat,
-      required this.lon});
+      required this.lon,
+      required this.checkDegree,
+      required this.checkDistance,
+      required this.checkSpeed});
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(children: [
-        TodayForecast(forecast: forecast),
-        NextHourForecast(forecast: forecast),
-        NextDayForecast(forecastDaily: forecastDaily, forecast: forecast),
-        Details(forecast: forecast),
+        TodayForecast(
+          checkSpeed: checkSpeed,
+          forecast: forecast,
+          checkDegree: checkDegree,
+        ),
+        NextHourForecast(
+          forecast: forecast,
+          checkDegree: checkDegree,
+        ),
+        NextDayForecast(
+          forecastDaily: forecastDaily,
+          forecast: forecast,
+          checkDegree: checkDegree,
+        ),
+        Details(
+          checkDegree: checkDegree,
+          forecast: forecast,
+          checkDistance: checkDistance,
+        ),
         AirQualityView(airQuality.listt![0].components!.pm10!),
         // const CoronavirusLastest(),
         SunMoon(forecast: forecast),
@@ -181,8 +212,10 @@ class BuildLoading extends StatelessWidget {
 
 class NextHourForecast extends StatelessWidget {
   Forecast forecast;
+  int checkDegree;
 
-  NextHourForecast({super.key, required this.forecast});
+  NextHourForecast(
+      {super.key, required this.forecast, required this.checkDegree});
 
   @override
   Widget build(BuildContext context) {
@@ -195,7 +228,10 @@ class NextHourForecast extends StatelessWidget {
           itemCount: 12,
           itemBuilder: (BuildContext context, int index) {
             return ItemHourForecast(
-                index: index, hourly: forecast.hourly![index]);
+              index: index,
+              hourly: forecast.hourly![index],
+              checkDegree: checkDegree,
+            );
           }),
     );
   }
@@ -204,8 +240,13 @@ class NextHourForecast extends StatelessWidget {
 class ItemHourForecast extends StatelessWidget {
   int index;
   Hourly hourly;
+  int checkDegree;
 
-  ItemHourForecast({super.key, required this.index, required this.hourly});
+  ItemHourForecast(
+      {super.key,
+      required this.index,
+      required this.hourly,
+      required this.checkDegree});
 
   @override
   Widget build(BuildContext context) {
@@ -240,7 +281,7 @@ class ItemHourForecast extends StatelessWidget {
               height: 18,
             ),
           ),
-          Text(SettingUtits.getDegreeUnit(hourly.temp, false),
+          Text(SettingUtits.getDegreeUnit(hourly.temp, false, checkDegree),
               style: AppStyles.h4.copyWith(color: Colors.white))
         ]),
       ),
@@ -251,21 +292,31 @@ class ItemHourForecast extends StatelessWidget {
 class NextDayForecast extends StatefulWidget {
   ForecastDaily forecastDaily;
   Forecast forecast;
+  int checkDegree;
 
   NextDayForecast(
-      {super.key, required this.forecastDaily, required this.forecast});
+      {super.key,
+      required this.forecastDaily,
+      required this.forecast,
+      required this.checkDegree});
 
   @override
-  State<NextDayForecast> createState() =>
-      _NextDayForecastState(forecastDaily: forecastDaily, forecast: forecast);
+  State<NextDayForecast> createState() => _NextDayForecastState(
+      forecastDaily: forecastDaily,
+      forecast: forecast,
+      checkDegree: checkDegree);
 }
 
 class _NextDayForecastState extends State<NextDayForecast> {
   ForecastDaily forecastDaily;
   Forecast forecast;
   final List<bool> _isOpen = [false, false, false, false, false];
+  int checkDegree;
 
-  _NextDayForecastState({required this.forecastDaily, required this.forecast});
+  _NextDayForecastState(
+      {required this.forecastDaily,
+      required this.forecast,
+      required this.checkDegree});
 
   @override
   Widget build(BuildContext context) {
@@ -329,10 +380,14 @@ class _NextDayForecastState extends State<NextDayForecast> {
                 canTapOnHeader: true,
                 headerBuilder: (BuildContext context, bool isExpanded) {
                   return DayCollapseForecast(
-                      index: item.key, forecast: forecast);
+                    index: item.key,
+                    forecast: forecast,
+                    checkDegree: checkDegree,
+                  );
                 },
                 // body: Container(),
                 body: DayExpandForecast(
+                    checkDegree: checkDegree,
                     index: item.key,
                     forecastDaily: forecastDaily,
                     forecast: forecast),
@@ -385,12 +440,14 @@ class DayExpandForecast extends StatelessWidget {
   ForecastDaily forecastDaily;
   int index;
   Forecast forecast;
+  int checkDegree;
 
   DayExpandForecast(
       {super.key,
       required this.forecastDaily,
       required this.index,
-      required this.forecast});
+      required this.forecast,
+      required this.checkDegree});
 
   @override
   Widget build(BuildContext context) {
@@ -418,6 +475,7 @@ class DayExpandForecast extends StatelessWidget {
             itemCount: listHourly.length,
             itemBuilder: (BuildContext context, int index) {
               return ItemDayExpandForecast(
+                checkDegree: checkDegree,
                 isCurrent: _isToday && index == 0,
                 hour: getStringHourItemDayExpand(listHourly[index].dt),
                 icon: listHourly[index].weather![0].icon!,
@@ -448,6 +506,7 @@ class DayExpandForecast extends StatelessWidget {
           itemCount: listHourly.length,
           itemBuilder: (BuildContext context, int index) {
             return ItemDayExpandForecast(
+              checkDegree: checkDegree,
               isCurrent: _isToday && index == 0,
               icon: listHourly[index].weather![0].icon!,
               temp: listHourly[index].main!.temp,
@@ -471,13 +530,15 @@ class ItemDayExpandForecast extends StatelessWidget {
   double temp;
   String hour;
   String icon;
+  int checkDegree;
 
   ItemDayExpandForecast(
       {super.key,
       required this.hour,
       required this.temp,
       required this.icon,
-      required this.isCurrent});
+      required this.isCurrent,
+      required this.checkDegree});
 
   @override
   Widget build(BuildContext context) {
@@ -508,7 +569,7 @@ class ItemDayExpandForecast extends StatelessWidget {
         Column(
           children: [
             Text(
-              SettingUtits.getDegreeUnit(temp, false),
+              SettingUtits.getDegreeUnit(temp, false, checkDegree),
               style: AppStyles.h4
                   .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
             ),
@@ -529,8 +590,13 @@ class ItemDayExpandForecast extends StatelessWidget {
 class DayCollapseForecast extends StatelessWidget {
   Forecast forecast;
   int index;
+  int checkDegree;
 
-  DayCollapseForecast({super.key, required this.forecast, required this.index});
+  DayCollapseForecast(
+      {super.key,
+      required this.forecast,
+      required this.index,
+      required this.checkDegree});
 
   @override
   Widget build(BuildContext context) {
@@ -566,11 +632,15 @@ class DayCollapseForecast extends StatelessWidget {
         ),
         Row(
           children: [
-            Text(SettingUtits.getDegreeUnit(daily.temp!.max!, false),
+            Text(
+                SettingUtits.getDegreeUnit(
+                    daily.temp!.max!, false, checkDegree),
                 style: AppStyles.h4.copyWith(color: Colors.white)),
             Padding(
               padding: const EdgeInsets.only(left: 23, right: 0),
-              child: Text(SettingUtits.getDegreeUnit(daily.temp!.min!, false),
+              child: Text(
+                  SettingUtits.getDegreeUnit(
+                      daily.temp!.min!, false, checkDegree),
                   style: AppStyles.h4.copyWith(color: Colors.white)),
             ),
           ],
@@ -582,8 +652,13 @@ class DayCollapseForecast extends StatelessWidget {
 
 class Details extends StatelessWidget {
   Forecast forecast;
+  int checkDistance;
+  int checkDegree;
 
-  Details({required this.forecast});
+  Details(
+      {required this.forecast,
+      required this.checkDistance,
+      required this.checkDegree});
 
   @override
   Widget build(BuildContext context) {
@@ -621,13 +696,15 @@ class Details extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ItemDetail('Feels like',
-                      SettingUtits.getDegreeUnit(current?.feelsLike, true)),
+                  ItemDetail(
+                      'Feels like',
+                      SettingUtits.getDegreeUnit(
+                          current?.feelsLike, true, checkDegree)),
                   ItemDetail('Humidity', '${current?.humidity}%'),
                   ItemDetail(
                       'Visibility',
                       SettingUtits.getDistanceUnit(
-                          current?.visibility as double)),
+                          current?.visibility as double, checkDistance)),
                   ItemDetail('UV Index', '${current?.uvi?.round()}'),
                   ItemDetail('Dew point', '${current?.dewPoint?.round()}°'),
                 ],
@@ -1101,8 +1178,14 @@ String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 
 class TodayForecast extends StatelessWidget {
   final Forecast forecast;
+  final int checkDegree;
+  final int checkSpeed;
 
-  const TodayForecast({super.key, required this.forecast});
+  const TodayForecast(
+      {super.key,
+      required this.forecast,
+      required this.checkDegree,
+      required this.checkSpeed});
 
   @override
   Widget build(BuildContext context) {
@@ -1143,7 +1226,8 @@ class TodayForecast extends StatelessWidget {
                         .createShader(bounds);
                   },
                   child: Text(
-                    SettingUtits.getDegreeUnit(current?.temp, true),
+                    SettingUtits.getDegreeUnit(
+                        current?.temp, true, checkDegree),
                     style: const TextStyle(
                         fontSize: 48.0,
                         color: Colors.white,
@@ -1163,7 +1247,7 @@ class TodayForecast extends StatelessWidget {
                     children: <TextSpan>[
                       TextSpan(
                           text: SettingUtits.getDegreeUnit(
-                              current?.feelsLike, true),
+                              current?.feelsLike, true, checkDegree),
                           style: AppStyles.h5.copyWith(color: Colors.white)),
                     ],
                   ),
@@ -1184,12 +1268,15 @@ class TodayForecast extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ItemTodayForecast(AppAssets.sunCloudy, 'Wind speed',
-                  SettingUtits.getSpeedUnit(current?.windSpeed ?? 0)),
+              ItemTodayForecast(
+                  AppAssets.sunCloudy,
+                  'Wind speed',
+                  SettingUtits.getSpeedUnit(
+                      current?.windSpeed ?? 0, checkSpeed)),
               Padding(
                 padding: const EdgeInsets.only(top: 16, bottom: 29),
                 child: ItemTodayForecast(AppAssets.sunCloudy, 'Wind gust',
-                    SettingUtits.getSpeedUnit(current?.windGust)),
+                    SettingUtits.getSpeedUnit(current?.windGust, checkSpeed)),
               ),
             ],
           ),

@@ -10,8 +10,9 @@ import 'my_separator.dart';
 
 class MyCandleDailyChart extends StatelessWidget {
   Forecast forecast;
+  int checkDegree;
 
-  MyCandleDailyChart({required this.forecast});
+  MyCandleDailyChart({required this.forecast, required this.checkDegree});
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +39,7 @@ class MyCandleDailyChart extends StatelessWidget {
                     index: index,
                     tempMax: tempMax,
                     daily: listDaily![index],
+                    checkDegree: checkDegree,
                   );
                 }),
           ),
@@ -51,9 +53,13 @@ class ItemCandleChart extends StatelessWidget {
   int tempMax;
   Daily daily;
   int index;
+  int checkDegree;
 
   ItemCandleChart(
-      {required this.index, required this.tempMax, required this.daily});
+      {required this.index,
+      required this.tempMax,
+      required this.daily,
+      required this.checkDegree});
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +82,8 @@ class ItemCandleChart extends StatelessWidget {
                         child: Align(
                           alignment: Alignment.bottomCenter,
                           child: Text(
-                            SettingUtits.getDegreeUnit(tempHigh * 1.0, false),
+                            SettingUtits.getDegreeUnit(
+                                tempHigh * 1.0, false, checkDegree),
                             style: AppStyles.h5
                                 .copyWith(color: AppColors.lightGrey),
                           ),
@@ -99,7 +106,8 @@ class ItemCandleChart extends StatelessWidget {
                         margin: EdgeInsets.only(top: 10),
                         height: 180.0 / tempMax * tempLow + 20,
                         child: Text(
-                          SettingUtits.getDegreeUnit(tempLow * 1.0, false),
+                          SettingUtits.getDegreeUnit(
+                              tempLow * 1.0, false, checkDegree),
                           style:
                               AppStyles.h5.copyWith(color: AppColors.lightGrey),
                         ),

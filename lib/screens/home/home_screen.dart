@@ -15,8 +15,8 @@ import 'package:weather_app/utils/current_location.dart';
 import 'package:http/http.dart' as http;
 import 'package:weather_app/utils/ui_utils.dart';
 
-import '../../bloc/weather_bloc.dart';
-import '../../bloc/weather_state.dart';
+import '../../bloc/weather_bloc/weather_bloc.dart';
+import '../../bloc/weather_bloc/weather_state.dart';
 import '../drawer/my_drawer.dart';
 
 class HomeScreen extends StatefulWidget {

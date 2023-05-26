@@ -10,8 +10,8 @@ import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
 import 'package:http/http.dart' as http;
 
-import '../../bloc/weather_bloc.dart';
-import '../../bloc/weather_state.dart';
+import '../../bloc/weather_bloc/weather_bloc.dart';
+import '../../bloc/weather_bloc/weather_state.dart';
 import '../../models/location.dart';
 import '../../utils/current_location.dart';
 

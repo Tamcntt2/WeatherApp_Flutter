@@ -1,15 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:weather_app/bloc/weather_event.dart';
-import 'package:weather_app/bloc/weather_state.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:weather_app/bloc/weather_bloc/weather_event.dart';
 import 'package:bloc/bloc.dart';
+import 'package:weather_app/bloc/weather_bloc/weather_state.dart';
 import 'package:weather_app/models/air_quality.dart';
 import 'package:weather_app/models/forecast.dart';
 import 'package:weather_app/models/location.dart';
 
-import '../models/forecast_daily.dart';
-import '../resources/api/api_repository.dart';
-import '../utils/current_location.dart';
+import '../../models/forecast_daily.dart';
+import '../../resources/api/api_repository.dart';
+import '../../utils/current_location.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   final ApiRepository apiRepository = ApiRepository();
@@ -32,12 +32,19 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
         await apiRepository.fetchForecastDaily(lat, lon);
     final MyLocation myLocation =
         await apiRepository.fetchAddressFromLocation(lat, lon);
+    final prefs = await SharedPreferences.getInstance();
+    int checkDegree = await prefs.getInt('degree') ?? 0;
+    int checkSpeed = await prefs.getInt('speed') ?? 0;
+    int checkDistance = await prefs.getInt('distance') ?? 0;
 
     emit(WeatherLoaded(
         forecast: forecast,
         airQuality: airQuality,
         forecastDaily: forecastDaily,
-        myLocation: myLocation));
+        myLocation: myLocation,
+        checkDegree: checkDegree,
+        checkDistance: checkDistance,
+        checkSpeed: checkSpeed));
   }
 
   Future<void> _onFetchWeatherLocation(
@@ -51,11 +58,19 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     final ForecastDaily forecastDaily =
         await apiRepository.fetchForecastDaily(lat, lon);
     final MyLocation myLocation =
-    await apiRepository.fetchAddressFromLocation(lat, lon);
+        await apiRepository.fetchAddressFromLocation(lat, lon);
+    final prefs = await SharedPreferences.getInstance();
+    int checkDegree = await prefs.getInt('degree') ?? 0;
+    int checkSpeed = await prefs.getInt('speed') ?? 0;
+    int checkDistance = await prefs.getInt('distance') ?? 0;
 
     emit(WeatherLoaded(
         forecast: forecast,
         airQuality: airQuality,
-        forecastDaily: forecastDaily, myLocation: myLocation));
+        forecastDaily: forecastDaily,
+        myLocation: myLocation,
+        checkDegree: checkDegree,
+        checkDistance: checkDistance,
+        checkSpeed: checkSpeed));
   }
 }
