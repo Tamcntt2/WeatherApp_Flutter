@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:weather_app/screens/search/search_screen.dart';
 import 'package:weather_app/screens/setting/setting_screen.dart';
 import 'package:weather_app/utils/ui_utils.dart';
@@ -28,7 +27,7 @@ class MyDrawer extends StatelessWidget {
             end: Alignment.bottomLeft),
       ),
       child: Column(
-        children: [
+        children: const [
           Expanded(flex: 1, child: DrawerUser()),
           Expanded(flex: 3, child: DrawerLocation()),
           Expanded(flex: 6, child: DrawerTools()),
@@ -196,7 +195,7 @@ class DrawerTools extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SettingScreen(),
+                  builder: (context) => const SettingScreen(),
                 ));
           },
         ),
@@ -274,7 +273,7 @@ class DrawerUser extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.close,
               size: 24,
             ),

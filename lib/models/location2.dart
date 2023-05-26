@@ -1,4 +1,5 @@
-class MyLocation2 { // Location from nominatim: get list location from address
+class MyLocation2 {
+  // Location from nominatim: get list location from address
   int? placeId;
   String? licence;
   String? osmType;
@@ -48,22 +49,22 @@ class MyLocation2 { // Location from nominatim: get list location from address
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["place_id"] = placeId;
-    _data["licence"] = licence;
-    _data["osm_type"] = osmType;
-    _data["osm_id"] = osmId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["place_id"] = placeId;
+    data["licence"] = licence;
+    data["osm_type"] = osmType;
+    data["osm_id"] = osmId;
     if (boundingbox != null) {
-      _data["boundingbox"] = boundingbox;
+      data["boundingbox"] = boundingbox;
     }
-    _data["lat"] = lat;
-    _data["lon"] = lon;
-    _data["display_name"] = displayName;
-    _data["class"] = class2;
-    _data["type"] = type;
-    _data["importance"] = importance;
-    _data["icon"] = icon;
-    return _data;
+    data["lat"] = lat;
+    data["lon"] = lon;
+    data["display_name"] = displayName;
+    data["class"] = class2;
+    data["type"] = type;
+    data["importance"] = importance;
+    data["icon"] = icon;
+    return data;
   }
 
   MyLocation2 copyWith({

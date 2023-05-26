@@ -5,7 +5,8 @@ class MyAccount {
   String? photoUrl;
   String? uid;
 
-  MyAccount({this.email, this.firstName, this.lastName, this.photoUrl, this.uid});
+  MyAccount(
+      {this.email, this.firstName, this.lastName, this.photoUrl, this.uid});
 
   MyAccount.fromJson(Map<String, dynamic> json) {
     uid = json["uid"];
@@ -16,7 +17,7 @@ class MyAccount {
   }
 
   Map<String, dynamic> toJson() {
-    final data = Map<String, dynamic>();
+    final data = <String, dynamic>{};
     data["uid"] = uid;
     data["firstName"] = firstName;
     data["lastName"] = lastName;

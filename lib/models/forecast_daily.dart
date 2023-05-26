@@ -23,17 +23,17 @@ class ForecastDaily {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["cod"] = cod;
-    _data["message"] = message;
-    _data["cnt"] = cnt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["cod"] = cod;
+    data["message"] = message;
+    data["cnt"] = cnt;
     if (listDaily != null) {
-      _data["list"] = listDaily?.map((e) => e.toJson()).toList();
+      data["list"] = listDaily?.map((e) => e.toJson()).toList();
     }
     if (city != null) {
-      _data["city"] = city?.toJson();
+      data["city"] = city?.toJson();
     }
-    return _data;
+    return data;
   }
 
   ForecastDaily copyWith({
@@ -88,18 +88,18 @@ class City {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id"] = id;
-    _data["name"] = name;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["id"] = id;
+    data["name"] = name;
     if (coord != null) {
-      _data["coord"] = coord?.toJson();
+      data["coord"] = coord?.toJson();
     }
-    _data["country"] = country;
-    _data["population"] = population;
-    _data["timezone"] = timezone;
-    _data["sunrise"] = sunrise;
-    _data["sunset"] = sunset;
-    return _data;
+    data["country"] = country;
+    data["population"] = population;
+    data["timezone"] = timezone;
+    data["sunrise"] = sunrise;
+    data["sunset"] = sunset;
+    return data;
   }
 
   City copyWith({
@@ -140,10 +140,10 @@ class Coord {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["lat"] = lat;
-    _data["lon"] = lon;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["lat"] = lat;
+    data["lon"] = lon;
+    return data;
   }
 
   Coord copyWith({
@@ -197,27 +197,27 @@ class Hourly3 {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["dt"] = dt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["dt"] = dt;
     if (main != null) {
-      _data["main"] = main?.toJson();
+      data["main"] = main?.toJson();
     }
     if (weather != null) {
-      _data["weather"] = weather?.map((e) => e.toJson()).toList();
+      data["weather"] = weather?.map((e) => e.toJson()).toList();
     }
     if (clouds != null) {
-      _data["clouds"] = clouds?.toJson();
+      data["clouds"] = clouds?.toJson();
     }
     if (wind != null) {
-      _data["wind"] = wind?.toJson();
+      data["wind"] = wind?.toJson();
     }
-    _data["visibility"] = visibility;
-    _data["pop"] = pop;
+    data["visibility"] = visibility;
+    data["pop"] = pop;
     if (sys != null) {
-      _data["sys"] = sys?.toJson();
+      data["sys"] = sys?.toJson();
     }
-    _data["dt_txt"] = dtTxt;
-    return _data;
+    data["dt_txt"] = dtTxt;
+    return data;
   }
 
   Hourly3 copyWith({
@@ -258,9 +258,9 @@ class Sys {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["pod"] = pod;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["pod"] = pod;
+    return data;
   }
 
   Sys copyWith({
@@ -274,7 +274,7 @@ class Sys {
 class Wind {
   dynamic speed;
   int? deg;
-  dynamic? gust;
+  dynamic gust;
 
   Wind({this.speed, this.deg, this.gust});
 
@@ -289,17 +289,17 @@ class Wind {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["speed"] = speed;
-    _data["deg"] = deg;
-    _data["gust"] = gust;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["speed"] = speed;
+    data["deg"] = deg;
+    data["gust"] = gust;
+    return data;
   }
 
   Wind copyWith({
-    dynamic? speed,
+    dynamic speed,
     int? deg,
-    dynamic? gust,
+    dynamic gust,
   }) =>
       Wind(
         speed: speed ?? this.speed,
@@ -322,9 +322,9 @@ class Clouds {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["all"] = all;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["all"] = all;
+    return data;
   }
 
   Clouds copyWith({
@@ -355,12 +355,12 @@ class Weather {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id"] = id;
-    _data["main"] = main;
-    _data["description"] = description;
-    _data["icon"] = icon;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["id"] = id;
+    data["main"] = main;
+    data["description"] = description;
+    data["icon"] = icon;
+    return data;
   }
 
   Weather copyWith({
@@ -378,15 +378,15 @@ class Weather {
 }
 
 class Main {
-  dynamic? temp;
-  dynamic? feelsLike;
-  dynamic? tempMin;
-  dynamic? tempMax;
+  dynamic temp;
+  dynamic feelsLike;
+  dynamic tempMin;
+  dynamic tempMax;
   int? pressure;
   int? seaLevel;
   int? grndLevel;
   int? humidity;
-  dynamic? tempKf;
+  dynamic tempKf;
 
   Main(
       {this.temp,
@@ -416,29 +416,29 @@ class Main {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["temp"] = temp;
-    _data["feels_like"] = feelsLike;
-    _data["temp_min"] = tempMin;
-    _data["temp_max"] = tempMax;
-    _data["pressure"] = pressure;
-    _data["sea_level"] = seaLevel;
-    _data["grnd_level"] = grndLevel;
-    _data["humidity"] = humidity;
-    _data["temp_kf"] = tempKf;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["temp"] = temp;
+    data["feels_like"] = feelsLike;
+    data["temp_min"] = tempMin;
+    data["temp_max"] = tempMax;
+    data["pressure"] = pressure;
+    data["sea_level"] = seaLevel;
+    data["grnd_level"] = grndLevel;
+    data["humidity"] = humidity;
+    data["temp_kf"] = tempKf;
+    return data;
   }
 
   Main copyWith({
-    dynamic? temp,
-    dynamic? feelsLike,
-    dynamic? tempMin,
-    dynamic? tempMax,
+    dynamic temp,
+    dynamic feelsLike,
+    dynamic tempMin,
+    dynamic tempMax,
     int? pressure,
     int? seaLevel,
     int? grndLevel,
     int? humidity,
-    dynamic? tempKf,
+    dynamic tempKf,
   }) =>
       Main(
         temp: temp ?? this.temp,

@@ -1,23 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_app/bloc/weather_bloc/weather_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weather_app/screens/login/login_screen.dart';
-import 'package:weather_app/screens/setting/default_location_setting_screen.dart';
-import 'package:weather_app/screens/setting/notification_setting_screen.dart';
-import 'package:weather_app/screens/setting/setting_screen.dart';
 import 'package:weather_app/screens/home/home_screen.dart';
-import 'package:weather_app/screens/search/search_screen.dart';
 import 'package:weather_app/screens/splash/splash_screen.dart';
 import 'package:weather_app/screens/stepper/stepper_screen.dart';
-import 'package:weather_app/screens/search/overview_forecast_screen.dart';
 
 import 'bloc/weather_bloc/weather_event.dart';
 import 'bloc/weather_bloc/weather_state.dart';
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -45,11 +39,11 @@ class _MyAppState extends State<MyApp> {
                 future: fetchSomething(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData && snapshot.data == true) {
-                    return StepperScreen();
+                    return const StepperScreen();
                   } else if (snapshot.hasData && snapshot.data == false) {
-                    return HomeScreen();
+                    return const HomeScreen();
                   } else {
-                    return SplashScreen();
+                    return const SplashScreen();
                   }
                 },
               ),
@@ -59,7 +53,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<bool> fetchSomething() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
     await prefs.setBool('isFirstTime', true);
     bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
     if (isFirstTime) {

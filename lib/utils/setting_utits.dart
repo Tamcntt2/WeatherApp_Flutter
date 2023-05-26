@@ -1,17 +1,14 @@
-import 'package:shared_preferences/shared_preferences.dart';
-
 class SettingUtits {
   static String getDegreeUnit(double cel, bool hint, int check) {
     // 0: C, 1: F, 2: K
-    print('Degree $check');
     if (check == 0) {
-      return '${cel.round().toString()}°' + (hint ? 'C' : '');
+      return '${cel.round().toString()}°${hint ? 'C' : ''}';
     } else if (check == 1) {
       double fah = cel * 9 / 5 + 32;
-      return '${fah.round().toString()}°' + (hint ? 'F' : '');
+      return '${fah.round().toString()}°${hint ? 'F' : ''}';
     } else {
       double kel = cel + 273.15;
-      return '${kel.round().toString()}°' + (hint ? 'K' : '');
+      return '${kel.round().toString()}°${hint ? 'K' : ''}';
     }
   }
 

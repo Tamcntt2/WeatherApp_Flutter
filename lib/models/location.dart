@@ -59,27 +59,27 @@ class MyLocation {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["place_id"] = placeId;
-    _data["licence"] = licence;
-    _data["osm_type"] = osmType;
-    _data["osm_id"] = osmId;
-    _data["lat"] = lat;
-    _data["lon"] = lon;
-    _data["place_rank"] = placeRank;
-    _data["category"] = category;
-    _data["type"] = type;
-    _data["importance"] = importance;
-    _data["addresstype"] = addresstype;
-    _data["name"] = name;
-    _data["display_name"] = displayName;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["place_id"] = placeId;
+    data["licence"] = licence;
+    data["osm_type"] = osmType;
+    data["osm_id"] = osmId;
+    data["lat"] = lat;
+    data["lon"] = lon;
+    data["place_rank"] = placeRank;
+    data["category"] = category;
+    data["type"] = type;
+    data["importance"] = importance;
+    data["addresstype"] = addresstype;
+    data["name"] = name;
+    data["display_name"] = displayName;
     if (address != null) {
-      _data["address"] = address?.toJson();
+      data["address"] = address?.toJson();
     }
     if (boundingbox != null) {
-      _data["boundingbox"] = boundingbox;
+      data["boundingbox"] = boundingbox;
     }
-    return _data;
+    return data;
   }
 
   MyLocation copyWith({
@@ -160,18 +160,18 @@ class MyAddress {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["amenity"] = amenity;
-    _data["house_number"] = houseNumber;
-    _data["road"] = road;
-    _data["neighbourhood"] = neighbourhood;
-    _data["city_district"] = cityDistrict;
-    _data["city"] = city;
-    _data["ISO3166-2-lvl4"] = iso31662Lvl4;
-    _data["postcode"] = postcode;
-    _data["country"] = country;
-    _data["country_code"] = countryCode;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["amenity"] = amenity;
+    data["house_number"] = houseNumber;
+    data["road"] = road;
+    data["neighbourhood"] = neighbourhood;
+    data["city_district"] = cityDistrict;
+    data["city"] = city;
+    data["ISO3166-2-lvl4"] = iso31662Lvl4;
+    data["postcode"] = postcode;
+    data["country"] = country;
+    data["country_code"] = countryCode;
+    return data;
   }
 
   MyAddress copyWith({

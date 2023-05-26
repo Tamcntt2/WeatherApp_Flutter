@@ -5,9 +5,11 @@ import 'package:weather_app/values/app_fonts.dart';
 import '../../values/app_assets.dart';
 
 class SplashScreen extends StatelessWidget {
+  const SplashScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return SplashView();
+    return const SplashView();
   }
 }
 

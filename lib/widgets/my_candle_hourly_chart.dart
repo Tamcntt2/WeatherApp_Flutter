@@ -13,7 +13,8 @@ class MyCandleHourlyChart extends StatefulWidget {
   Forecast forecast;
   int checkDegree;
 
-  MyCandleHourlyChart({required this.forecast, required this.checkDegree});
+  MyCandleHourlyChart(
+      {super.key, required this.forecast, required this.checkDegree});
 
   @override
   State<MyCandleHourlyChart> createState() =>
@@ -36,7 +37,7 @@ class _MyCandleHourlyChartState extends State<MyCandleHourlyChart> {
         Offset center = box.localToGlobal(box.size.center(Offset.zero));
         listPoint.add(center);
       }
-      print(listPoint.toString());
+      // print(listPoint.toString());
       setState(() {});
     });
     super.initState();
@@ -89,19 +90,19 @@ class ItemCandleChart extends StatelessWidget {
   Widget build(BuildContext context) {
     int temp = hourly.temp!.round();
     DateTime date = EpochTime.getDateTime(hourly.dt!);
-    return Container(
+    return SizedBox(
       width: (UIUtils.getScreenSize(context).width - 40) / 7,
       child: Column(
         children: [
           Column(
             children: [
-              Container(
+              SizedBox(
                 height: 250,
                 child: Stack(children: [
                   Column(
                     children: [
                       Container(
-                        margin: EdgeInsets.only(bottom: 10),
+                        margin: const EdgeInsets.only(bottom: 10),
                         height: 230.0 / 70 * (70 - temp),
                         child: Align(
                           alignment: Alignment.bottomCenter,
@@ -119,8 +120,8 @@ class ItemCandleChart extends StatelessWidget {
                           child: Container(
                             decoration: BoxDecoration(
                                 color: index == 0
-                                    ? Color(0xffF1B289)
-                                    : Color(0xff595C66),
+                                    ? const Color(0xffF1B289)
+                                    : const Color(0xff595C66),
                                 borderRadius: BorderRadius.circular(2.5)),
                             width: 5,
                             height: double.infinity,
@@ -128,7 +129,7 @@ class ItemCandleChart extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 10),
+                        margin: const EdgeInsets.only(top: 10),
                         height: 230.0 / 70 * temp - 5,
                         child: Container(),
                       )
@@ -140,7 +141,7 @@ class ItemCandleChart extends StatelessWidget {
                       MyColumnSeparator(
                           color: index == 0
                               ? Colors.transparent
-                              : Color(0xff979797),
+                              : const Color(0xff979797),
                           width: 0.25),
                     ],
                   )
@@ -165,7 +166,7 @@ class ItemCandleChart extends StatelessWidget {
 class DrawLine extends StatelessWidget {
   List<Offset> listPoint;
 
-  DrawLine(this.listPoint);
+  DrawLine(this.listPoint, {super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rolling_switch/rolling_switch.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
 import 'package:weather_app/widgets/my_candle_daily_chart.dart';
 
@@ -20,7 +18,7 @@ class TemperaturePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<WeatherBloc, WeatherState>(builder: (context, state) {
       if (state is WeatherInitial || state is WeatherLoading) {
-        return BuildLoading();
+        return const BuildLoading();
       } else if (state is WeatherLoaded) {
         forecast = state.forecast!;
         checkDegree = state.checkDegree!;
@@ -39,7 +37,8 @@ class TemperatureView extends StatefulWidget {
   Forecast forecast;
   int checkDegree;
 
-  TemperatureView({required this.forecast, required this.checkDegree});
+  TemperatureView(
+      {super.key, required this.forecast, required this.checkDegree});
 
   @override
   State<TemperatureView> createState() =>
@@ -47,7 +46,6 @@ class TemperatureView extends StatefulWidget {
 }
 
 class _TemperatureViewState extends State<TemperatureView> {
-  bool _isOverview = false;
   int _isSwitched = 1;
   int checkDegree;
 
@@ -57,7 +55,7 @@ class _TemperatureViewState extends State<TemperatureView> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Text(
@@ -137,12 +135,13 @@ class TemperatureHourlyChart extends StatelessWidget {
   Forecast forecast;
   int checkDegree;
 
-  TemperatureHourlyChart({required this.forecast, required this.checkDegree});
+  TemperatureHourlyChart(
+      {super.key, required this.forecast, required this.checkDegree});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(top: 35),
+        padding: const EdgeInsets.only(top: 35),
         decoration: BoxDecoration(
             gradient: const LinearGradient(
                 colors: [Color(0xff232329), Color(0xff2F313A)],
@@ -160,12 +159,13 @@ class TemperatureDailyChart extends StatelessWidget {
   Forecast forecast;
   int checkDegree;
 
-  TemperatureDailyChart({required this.forecast, required this.checkDegree});
+  TemperatureDailyChart(
+      {super.key, required this.forecast, required this.checkDegree});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(top: 35),
+        padding: const EdgeInsets.only(top: 35),
         decoration: BoxDecoration(
             gradient: const LinearGradient(
                 colors: [Color(0xff232329), Color(0xff2F313A)],

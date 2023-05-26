@@ -10,27 +10,25 @@ import 'my_separator.dart';
 class MyColumnChart extends StatelessWidget {
   List<Daily> listDaily;
 
-  MyColumnChart({required this.listDaily});
+  MyColumnChart({super.key, required this.listDaily});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Container(
-            height: 300,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 7,
-                itemBuilder: (BuildContext context, int index) {
-                  return ItemColumnChart(
-                      index: index,
-                      timestamps: listDaily[index].dt!,
-                      humidity: listDaily[index].humidity!);
-                }),
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        SizedBox(
+          height: 300,
+          child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 7,
+              itemBuilder: (BuildContext context, int index) {
+                return ItemColumnChart(
+                    index: index,
+                    timestamps: listDaily[index].dt!,
+                    humidity: listDaily[index].humidity!);
+              }),
+        ),
+      ],
     );
   }
 }
@@ -41,17 +39,20 @@ class ItemColumnChart extends StatelessWidget {
   int index;
 
   ItemColumnChart(
-      {required this.index, required this.timestamps, required this.humidity});
+      {super.key,
+      required this.index,
+      required this.timestamps,
+      required this.humidity});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: (UIUtils.getScreenSize(context).width - 40) / 7,
       // width: double.infinity / 7,
       child: Column(
         children: [
           Text(
-            '${EpochTime.getWeekDay(timestamps)}',
+            EpochTime.getWeekDay(timestamps),
             style: AppStyles.h5.copyWith(
                 color: index == 0 ? Colors.white : AppColors.lightGrey),
           ),
@@ -60,7 +61,7 @@ class ItemColumnChart extends StatelessWidget {
           ),
           Column(
             children: [
-              Container(
+              SizedBox(
                 height: 200,
                 child: Stack(children: [
                   Column(
@@ -73,8 +74,14 @@ class ItemColumnChart extends StatelessWidget {
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                               colors: index.floor().isEven
-                                  ? [Color(0xffD2D2D3), Color(0xff80838A)]
-                                  : [Color(0xff98999C), Color(0xff98999C)],
+                                  ? [
+                                      const Color(0xffD2D2D3),
+                                      const Color(0xff80838A)
+                                    ]
+                                  : [
+                                      const Color(0xff98999C),
+                                      const Color(0xff98999C)
+                                    ],
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter),
                         ),
@@ -84,10 +91,11 @@ class ItemColumnChart extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      MyColumnSeparator(color: Color(0xff979797), width: 0.25),
+                      const MyColumnSeparator(
+                          color: Color(0xff979797), width: 0.25),
                       MyColumnSeparator(
                           color: index == 6
-                              ? Color(0xff979797)
+                              ? const Color(0xff979797)
                               : Colors.transparent,
                           width: 0.25),
                     ],

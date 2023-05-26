@@ -6,6 +6,6 @@ class StepperScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StepperPage1();
+    return const StepperPage1();
   }
 }

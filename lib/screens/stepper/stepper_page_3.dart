@@ -62,11 +62,11 @@ class StepperPage3 extends StatelessWidget {
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => HomeScreen(),
+                                builder: (context) => const HomeScreen(),
                               ),
                               (route) => false);
                         },
-                        child: Text(
+                        child: const Text(
                           'Skip',
                           style: TextStyle(color: Colors.white, fontSize: 14),
                         ),
@@ -128,7 +128,7 @@ class StepperPage3 extends StatelessWidget {
                               Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => StepperPage4(),
+                                    builder: (context) => const StepperPage4(),
                                   ),
                                   (route) => false);
                             },

@@ -26,12 +26,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter),
         ),
-        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 50),
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Sign Up',
                 style: TextStyle(color: Colors.white, fontSize: 30),
               ),
@@ -40,7 +40,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 children: [
                   Row(
                     children: [
-                      Expanded(
+                      const Expanded(
                         child: TextField(
                           style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
@@ -51,14 +51,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     width: 0.5, color: Colors.redAccent),
-                                borderRadius: const BorderRadius.all(
+                                borderRadius: BorderRadius.all(
                                   Radius.circular(30),
                                 ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     width: 0.5, color: Colors.redAccent),
-                                borderRadius: const BorderRadius.all(
+                                borderRadius: BorderRadius.all(
                                   Radius.circular(30),
                                 ),
                               )),
@@ -67,7 +67,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       Container(
                         width: 15,
                       ),
-                      Expanded(
+                      const Expanded(
                         child: TextField(
                           style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
@@ -78,14 +78,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     width: 0.5, color: Colors.redAccent),
-                                borderRadius: const BorderRadius.all(
+                                borderRadius: BorderRadius.all(
                                   Radius.circular(30),
                                 ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     width: 0.5, color: Colors.redAccent),
-                                borderRadius: const BorderRadius.all(
+                                borderRadius: BorderRadius.all(
                                   Radius.circular(30),
                                 ),
                               )),
@@ -96,7 +96,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Container(
                     height: 15,
                   ),
-                  TextField(
+                  const TextField(
                     style: TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                         prefixIcon: Icon(
@@ -110,14 +110,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         focusedBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(width: 0.5, color: Colors.redAccent),
-                          borderRadius: const BorderRadius.all(
+                          borderRadius: BorderRadius.all(
                             Radius.circular(30),
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(width: 0.5, color: Colors.redAccent),
-                          borderRadius: const BorderRadius.all(
+                          borderRadius: BorderRadius.all(
                             Radius.circular(30),
                           ),
                         )),
@@ -126,7 +126,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 15,
                   ),
                   TextField(
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                     obscureText: _obscureText,
                     decoration: InputDecoration(
                         hintText: 'Password',
@@ -140,28 +140,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             });
                           },
                         ),
-                        hintStyle: TextStyle(
+                        hintStyle: const TextStyle(
                             color: AppColors.lightGrey,
                             fontStyle: FontStyle.italic),
-                        focusedBorder: OutlineInputBorder(
+                        focusedBorder: const OutlineInputBorder(
                           borderSide:
                               BorderSide(width: 0.5, color: Colors.redAccent),
-                          borderRadius: const BorderRadius.all(
+                          borderRadius: BorderRadius.all(
                             Radius.circular(30),
                           ),
                         ),
                         suffixIconColor: Colors.white,
-                        enabledBorder: OutlineInputBorder(
+                        enabledBorder: const OutlineInputBorder(
                           borderSide:
                               BorderSide(width: 0.5, color: Colors.redAccent),
-                          borderRadius: const BorderRadius.all(
+                          borderRadius: BorderRadius.all(
                             Radius.circular(30),
                           ),
                         )),
                   ),
                   Container(height: 15),
                   TextField(
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                     obscureText: _obscureText2,
                     decoration: InputDecoration(
                         hintText: 'Confirm Password',
@@ -175,21 +175,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             });
                           },
                         ),
-                        hintStyle: TextStyle(
+                        hintStyle: const TextStyle(
                             color: AppColors.lightGrey,
                             fontStyle: FontStyle.italic),
-                        focusedBorder: OutlineInputBorder(
+                        focusedBorder: const OutlineInputBorder(
                           borderSide:
                               BorderSide(width: 0.5, color: Colors.redAccent),
-                          borderRadius: const BorderRadius.all(
+                          borderRadius: BorderRadius.all(
                             Radius.circular(30),
                           ),
                         ),
                         suffixIconColor: Colors.white,
-                        enabledBorder: OutlineInputBorder(
+                        enabledBorder: const OutlineInputBorder(
                           borderSide:
                               BorderSide(width: 0.5, color: Colors.redAccent),
-                          borderRadius: const BorderRadius.all(
+                          borderRadius: BorderRadius.all(
                             Radius.circular(30),
                           ),
                         )),
@@ -202,7 +202,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     children: [
                       Checkbox(
                         value: _isChecked,
-                        side: BorderSide(color: Colors.white),
+                        side: const BorderSide(color: Colors.white),
                         activeColor: Colors.redAccent,
                         checkColor: Colors.white,
                         onChanged: (bool? value) {
@@ -211,7 +211,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           });
                         },
                       ),
-                      Text(
+                      const Text(
                         'I Agree with privacy and policy',
                         style: TextStyle(color: AppColors.lightGrey),
                       ),
@@ -225,14 +225,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: Container(
                       width: double.infinity,
                       alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(vertical: 15),
-                      child: Text(
-                        'Sign up',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 15),
                       decoration: BoxDecoration(
                           color: Colors.redAccent,
                           borderRadius: BorderRadius.circular(30)),
+                      child: const Text(
+                        'Sign up',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                 ],
@@ -242,12 +242,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         'Already have an accout?',
                         style: TextStyle(color: AppColors.lightGrey),
                       ),
                       TextButton(
-                        child: Text(
+                        child: const Text(
                           'Sign in',
                           style: TextStyle(color: Colors.redAccent),
                         ),
@@ -255,7 +255,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => LoginScreen(),
+                                builder: (context) => const LoginScreen(),
                               ),
                               (route) => false);
                         },

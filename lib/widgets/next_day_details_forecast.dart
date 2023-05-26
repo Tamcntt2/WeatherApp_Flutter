@@ -12,7 +12,8 @@ class NextDayDetailsForecast extends StatelessWidget {
   Forecast forecast;
   int checkDegree;
 
-  NextDayDetailsForecast({required this.forecast, required this.checkDegree});
+  NextDayDetailsForecast(
+      {super.key, required this.forecast, required this.checkDegree});
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +41,14 @@ class ItemDayDetailsForecast extends StatelessWidget {
   Daily daily;
   int checkDegree;
 
-  ItemDayDetailsForecast({required this.daily, required this.checkDegree});
+  ItemDayDetailsForecast(
+      {super.key, required this.daily, required this.checkDegree});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 70,
-      margin: EdgeInsets.only(bottom: 2),
+      margin: const EdgeInsets.only(bottom: 2),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         gradient: const LinearGradient(
@@ -60,7 +62,7 @@ class ItemDayDetailsForecast extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
-              '${EpochTime.getWeekDay(daily.dt!)}',
+              EpochTime.getWeekDay(daily.dt!),
               style: AppStyles.h4.copyWith(color: AppColors.lightGrey),
             ),
             Text(
@@ -105,7 +107,7 @@ class ItemDayDetailsForecast extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.water_drop,
                       color: Colors.white,
                       size: 12,

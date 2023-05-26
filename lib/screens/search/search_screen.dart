@@ -9,6 +9,8 @@ import '../../models/location.dart';
 import '../../resources/api/api_repository.dart';
 
 class SearchScreen extends StatelessWidget {
+  const SearchScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -31,7 +33,7 @@ class SearchScreen extends StatelessWidget {
             actions: [
               IconButton(
                   onPressed: () {},
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.more_vert,
                     color: Colors.white,
                     size: 17,
@@ -41,7 +43,7 @@ class SearchScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.arrow_back_ios,
                   color: Colors.white,
                   size: 17,
@@ -55,14 +57,15 @@ class SearchScreen extends StatelessWidget {
             ),
           ),
           body: Container(
-            padding: EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 10),
+            padding:
+                const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 10),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              SearchView(),
+              const SearchView(),
               Container(
                 height: 20,
               ),
-              Expanded(child: LocationView())
+              const Expanded(child: LocationView())
             ]),
           ),
         ),
@@ -72,6 +75,8 @@ class SearchScreen extends StatelessWidget {
 }
 
 class SearchView extends StatefulWidget {
+  const SearchView({super.key});
+
   @override
   State<SearchView> createState() => _SearchViewState();
 }
@@ -79,67 +84,63 @@ class SearchView extends StatefulWidget {
 class _SearchViewState extends State<SearchView> {
   final TextEditingController _textFieldController = TextEditingController();
 
-  final _focusNode = FocusNode();
-
-  // String _text = '';
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: TypeAheadField(
-          textFieldConfiguration: TextFieldConfiguration(
-            // onChanged: (value) {
-            //   setState(() {
-            //     _text = value;
-            //   });
-            // },
-            textCapitalization: TextCapitalization.words,
-            decoration: InputDecoration(
-              hintText: 'Enter the city name',
-              filled: true,
-              fillColor: Color(0xff56586a),
-              prefixIconColor: AppColors.lightGrey,
-              hintStyle: AppStyles.h3.copyWith(color: AppColors.lightGrey),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              border: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              prefixIcon: Icon(Icons.search),
-              suffixIcon: TextButton(
-                  onPressed: () {
-                    _textFieldController.clear();
-                    // _focusNode.unfocus();
-                  },
-                  child: Text('Cancel')),
+    return TypeAheadField(
+        textFieldConfiguration: TextFieldConfiguration(
+          // onChanged: (value) {
+          //   setState(() {
+          //     _text = value;
+          //   });
+          // },
+          textCapitalization: TextCapitalization.words,
+          decoration: InputDecoration(
+            hintText: 'Enter the city name',
+            filled: true,
+            fillColor: const Color(0xff56586a),
+            prefixIconColor: AppColors.lightGrey,
+            hintStyle: AppStyles.h3.copyWith(color: AppColors.lightGrey),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(20),
             ),
-            controller: this._textFieldController,
-            // focusNode: _focusNode,
-            style: TextStyle(color: AppColors.lightGrey),
+            border: OutlineInputBorder(
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            prefixIcon: const Icon(Icons.search),
+            suffixIcon: TextButton(
+                onPressed: () {
+                  _textFieldController.clear();
+                  // _focusNode.unfocus();
+                },
+                child: const Text('Cancel')),
           ),
-          suggestionsCallback: (pattern) async {
-            return await StateService.getSuggestions(pattern);
-          },
-          transitionBuilder: (context, suggestionsBox, controller) {
-            return suggestionsBox;
-          },
-          itemBuilder: (context, suggestion) {
-            return ListTile(
-              title: Text(suggestion.displayName!),
-            );
-          },
-          onSuggestionSelected: (suggestion) {
-            this._textFieldController.text = suggestion.displayName!;
-            // ... open overview
-          }),
-    );
+          controller: _textFieldController,
+          // focusNode: _focusNode,
+          style: const TextStyle(color: AppColors.lightGrey),
+        ),
+        suggestionsCallback: (pattern) async {
+          return await StateService.getSuggestions(pattern);
+        },
+        transitionBuilder: (context, suggestionsBox, controller) {
+          return suggestionsBox;
+        },
+        itemBuilder: (context, suggestion) {
+          return ListTile(
+            title: Text(suggestion.displayName!),
+          );
+        },
+        onSuggestionSelected: (suggestion) {
+          this._textFieldController.text = suggestion.displayName!;
+          // ... open overview
+        });
   }
 }
 
 class LocationView extends StatelessWidget {
+  const LocationView({super.key});
+
   @override
   Widget build(BuildContext context) {
     // List<MyLocation> listLocation = [];
@@ -150,7 +151,7 @@ class LocationView extends StatelessWidget {
         scrollDirection: Axis.vertical,
         // itemCount: listLocation.length,
         itemBuilder: (BuildContext context, int index) {
-          return Placeholder();
+          return const Placeholder();
           // return ItemLocation(listLocation[index], index == 0);
         });
   }
@@ -160,7 +161,7 @@ class ItemLocation extends StatelessWidget {
   MyLocation location;
   bool isCurrent;
 
-  ItemLocation(this.location, this.isCurrent);
+  ItemLocation(this.location, this.isCurrent, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -168,9 +169,10 @@ class ItemLocation extends StatelessWidget {
       onTap: () {},
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20), color: Color(0xff56586a)),
+            borderRadius: BorderRadius.circular(20),
+            color: const Color(0xff56586a)),
         child: Column(children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

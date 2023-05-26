@@ -18,11 +18,11 @@ class NotificationSettingScreen extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 appBar: AppBar(
                     bottom: PreferredSize(
+                      preferredSize: const Size.fromHeight(1.0),
                       child: Container(
                         color: Colors.grey,
                         height: 0.25,
                       ),
-                      preferredSize: Size.fromHeight(1.0),
                     ),
                     backgroundColor: Colors.transparent,
                     elevation: 0,
@@ -30,14 +30,14 @@ class NotificationSettingScreen extends StatelessWidget {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.arrow_back_ios,
                           color: Colors.white,
                           size: 17,
                         )),
                     actions: [
                       IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.more_vert,
                           color: Colors.transparent,
                           size: 17,
@@ -45,14 +45,14 @@ class NotificationSettingScreen extends StatelessWidget {
                         onPressed: () {},
                       )
                     ],
-                    title: Center(
+                    title: const Center(
                       child: Text('Notification Settings',
                           style: TextStyle(color: Colors.white, fontSize: 14)),
                     )),
                 body: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    TitleNotification(),
+                    const TitleNotification(),
                     Container(
                       color: Colors.grey,
                       height: 0.25,
@@ -62,7 +62,7 @@ class NotificationSettingScreen extends StatelessWidget {
                       color: Colors.grey,
                       height: 0.25,
                     ),
-                    DailyNotification(),
+                    const DailyNotification(),
                     Container(
                       color: Colors.grey,
                       height: 0.25,
@@ -78,7 +78,7 @@ class TitleNotification extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 20, bottom: 10),
+      padding: const EdgeInsets.only(top: 20, bottom: 10),
       child: Column(
         children: [
           Text(
@@ -95,7 +95,7 @@ class TitleNotification extends StatelessWidget {
           InkWell(
             onTap: () {},
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -103,7 +103,7 @@ class TitleNotification extends StatelessWidget {
                     'Allow push notifications',
                     style: AppStyles.h3.copyWith(color: Colors.white),
                   ),
-                  Icon(
+                  const Icon(
                     Icons.navigate_next,
                     color: Colors.white,
                     size: 17,
@@ -119,6 +119,8 @@ class TitleNotification extends StatelessWidget {
 }
 
 class WarningNotification extends StatefulWidget {
+  const WarningNotification({super.key});
+
   @override
   State<WarningNotification> createState() => _WarningNotificationState();
 }

@@ -16,7 +16,7 @@ class HumidityPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<WeatherBloc, WeatherState>(builder: (context, state) {
       if (state is WeatherInitial || state is WeatherLoading) {
-        return BuildLoading();
+        return const BuildLoading();
       } else if (state is WeatherLoaded) {
         forecast = state.forecast!;
         checkDegree = state.checkDegree!;
@@ -43,13 +43,14 @@ class HumidityView extends StatelessWidget {
   final Forecast forecast;
   final int checkDegree;
 
-  HumidityView({required this.forecast, required this.checkDegree});
+  const HumidityView(
+      {super.key, required this.forecast, required this.checkDegree});
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
             'Humidity',
@@ -78,7 +79,7 @@ class HumidityView extends StatelessWidget {
 class HumidityChart extends StatelessWidget {
   List<Daily> listDaily;
 
-  HumidityChart({required this.listDaily});
+  HumidityChart({super.key, required this.listDaily});
 
   @override
   Widget build(BuildContext context) {

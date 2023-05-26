@@ -12,7 +12,8 @@ class MyCandleDailyChart extends StatelessWidget {
   Forecast forecast;
   int checkDegree;
 
-  MyCandleDailyChart({required this.forecast, required this.checkDegree});
+  MyCandleDailyChart(
+      {super.key, required this.forecast, required this.checkDegree});
 
   @override
   Widget build(BuildContext context) {
@@ -26,25 +27,23 @@ class MyCandleDailyChart extends StatelessWidget {
     }
     int tempMax =
         listHigh.reduce((value, element) => value > element ? value : element);
-    return Container(
-      child: Column(
-        children: [
-          Container(
-            height: 300,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 7,
-                itemBuilder: (BuildContext context, int index) {
-                  return ItemCandleChart(
-                    index: index,
-                    tempMax: tempMax,
-                    daily: listDaily![index],
-                    checkDegree: checkDegree,
-                  );
-                }),
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        SizedBox(
+          height: 300,
+          child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 7,
+              itemBuilder: (BuildContext context, int index) {
+                return ItemCandleChart(
+                  index: index,
+                  tempMax: tempMax,
+                  daily: listDaily![index],
+                  checkDegree: checkDegree,
+                );
+              }),
+        ),
+      ],
     );
   }
 }
@@ -56,7 +55,8 @@ class ItemCandleChart extends StatelessWidget {
   int checkDegree;
 
   ItemCandleChart(
-      {required this.index,
+      {super.key,
+      required this.index,
       required this.tempMax,
       required this.daily,
       required this.checkDegree});
@@ -65,19 +65,19 @@ class ItemCandleChart extends StatelessWidget {
   Widget build(BuildContext context) {
     int tempHigh = daily.temp!.max!.round();
     int tempLow = daily.temp!.min!.round();
-    return Container(
+    return SizedBox(
       width: (UIUtils.getScreenSize(context).width - 40) / 7,
       child: Column(
         children: [
           Column(
             children: [
-              Container(
+              SizedBox(
                 height: 250,
                 child: Stack(children: [
                   Column(
                     children: [
                       Container(
-                        margin: EdgeInsets.only(bottom: 10),
+                        margin: const EdgeInsets.only(bottom: 10),
                         height: 180.0 / tempMax * (tempMax - tempHigh) + 20,
                         child: Align(
                           alignment: Alignment.bottomCenter,
@@ -94,8 +94,8 @@ class ItemCandleChart extends StatelessWidget {
                           child: Container(
                             decoration: BoxDecoration(
                                 color: index == 0
-                                    ? Color(0xffF1B289)
-                                    : Color(0xff595C66),
+                                    ? const Color(0xffF1B289)
+                                    : const Color(0xff595C66),
                                 borderRadius: BorderRadius.circular(2.5)),
                             width: 5,
                             height: double.infinity,
@@ -103,7 +103,7 @@ class ItemCandleChart extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 10),
+                        margin: const EdgeInsets.only(top: 10),
                         height: 180.0 / tempMax * tempLow + 20,
                         child: Text(
                           SettingUtits.getDegreeUnit(
@@ -120,7 +120,7 @@ class ItemCandleChart extends StatelessWidget {
                       MyColumnSeparator(
                           color: index == 0
                               ? Colors.transparent
-                              : Color(0xff979797),
+                              : const Color(0xff979797),
                           width: 0.25),
                     ],
                   )

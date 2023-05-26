@@ -16,14 +16,14 @@ class AirQuality {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (coord != null) {
-      _data["coord"] = coord?.toJson();
+      data["coord"] = coord?.toJson();
     }
     if (listt != null) {
-      _data["list"] = listt?.map((e) => e.toJson()).toList();
+      data["list"] = listt?.map((e) => e.toJson()).toList();
     }
-    return _data;
+    return data;
   }
 
   AirQuality copyWith({
@@ -56,15 +56,15 @@ class ListAQ {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (main != null) {
-      _data["main"] = main?.toJson();
+      data["main"] = main?.toJson();
     }
     if (components != null) {
-      _data["components"] = components?.toJson();
+      data["components"] = components?.toJson();
     }
-    _data["dt"] = dt;
-    return _data;
+    data["dt"] = dt;
+    return data;
   }
 
   ListAQ copyWith({
@@ -115,16 +115,16 @@ class Components {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["co"] = co;
-    _data["no"] = no;
-    _data["no2"] = no2;
-    _data["o3"] = o3;
-    _data["so2"] = so2;
-    _data["pm2_5"] = pm25;
-    _data["pm10"] = pm10;
-    _data["nh3"] = nh3;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["co"] = co;
+    data["no"] = no;
+    data["no2"] = no2;
+    data["o3"] = o3;
+    data["so2"] = so2;
+    data["pm2_5"] = pm25;
+    data["pm10"] = pm10;
+    data["nh3"] = nh3;
+    return data;
   }
 
   Components copyWith({
@@ -140,7 +140,7 @@ class Components {
       Components(
         co: co ?? this.co,
         no: no ?? this.no,
-        no2: no2 ?? this.no2,
+        no2: no2 ?? no2,
         o3: o3 ?? this.o3,
         so2: so2 ?? this.so2,
         pm25: pm25 ?? this.pm25,
@@ -163,9 +163,9 @@ class Main {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["aqi"] = aqi;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["aqi"] = aqi;
+    return data;
   }
 
   Main copyWith({
@@ -192,10 +192,10 @@ class Coord {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["lon"] = lon;
-    _data["lat"] = lat;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["lon"] = lon;
+    data["lat"] = lat;
+    return data;
   }
 
   Coord copyWith({

@@ -18,11 +18,11 @@ class DefaultLocationSettingScreen extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 appBar: AppBar(
                     bottom: PreferredSize(
+                      preferredSize: const Size.fromHeight(1.0),
                       child: Container(
                         color: Colors.grey,
                         height: 0.25,
                       ),
-                      preferredSize: Size.fromHeight(1.0),
                     ),
                     backgroundColor: Colors.transparent,
                     elevation: 0,
@@ -30,14 +30,14 @@ class DefaultLocationSettingScreen extends StatelessWidget {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.arrow_back_ios,
                           color: Colors.white,
                           size: 17,
                         )),
                     actions: [
                       IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.more_vert,
                           color: Colors.transparent,
                           size: 17,
@@ -45,14 +45,14 @@ class DefaultLocationSettingScreen extends StatelessWidget {
                         onPressed: () {},
                       )
                     ],
-                    title: Center(
+                    title: const Center(
                       child: Text('Default Location Settings',
                           style: TextStyle(color: Colors.white, fontSize: 14)),
                     )),
                 body: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    CurrentLocationView(),
+                    const CurrentLocationView(),
                     Container(
                       color: Colors.grey,
                       height: 0.25,
@@ -68,7 +68,7 @@ class CurrentLocationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       width: double.infinity,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -76,7 +76,7 @@ class CurrentLocationView extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.location_on,
                 color: Colors.white,
               ),
@@ -89,7 +89,7 @@ class CurrentLocationView extends StatelessWidget {
               ),
             ],
           ),
-          Icon(
+          const Icon(
             Icons.check,
             color: Colors.redAccent,
           )
@@ -100,6 +100,8 @@ class CurrentLocationView extends StatelessWidget {
 }
 
 class WarningNotification extends StatefulWidget {
+  const WarningNotification({super.key});
+
   @override
   State<WarningNotification> createState() => _WarningNotificationState();
 }

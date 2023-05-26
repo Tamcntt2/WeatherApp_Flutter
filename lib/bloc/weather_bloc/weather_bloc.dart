@@ -14,7 +14,7 @@ import '../../utils/current_location.dart';
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   final ApiRepository apiRepository = ApiRepository();
 
-  WeatherBloc() : super(WeatherState()) {
+  WeatherBloc() : super(const WeatherState()) {
     on<WeatherCurrentFetched>(_onFetchWeather);
     on<WeatherLocationFetched>(_onFetchWeatherLocation);
   }
@@ -33,9 +33,9 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     final MyLocation myLocation =
         await apiRepository.fetchAddressFromLocation(lat, lon);
     final prefs = await SharedPreferences.getInstance();
-    int checkDegree = await prefs.getInt('degree') ?? 0;
-    int checkSpeed = await prefs.getInt('speed') ?? 0;
-    int checkDistance = await prefs.getInt('distance') ?? 0;
+    int checkDegree = prefs.getInt('degree') ?? 0;
+    int checkSpeed = prefs.getInt('speed') ?? 0;
+    int checkDistance = prefs.getInt('distance') ?? 0;
 
     emit(WeatherLoaded(
         forecast: forecast,
@@ -60,9 +60,9 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     final MyLocation myLocation =
         await apiRepository.fetchAddressFromLocation(lat, lon);
     final prefs = await SharedPreferences.getInstance();
-    int checkDegree = await prefs.getInt('degree') ?? 0;
-    int checkSpeed = await prefs.getInt('speed') ?? 0;
-    int checkDistance = await prefs.getInt('distance') ?? 0;
+    int checkDegree = prefs.getInt('degree') ?? 0;
+    int checkSpeed = prefs.getInt('speed') ?? 0;
+    int checkDistance = prefs.getInt('distance') ?? 0;
 
     emit(WeatherLoaded(
         forecast: forecast,

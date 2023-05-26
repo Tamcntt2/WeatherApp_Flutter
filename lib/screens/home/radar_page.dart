@@ -18,7 +18,7 @@ class _RadarPageState extends State<RadarPage> {
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
-    controller.showMarkerInfoWindow(MarkerId("Demo"));
+    controller.showMarkerInfoWindow(const MarkerId("Demo"));
   }
 
   @override
@@ -28,7 +28,7 @@ class _RadarPageState extends State<RadarPage> {
         onMapCreated: _onMapCreated,
         markers: {
           Marker(
-            markerId: MarkerId("Demo"),
+            markerId: const MarkerId("Demo"),
             position: LatLng(data["lat"] as double, data["lon"] as double),
             visible: true,
             infoWindow: InfoWindow(

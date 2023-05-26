@@ -361,7 +361,7 @@ class DayExpandForecast extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool _isToday = index == 0;
+    bool isToday = index == 0;
 
     if (index < 2) {
       List<Hourly> listHourly = [];
@@ -386,7 +386,7 @@ class DayExpandForecast extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               return ItemDayExpandForecast(
                 checkDegree: checkDegree,
-                isCurrent: _isToday && index == 0,
+                isCurrent: isToday && index == 0,
                 hour: getStringHourItemDayExpand(listHourly[index].dt),
                 icon: listHourly[index].weather![0].icon!,
                 temp: listHourly[index].temp,
@@ -417,7 +417,7 @@ class DayExpandForecast extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             return ItemDayExpandForecast(
               checkDegree: checkDegree,
-              isCurrent: _isToday && index == 0,
+              isCurrent: isToday && index == 0,
               icon: listHourly[index].weather![0].icon!,
               temp: listHourly[index].main!.temp,
               hour: getStringHourItemDayExpand(listHourly[index].dt),
@@ -566,7 +566,8 @@ class Details extends StatelessWidget {
   int checkDistance;
 
   Details(
-      {required this.forecast,
+      {super.key,
+      required this.forecast,
       required this.checkDegree,
       required this.checkDistance});
 
@@ -660,7 +661,7 @@ class ItemDetail extends StatelessWidget {
 class AirQualityView extends StatelessWidget {
   final double valuePM10;
 
-  AirQualityView(this.valuePM10);
+  const AirQualityView(this.valuePM10, {super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:weather_app/models/location.dart';
 
 import '../../models/air_quality.dart';
@@ -17,7 +16,7 @@ class WeatherState extends Equatable {
   final int? checkDistance;
   final int? checkSpeed;
 
-  WeatherState(
+  const WeatherState(
       {this.forecastDaily,
       this.forecast,
       this.airQuality,
@@ -36,7 +35,7 @@ class WeatherInitial extends WeatherState {}
 class WeatherLoading extends WeatherState {}
 
 class WeatherLoaded extends WeatherState {
-  WeatherLoaded(
+  const WeatherLoaded(
       {super.forecast,
       super.forecastDaily,
       super.airQuality,
@@ -49,5 +48,5 @@ class WeatherLoaded extends WeatherState {
 class WeatherError extends WeatherState {
   final String? message;
 
-  WeatherError(this.message);
+  const WeatherError(this.message);
 }

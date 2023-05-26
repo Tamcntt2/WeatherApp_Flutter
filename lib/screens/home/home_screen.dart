@@ -50,12 +50,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       return Container();
                     } else if (state is WeatherLoaded) {
                       MyLocation myLocation = state.myLocation!;
-                      print(myLocation.toJson());
+                      // print(myLocation.toJson());
                       String textAddress =
                           '${myLocation.address!.city}, ${myLocation.address!.country}';
                       return Text(
                         UIUtils.convertNameCity(textAddress),
-                        style: TextStyle(color: Colors.white, fontSize: 14),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 14),
                       );
                     } else {
                       return Container();
@@ -83,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
               backgroundColor: Colors.transparent,
               actions: [
                 IconButton(
-                  icon: Icon(Icons.more_vert, size: 24),
+                  icon: const Icon(Icons.more_vert, size: 24),
                   onPressed: () {
                     _scheduleDailyNotification();
                   },
@@ -111,10 +112,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             body: TabBarView(children: [
               // RadarPage(),
-              TodayPage(),
+              const TodayPage(),
               TemperaturePage(),
               HumidityPage(),
-              RadarPage()
+              const RadarPage()
             ]),
           ),
         ),

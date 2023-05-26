@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import 'app.dart';
 
@@ -10,7 +9,7 @@ Future<void> main() async {
       FlutterLocalNotificationsPlugin();
 
   var initializationSettingsAndroid =
-      new AndroidInitializationSettings('@mipmap/ic_launcher');
+      const AndroidInitializationSettings('@mipmap/ic_launcher');
 
   var initializationSettingsIOS = DarwinInitializationSettings(
     requestAlertPermission: true,

@@ -3,7 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:weather_app/screens/setting/default_location_setting_screen.dart';
 import 'package:weather_app/screens/setting/notification_setting_screen.dart';
-import 'package:weather_app/utils/setting_utits.dart';
 import 'package:weather_app/utils/ui_utils.dart';
 import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
@@ -25,11 +24,11 @@ class SettingScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
             bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(1.0),
               child: Container(
                 color: Colors.grey,
                 height: 0.25,
               ),
-              preferredSize: Size.fromHeight(1.0),
             ),
             backgroundColor: Colors.transparent,
             elevation: 0,
@@ -37,14 +36,14 @@ class SettingScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.arrow_back_ios,
                   color: Colors.white,
                   size: 17,
                 )),
             actions: [
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.more_vert,
                   color: Colors.transparent,
                   size: 17,
@@ -52,28 +51,28 @@ class SettingScreen extends StatelessWidget {
                 onPressed: () {},
               )
             ],
-            title: Center(
+            title: const Center(
               child: Text('Settings',
                   style: TextStyle(color: Colors.white, fontSize: 14)),
             )),
         body: Column(
           children: [
-            UnitSetting(),
+            const UnitSetting(),
             Container(
               color: Colors.grey,
               height: 0.25,
             ),
-            NotificationSetting(),
+            const NotificationSetting(),
             Container(
               color: Colors.grey,
               height: 0.25,
             ),
-            LocationSetting(),
+            const LocationSetting(),
             Container(
               color: Colors.grey,
               height: 0.25,
             ),
-            LocationDefaultSetting(),
+            const LocationDefaultSetting(),
             Container(
               color: Colors.grey,
               height: 0.25,
@@ -146,7 +145,7 @@ class _UnitSettingState extends State<UnitSetting> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -175,11 +174,11 @@ class _UnitSettingState extends State<UnitSetting> {
             ],
             doubleTapDisable: true,
             totalSwitches: 3,
-            labels: ['Celsius', 'Fahrenheit', 'Kelvin'],
+            labels: const ['Celsius', 'Fahrenheit', 'Kelvin'],
             onToggle: (index) {
               setState(() {
                 setDegreeSP(index!);
-                _indexDegree = index!;
+                _indexDegree = index;
               });
             },
           ),
@@ -207,11 +206,11 @@ class _UnitSettingState extends State<UnitSetting> {
             ],
             doubleTapDisable: true,
             totalSwitches: 3,
-            labels: ['m/s', 'km/h', 'mph'],
+            labels: const ['m/s', 'km/h', 'mph'],
             onToggle: (index) {
               setState(() {
                 setSpeedSP(index!);
-                _indexSpeed = index!;
+                _indexSpeed = index;
               });
             },
           ),
@@ -238,11 +237,11 @@ class _UnitSettingState extends State<UnitSetting> {
             ],
             doubleTapDisable: true,
             totalSwitches: 2,
-            labels: ['m', 'km'],
+            labels: const ['m', 'km'],
             onToggle: (index) {
               setState(() {
                 setDistanceSP(index!);
-                _indexDistance = index!;
+                _indexDistance = index;
               });
             },
           ),
@@ -263,7 +262,7 @@ class _LocationSettingState extends State<LocationSetting> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       width: double.infinity,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -282,7 +281,7 @@ class _LocationSettingState extends State<LocationSetting> {
               ),
               IconButton(
                   onPressed: () {},
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.navigate_next,
                     color: Colors.white,
                   )),
@@ -309,11 +308,11 @@ class _NotificationSettingState extends State<NotificationSetting> {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => NotificationSettingScreen(),
+              builder: (context) => const NotificationSettingScreen(),
             ));
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         width: double.infinity,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -328,10 +327,10 @@ class _NotificationSettingState extends State<NotificationSetting> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => NotificationSettingScreen(),
+                        builder: (context) => const NotificationSettingScreen(),
                       ));
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.navigate_next,
                   color: Colors.white,
                 ))
@@ -357,11 +356,11 @@ class _LocationDefaultSettingState extends State<LocationDefaultSetting> {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => DefaultLocationSettingScreen(),
+              builder: (context) => const DefaultLocationSettingScreen(),
             ));
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         width: double.infinity,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -384,10 +383,10 @@ class _LocationDefaultSettingState extends State<LocationDefaultSetting> {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                DefaultLocationSettingScreen(),
+                                const DefaultLocationSettingScreen(),
                           ));
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.navigate_next,
                       color: Colors.white,
                     )),

@@ -13,6 +13,8 @@ class ChangeProfileScreen extends StatelessWidget {
       lastName: 'Hong Tam',
       uid: '111');
 
+  ChangeProfileScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -35,7 +37,7 @@ class ChangeProfileScreen extends StatelessWidget {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.arrow_back_ios,
                         color: Colors.white,
                       )),
@@ -46,7 +48,7 @@ class ChangeProfileScreen extends StatelessWidget {
                   ),
                   TextButton(
                       onPressed: () {},
-                      child: Text(
+                      child: const Text(
                         'Done',
                         style: TextStyle(color: Colors.lightBlueAccent),
                       ))
@@ -56,12 +58,12 @@ class ChangeProfileScreen extends StatelessWidget {
                   ? Container(
                       width: 100,
                       height: 100,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           shape: BoxShape.circle, color: Colors.white10),
                       child: Center(
                           child: Text(
                         _getTextImage(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: AppColors.lightGrey,
                             fontSize: 30),
@@ -77,13 +79,13 @@ class ChangeProfileScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-              Text(
+              const Text(
                 'Change profile picture',
                 style: TextStyle(color: AppColors.lightGrey),
               ),
               Container(
-                decoration: BoxDecoration(),
-                child: Column(children: [
+                decoration: const BoxDecoration(),
+                child: Column(children: const [
                   Text('First name'),
                   TextField(
                     decoration: InputDecoration(

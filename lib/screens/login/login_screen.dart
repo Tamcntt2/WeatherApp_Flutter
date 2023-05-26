@@ -26,19 +26,19 @@ class _LoginScreenState extends State<LoginScreen> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter),
         ),
-        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 50),
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Log In',
                 style: TextStyle(color: Colors.white, fontSize: 30),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextField(
+                  const TextField(
                     style: TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                         prefixIcon: Icon(
@@ -52,14 +52,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         focusedBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(width: 0.5, color: Colors.redAccent),
-                          borderRadius: const BorderRadius.all(
+                          borderRadius: BorderRadius.all(
                             Radius.circular(30),
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(width: 0.5, color: Colors.redAccent),
-                          borderRadius: const BorderRadius.all(
+                          borderRadius: BorderRadius.all(
                             Radius.circular(30),
                           ),
                         )),
@@ -68,10 +68,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 15,
                   ),
                   TextField(
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                     obscureText: _obscureText,
                     decoration: InputDecoration(
-                        prefixIcon: Icon(
+                        prefixIcon: const Icon(
                           Icons.lock,
                           color: Colors.white,
                         ),
@@ -86,21 +86,21 @@ class _LoginScreenState extends State<LoginScreen> {
                             });
                           },
                         ),
-                        hintStyle: TextStyle(
+                        hintStyle: const TextStyle(
                             color: AppColors.lightGrey,
                             fontStyle: FontStyle.italic),
-                        focusedBorder: OutlineInputBorder(
+                        focusedBorder: const OutlineInputBorder(
                           borderSide:
                               BorderSide(width: 0.5, color: Colors.redAccent),
-                          borderRadius: const BorderRadius.all(
+                          borderRadius: BorderRadius.all(
                             Radius.circular(30),
                           ),
                         ),
                         suffixIconColor: Colors.white,
-                        enabledBorder: OutlineInputBorder(
+                        enabledBorder: const OutlineInputBorder(
                           borderSide:
                               BorderSide(width: 0.5, color: Colors.redAccent),
-                          borderRadius: const BorderRadius.all(
+                          borderRadius: BorderRadius.all(
                             Radius.circular(30),
                           ),
                         )),
@@ -115,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           Checkbox(
                             value: _isChecked,
-                            side: BorderSide(color: Colors.white),
+                            side: const BorderSide(color: Colors.white),
                             activeColor: Colors.redAccent,
                             checkColor: Colors.white,
                             onChanged: (bool? value) {
@@ -124,13 +124,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               });
                             },
                           ),
-                          Text(
+                          const Text(
                             'Remember me',
                             style: TextStyle(color: AppColors.lightGrey),
                           ),
                         ],
                       ),
-                      Text(
+                      const Text(
                         'Forgot password',
                         style: TextStyle(color: Colors.redAccent),
                       )
@@ -144,32 +144,32 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Container(
                       width: double.infinity,
                       alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(vertical: 15),
-                      child: Text(
-                        'Log in',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 15),
                       decoration: BoxDecoration(
                           color: Colors.redAccent,
                           borderRadius: BorderRadius.circular(30)),
+                      child: const Text(
+                        'Log in',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                 ],
               ),
               Column(
                 children: [
-                  Text(
+                  const Text(
                     'Or Sign in with',
                     style: TextStyle(color: AppColors.lightGrey),
                   ),
                   InkWell(
                     onTap: () {},
                     child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 10),
+                      margin: const EdgeInsets.symmetric(vertical: 10),
                       width: 35,
                       height: 35,
                       decoration: BoxDecoration(
-                          image: DecorationImage(
+                          image: const DecorationImage(
                               image: AssetImage(
                             AppAssets.google,
                           )),
@@ -180,12 +180,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         'Don\'t have an accout?',
                         style: TextStyle(color: AppColors.lightGrey),
                       ),
                       TextButton(
-                        child: Text(
+                        child: const Text(
                           'Sign up',
                           style: TextStyle(color: Colors.redAccent),
                         ),
@@ -193,7 +193,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => RegisterScreen(),
+                                builder: (context) => const RegisterScreen(),
                               ),
                               (route) => false);
                         },

@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:weather_app/bloc/weather_bloc/weather_bloc.dart';
@@ -12,22 +9,19 @@ import 'package:weather_app/utils/ui_utils.dart';
 import 'package:weather_app/values/app_assets.dart';
 import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
-import 'package:http/http.dart' as http;
-
 import '../../../models/air_quality.dart';
 import '../../../models/forecast.dart';
-import '../../../models/forecast_daily.dart';
 import '../../../widgets/my_separator.dart';
 import '../../bloc/weather_bloc/weather_state.dart';
 import '../../models/location.dart';
-import '../../utils/current_location.dart';
 import '../../utils/setting_utits.dart';
 
 class OverviewLocationScreen extends StatefulWidget {
   final double lat;
   final double lon;
 
-  OverviewLocationScreen({required this.lat, required this.lon});
+  const OverviewLocationScreen(
+      {super.key, required this.lat, required this.lon});
 
   @override
   State<OverviewLocationScreen> createState() =>
@@ -66,7 +60,7 @@ class _OverviewLocationScreenState extends State<OverviewLocationScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back_ios,
                 color: Colors.white,
                 size: 17,
@@ -75,7 +69,7 @@ class _OverviewLocationScreenState extends State<OverviewLocationScreen> {
             actions: [
               IconButton(
                 onPressed: () {},
-                icon: Icon(
+                icon: const Icon(
                   Icons.more_vert,
                   color: Colors.white,
                   size: 17,
@@ -93,7 +87,7 @@ class _OverviewLocationScreenState extends State<OverviewLocationScreen> {
                         '${myLocation.address!.city}, ${myLocation.address!.country}';
                     return Text(
                       UIUtils.convertNameCity(textAddress),
-                      style: TextStyle(color: Colors.white, fontSize: 14),
+                      style: const TextStyle(color: Colors.white, fontSize: 14),
                     );
                   } else {
                     return Container();
@@ -451,7 +445,7 @@ class DayExpandForecast extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool _isToday = index == 0;
+    bool isToday = index == 0;
 
     if (index < 2) {
       List<Hourly> listHourly = [];
@@ -476,7 +470,7 @@ class DayExpandForecast extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               return ItemDayExpandForecast(
                 checkDegree: checkDegree,
-                isCurrent: _isToday && index == 0,
+                isCurrent: isToday && index == 0,
                 hour: getStringHourItemDayExpand(listHourly[index].dt),
                 icon: listHourly[index].weather![0].icon!,
                 temp: listHourly[index].temp,
@@ -507,7 +501,7 @@ class DayExpandForecast extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             return ItemDayExpandForecast(
               checkDegree: checkDegree,
-              isCurrent: _isToday && index == 0,
+              isCurrent: isToday && index == 0,
               icon: listHourly[index].weather![0].icon!,
               temp: listHourly[index].main!.temp,
               hour: getStringHourItemDayExpand(listHourly[index].dt),
@@ -656,7 +650,8 @@ class Details extends StatelessWidget {
   int checkDegree;
 
   Details(
-      {required this.forecast,
+      {super.key,
+      required this.forecast,
       required this.checkDistance,
       required this.checkDegree});
 
@@ -750,7 +745,7 @@ class ItemDetail extends StatelessWidget {
 class AirQualityView extends StatelessWidget {
   final double valuePM10;
 
-  AirQualityView(this.valuePM10);
+  const AirQualityView(this.valuePM10, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -801,7 +796,7 @@ class AirQualityView extends StatelessWidget {
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
                             ),
-                            Container(
+                            SizedBox(
                               width: 75,
                               child: Text(
                                 textAlign: TextAlign.center,
