@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_app/values/app_styles.dart';
 
 class NotificationSettingScreen extends StatelessWidget {
@@ -57,7 +59,7 @@ class NotificationSettingScreen extends StatelessWidget {
                       color: Colors.grey,
                       height: 0.25,
                     ),
-                    WarningNotification(),
+                    const WarningNotification(),
                     Container(
                       color: Colors.grey,
                       height: 0.25,
@@ -67,9 +69,82 @@ class NotificationSettingScreen extends StatelessWidget {
                       color: Colors.grey,
                       height: 0.25,
                     ),
+                    const TimeDailySetting()
                   ],
                 ))));
   }
+}
+
+class TimeDailySetting extends StatefulWidget {
+  const TimeDailySetting({Key? key}) : super(key: key);
+
+  @override
+  State<TimeDailySetting> createState() => _TimeDailySettingState();
+}
+
+class _TimeDailySettingState extends State<TimeDailySetting> {
+  late TimeOfDay timeOfDay;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Daily notification time',
+                style: AppStyles.h3.copyWith(color: Colors.white),
+              ),
+              Container(
+                height: 5,
+              ),
+              Text(
+                'What time is the daily weather forecast?',
+                style: AppStyles.h4.copyWith(color: Colors.white),
+              )
+            ],
+          ),
+          FutureBuilder(
+            future: fetchTimeSettingDaily(),
+            builder: (context, snapshot) {
+              timeOfDay = snapshot.data!;
+              return TextButton(
+                onPressed: () async {
+                  TimeOfDay? time = await showTimePicker(
+                      context: context, initialTime: timeOfDay);
+                  if (time == null) return;
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  await prefs.setInt('hourDaily', time.hour);
+                  await prefs.setInt('minuteDaily', time.minute);
+                  setState(() {
+                    timeOfDay = time;
+                  });
+                },
+                child: Text(
+                  '${timeOfDay.hour > 9 ? timeOfDay.hour : ('0${timeOfDay.hour}')}:${timeOfDay.minute > 9 ? timeOfDay.minute : ('0${timeOfDay.minute}')}',
+                  style: const TextStyle(color: Colors.white),
+                ),
+              );
+            },
+          )
+        ],
+      ),
+    );
+  }
+}
+
+Future<TimeOfDay> fetchTimeSettingDaily() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  int hour = prefs.getInt('hourDaily') ?? 8;
+  int minute = prefs.getInt('minuteDaily') ?? 0;
+  TimeOfDay timeOfDay = TimeOfDay(hour: hour, minute: minute);
+  return timeOfDay;
 }
 
 class TitleNotification extends StatelessWidget {
@@ -195,7 +270,7 @@ class _DailyNotificationState extends State<DailyNotification> {
                 height: 5,
               ),
               Text(
-                'Get daily weather forecast at 8 am',
+                'Get daily weather forecast',
                 style: AppStyles.h4.copyWith(color: Colors.white),
               )
             ],
