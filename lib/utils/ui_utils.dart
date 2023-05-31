@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 
 class UIUtils {
   static Size getScreenSize(BuildContext context) {
@@ -29,14 +29,14 @@ class UIUtils {
 
   static String keyGoogleMap = 'AIzaSyC4w2mDNzjs2tkCp5f_EO_n6BNBa3erKxE';
 
-  static showToast(String msg) {
-    Fluttertoast.showToast(
-        msg: msg,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black.withOpacity(0.8),
-        textColor: Colors.white,
-        fontSize: 14);
-  }
+  // static showToast(String msg) {
+  //   Fluttertoast.showToast(
+  //       msg: msg,
+  //       toastLength: Toast.LENGTH_SHORT,
+  //       gravity: ToastGravity.BOTTOM,
+  //       timeInSecForIosWeb: 1,
+  //       backgroundColor: Colors.black.withOpacity(0.8),
+  //       textColor: Colors.white,
+  //       fontSize: 14);
+  // }
 }

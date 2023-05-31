@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_app/bloc/weather_bloc/weather_event.dart';
@@ -17,6 +19,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   WeatherBloc() : super(const WeatherState()) {
     on<WeatherCurrentFetched>(_onFetchWeather);
     on<WeatherLocationFetched>(_onFetchWeatherLocation);
+    on<WeatherSetting>(_onSettingWeather);
   }
 
   Future<void> _onFetchWeather(
@@ -72,5 +75,10 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
         checkDegree: checkDegree,
         checkDistance: checkDistance,
         checkSpeed: checkSpeed));
+  }
+
+  FutureOr<void> _onSettingWeather(
+      WeatherSetting event, Emitter<WeatherState> emit) {
+
   }
 }

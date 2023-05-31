@@ -400,7 +400,7 @@ class Main {
       this.tempKf});
 
   Main.fromJson(Map<String, dynamic> json) {
-    temp = json["temp"];
+    temp = json["temp"]  is int ? (json['temp'] as int).toDouble(): json['temp'] as double?;
     feelsLike = json["feels_like"];
     tempMin = json["temp_min"];
     tempMax = json["temp_max"];

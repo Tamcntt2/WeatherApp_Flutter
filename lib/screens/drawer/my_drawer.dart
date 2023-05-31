@@ -1,21 +1,17 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather_app/screens/login/login_screen.dart';
 import 'package:weather_app/screens/search/search_screen.dart';
 import 'package:weather_app/screens/setting/setting_screen.dart';
 import 'package:weather_app/utils/ui_utils.dart';
 import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
-import 'package:http/http.dart' as http;
-
 import '../../bloc/weather_bloc/weather_bloc.dart';
 import '../../bloc/weather_bloc/weather_state.dart';
 import '../../models/location.dart';
-import '../../utils/current_location.dart';
 
 class MyDrawer extends StatelessWidget {
-  const MyDrawer({Key? key}) : super(key: key);
+  const MyDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +34,7 @@ class MyDrawer extends StatelessWidget {
 }
 
 class DrawerLocation extends StatelessWidget {
-  const DrawerLocation({Key? key}) : super(key: key);
+  const DrawerLocation({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +64,7 @@ class DrawerLocation extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SearchScreen(),
+                        builder: (context) => const SearchScreen(),
                       ));
                 },
                 child: Text(
@@ -104,53 +100,20 @@ class DrawerLocation extends StatelessWidget {
               }
             },
           ),
-          // title: FutureBuilder(
-          //   builder: (context, snapshot) {
-          //     String textAddress;
-          //     if (snapshot.hasData) {
-          //       textAddress =
-          //           '${snapshot.data!.address!.city}, ${snapshot.data!.address!.country}';
-          //     } else {
-          //       textAddress = '';
-          //     }
-          //     return Text(
-          //       UIUtils.convertNameCity(textAddress),
-          //       style: AppStyles.h3.copyWith(
-          //           fontWeight: FontWeight.bold, color: Colors.white),
-          //     );
-          //   },
-          //   future: _fetchCurrentAddress(),
-          // )
-          // title: Text(
-          // 'Ha Noi, Viet Nam',
-          // style: AppStyles.h3
-          //     .copyWith(fontWeight: FontWeight.bold, color: Colors.white),
-          // ),
         ),
       ],
     );
   }
-
-// Future<MyLocation> _fetchCurrentAddress() async {
-//   Position position = await CurrentLocation.getCurrentLocation();
-//   double lat = position.latitude;
-//   double lon = position.longitude;
-//   print('lat: $lat, lon: $lon');
-//   var recipesUrl = Uri.parse(
-//       'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=$lat&lon=$lon');
-//   final response = await http.get(recipesUrl);
-//   if (response.statusCode == 200) {
-//     final body = json.decode(response.body);
-//     return MyLocation.fromJson(body);
-//   } else {
-//     throw Exception('Failed to load data from API');
-//   }
-// }
 }
 
-class DrawerTools extends StatelessWidget {
-  const DrawerTools({Key? key}) : super(key: key);
+class DrawerTools extends StatefulWidget {
+  const DrawerTools({super.key});
 
+  @override
+  State<DrawerTools> createState() => _DrawerToolsState();
+}
+
+class _DrawerToolsState extends State<DrawerTools> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -192,6 +155,12 @@ class DrawerTools extends StatelessWidget {
                 .copyWith(fontWeight: FontWeight.bold, color: Colors.white),
           ),
           onTap: () {
+            // Navigator.pushAndRemoveUntil(
+            //     context,
+            //     MaterialPageRoute(
+            //       builder: (context) => const SettingScreen(),
+            //     ),
+            //     (route) => false);
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -251,31 +220,43 @@ class DrawerUser extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                   width: 36,
                   height: 36,
                   margin: const EdgeInsets.only(right: 15),
                   decoration: const BoxDecoration(
-                      shape: BoxShape.circle, color: Colors.white)),
-              Text(
-                'Sign in',
-                style: AppStyles.h2
-                    .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                      shape: BoxShape.circle, color: Colors.white),
+                  child: const Center(child: Icon(Icons.account_circle))),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ));
+                },
+                child: Text(
+                  'Sign in',
+                  style: AppStyles.h2.copyWith(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
               ),
             ],
           ),
-          IconButton(
-            color: Colors.white,
-            onPressed: () {
+          InkWell(
+            onTap: () {
               Navigator.of(context).pop();
             },
-            icon: const Icon(
+            child: const Icon(
               Icons.close,
               size: 24,
+              color: Colors.white,
             ),
           ),
         ],

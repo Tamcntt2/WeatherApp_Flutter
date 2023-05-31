@@ -615,9 +615,9 @@ class Details extends StatelessWidget {
                   ItemDetail(
                       'Visibility',
                       SettingUtits.getDistanceUnit(
-                          current?.visibility as double, checkDistance)),
-                  ItemDetail('UV Index', '${current?.uvi?.round()}'),
-                  ItemDetail('Dew point', '${current?.dewPoint?.round()}°'),
+                          current!.visibility!, checkDistance)),
+                  ItemDetail('UV Index', '${current.uvi?.round()}'),
+                  ItemDetail('Dew point', '${current.dewPoint?.round()}°'),
                 ],
               ),
             )
@@ -1138,7 +1138,7 @@ class TodayForecast extends StatelessWidget {
                   },
                   child: Text(
                     SettingUtits.getDegreeUnit(
-                        current?.temp, true, checkDegree),
+                        current!.temp, true, checkDegree),
                     style: const TextStyle(
                         fontSize: 48.0,
                         color: Colors.white,

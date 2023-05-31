@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:intl/intl.dart';
+import 'package:weather_app/models/forecast.dart';
 import 'package:weather_app/models/location2.dart';
+import 'package:weather_app/utils/setting_utits.dart';
 import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
 
+import '../../bloc/weather_bloc/weather_bloc.dart';
+import '../../bloc/weather_bloc/weather_state.dart';
 import '../../models/location.dart';
 import '../../resources/api/api_repository.dart';
 
@@ -25,51 +30,94 @@ class SearchScreen extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter),
         ),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            actions: [
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.more_vert,
-                    color: Colors.white,
-                    size: 17,
-                  )),
-            ],
-            leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                  size: 17,
-                )),
-            title: Center(
-              child: Text(
-                'Seacrh Location',
-                style: AppStyles.h3
-                    .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-          body: Container(
-            padding:
-                const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 10),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const SearchView(),
-              Container(
-                height: 20,
-              ),
-              const Expanded(child: LocationView())
-            ]),
+        child:
+            BlocBuilder<WeatherBloc, WeatherState>(builder: (context, state) {
+          if (state is WeatherInitial || state is WeatherLoading) {
+            return Container();
+          } else if (state is WeatherLoaded) {
+            MyLocation myLocation = state.myLocation!;
+            int checkDegree = state.checkDegree!;
+            int checkDistance = state.checkDistance!;
+            int checkSpeed = state.checkSpeed!;
+            Forecast forecast = state.forecast!;
+            return SearchPage(
+                myLocation: myLocation,
+                checkDegree: checkDegree,
+                checkDistance: checkDistance,
+                checkSpeed: checkSpeed,
+                forecast: forecast);
+          } else {
+            return Container();
+          }
+        }),
+      )),
+    );
+  }
+}
+
+class SearchPage extends StatelessWidget {
+  MyLocation myLocation;
+  int checkDegree;
+  int checkDistance;
+  int checkSpeed;
+  Forecast forecast;
+
+  SearchPage(
+      {super.key,
+      required this.forecast,
+      required this.myLocation,
+      required this.checkDistance,
+      required this.checkDegree,
+      required this.checkSpeed});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.more_vert,
+                color: Colors.white,
+                size: 17,
+              )),
+        ],
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+              size: 17,
+            )),
+        title: Center(
+          child: Text(
+            'Search Location',
+            style: AppStyles.h3
+                .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
-      )),
+      ),
+      body: Container(
+        padding:
+            const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 10),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const SearchView(),
+          Container(
+            height: 20,
+          ),
+          Expanded(
+              child: LocationView(
+                  currentLocation: myLocation,
+                  forecast: forecast,
+                  checkDegree: checkDegree))
+        ]),
+      ),
     );
   }
 }
@@ -132,27 +180,35 @@ class _SearchViewState extends State<SearchView> {
           );
         },
         onSuggestionSelected: (suggestion) {
-          this._textFieldController.text = suggestion.displayName!;
+          _textFieldController.text = suggestion.displayName!;
           // ... open overview
         });
   }
 }
 
 class LocationView extends StatelessWidget {
-  const LocationView({super.key});
+  MyLocation currentLocation;
+  Forecast forecast;
+  int checkDegree;
+
+  LocationView(
+      {super.key,
+      required this.checkDegree,
+      required this.currentLocation,
+      required this.forecast});
 
   @override
   Widget build(BuildContext context) {
-    // List<MyLocation> listLocation = [];
-    // listLocation.add(MyLocation(
-    //     name: 'Hà Nội', latitude: 21.030653, longtitude: 105.847130));
+    List<MyLocation> listLocation = [];
+    listLocation.add(currentLocation);
 
     return ListView.builder(
         scrollDirection: Axis.vertical,
-        // itemCount: listLocation.length,
+        itemCount: listLocation.length,
         itemBuilder: (BuildContext context, int index) {
-          return const Placeholder();
-          // return ItemLocation(listLocation[index], index == 0);
+          // return const Placeholder();
+          return ItemLocation(
+              listLocation[index], index == 0, forecast, checkDegree);
         });
   }
 }
@@ -160,8 +216,11 @@ class LocationView extends StatelessWidget {
 class ItemLocation extends StatelessWidget {
   MyLocation location;
   bool isCurrent;
+  Forecast forecast;
+  int checkDegree;
 
-  ItemLocation(this.location, this.isCurrent, {super.key});
+  ItemLocation(this.location, this.isCurrent, this.forecast, this.checkDegree,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -186,6 +245,9 @@ class ItemLocation extends StatelessWidget {
                     style: AppStyles.h2.copyWith(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),
+                  Container(
+                    height: 3,
+                  ),
                   Text(
                     DateFormat('hh:mm').format(DateTime.now()),
                     style: AppStyles.h3.copyWith(color: Colors.white),
@@ -193,7 +255,8 @@ class ItemLocation extends StatelessWidget {
                 ],
               ),
               Text(
-                '32°',
+                SettingUtits.getDegreeUnit(
+                    forecast.current!.temp!, true, checkDegree),
                 style: AppStyles.h3.copyWith(color: Colors.white, fontSize: 30),
               )
             ],
@@ -209,7 +272,7 @@ class ItemLocation extends StatelessWidget {
                 style: AppStyles.h3.copyWith(color: Colors.white),
               ),
               Text(
-                'C:32° T:24°',
+                'Min: ${SettingUtits.getDegreeUnit(forecast.daily![0].temp!.min!, false, checkDegree)} - Max: ${SettingUtits.getDegreeUnit(forecast.daily![0].temp!.max!, false, checkDegree)}',
                 style: AppStyles.h3.copyWith(color: Colors.white),
               )
             ],

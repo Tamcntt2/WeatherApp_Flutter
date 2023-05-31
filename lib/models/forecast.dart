@@ -61,7 +61,7 @@ class Daily {
   FeelsLike? feelsLike;
   int? pressure;
   int? humidity;
-  double? dewPoint;
+  dynamic dewPoint;
   double? windSpeed;
   int? windDeg;
   dynamic windGust;
@@ -171,7 +171,7 @@ class Weather2 {
 }
 
 class FeelsLike {
-  double? day;
+  dynamic day;
   double? night;
   double? eve;
   double? morn;
@@ -196,7 +196,7 @@ class FeelsLike {
 }
 
 class Temp {
-  double? day;
+  dynamic day;
   double? min;
   double? max;
   double? night;
@@ -232,7 +232,7 @@ class Hourly {
   dynamic feelsLike;
   int? pressure;
   int? humidity;
-  double? dewPoint;
+  dynamic dewPoint;
   dynamic uvi;
   int? clouds;
   int? visibility;
@@ -260,14 +260,16 @@ class Hourly {
 
   Hourly.fromJson(Map<String, dynamic> json) {
     dt = json["dt"];
-    temp = json["temp"];
+    temp = json["temp"] is int
+        ? (json['temp'] as int).toDouble()
+        : json['temp'] as double?;
     feelsLike = json["feels_like"];
     pressure = json["pressure"];
     humidity = json["humidity"];
     dewPoint = json["dew_point"];
     uvi = json["uvi"];
     clouds = json["clouds"];
-    visibility = json["visibility"];
+    visibility = json["visibility"]  ;
     windSpeed = json["wind_speed"];
     windDeg = json["wind_deg"];
     windGust = json["wind_gust"];
@@ -332,7 +334,7 @@ class Current {
   dynamic feelsLike;
   int? pressure;
   int? humidity;
-  double? dewPoint;
+  dynamic dewPoint;
   dynamic uvi;
   int? clouds;
   int? visibility;
@@ -362,7 +364,10 @@ class Current {
     dt = json["dt"];
     sunrise = json["sunrise"];
     sunset = json["sunset"];
-    temp = json["temp"];
+    temp = json["temp"] is int
+        ? (json['temp'] as int).toDouble()
+        : json['temp'] as double?;
+    // temp = json["temp"];
     feelsLike = json["feels_like"];
     pressure = json["pressure"];
     humidity = json["humidity"];

@@ -190,12 +190,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(color: Colors.redAccent),
                         ),
                         onPressed: () {
-                          Navigator.pushAndRemoveUntil(
+                          // Navigator.pop(context);
+                          Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const RegisterScreen(),
-                              ),
-                              (route) => false);
+                              ));
                         },
                       )
                     ],

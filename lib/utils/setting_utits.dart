@@ -25,7 +25,7 @@ class SettingUtits {
     }
   }
 
-  static String getDistanceUnit(double distance, int check) {
+  static String getDistanceUnit(int distance, int check) {
     // 0: m, 1: km
     if (check == 0) {
       return '$distance m';

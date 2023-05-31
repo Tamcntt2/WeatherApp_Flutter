@@ -252,12 +252,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           style: TextStyle(color: Colors.redAccent),
                         ),
                         onPressed: () {
-                          Navigator.pushAndRemoveUntil(
+                          // Navigator.pop(context);
+                          Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const LoginScreen(),
-                              ),
-                              (route) => false);
+                              ));
                         },
                       )
                     ],
