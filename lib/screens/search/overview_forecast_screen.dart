@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:weather_app/bloc/weather_bloc/weather_bloc.dart';
+import 'package:weather_app/bloc/weather_bloc/weather_event.dart';
 import 'package:weather_app/models/forecast_daily.dart';
 import 'package:weather_app/utils/epoch_time.dart';
 import 'package:weather_app/utils/ui_utils.dart';
@@ -12,20 +15,25 @@ import 'package:weather_app/values/app_styles.dart';
 import '../../../models/air_quality.dart';
 import '../../../models/forecast.dart';
 import '../../../widgets/my_separator.dart';
+import '../../bloc/local_location_bloc/location_bloc.dart';
+import '../../bloc/local_location_bloc/location_event.dart';
+import '../../bloc/local_location_bloc/location_state.dart';
 import '../../bloc/weather_bloc/weather_state.dart';
 import '../../models/location.dart';
 import '../../utils/setting_utits.dart';
+import 'package:http/http.dart' as http;
 
 class OverviewLocationScreen extends StatefulWidget {
   final double lat;
   final double lon;
+  final bool isFavorite;
 
   const OverviewLocationScreen(
-      {super.key, required this.lat, required this.lon});
+      {super.key, required this.lat, required this.lon, required this.isFavorite});
 
   @override
   State<OverviewLocationScreen> createState() =>
-      _OverviewLocationScreenState(lat: lat, lon: lon);
+      _OverviewLocationScreenState(lat: lat, lon: lon, isFavorite: isFavorite);
 }
 
 class _OverviewLocationScreenState extends State<OverviewLocationScreen> {
@@ -35,11 +43,12 @@ class _OverviewLocationScreenState extends State<OverviewLocationScreen> {
   late int checkDegree;
   late int checkSpeed;
   late int checkDistance;
+  final bool isFavorite;
 
   final double lat;
   final double lon;
 
-  _OverviewLocationScreenState({required this.lat, required this.lon});
+  _OverviewLocationScreenState({required this.lat, required this.lon, required this.isFavorite});
 
   @override
   Widget build(BuildContext context) {
@@ -68,9 +77,17 @@ class _OverviewLocationScreenState extends State<OverviewLocationScreen> {
             ),
             actions: [
               IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.more_vert,
+                onPressed: () {
+                  // ...
+                },
+                icon: isFavorite
+                    ? const Icon(
+                  Icons.favorite,
+                  color: Colors.white,
+                  size: 17,
+                )
+                    : const Icon(
+                  Icons.favorite_outline,
                   color: Colors.white,
                   size: 17,
                 ),
@@ -82,12 +99,16 @@ class _OverviewLocationScreenState extends State<OverviewLocationScreen> {
                   if (state is WeatherInitial || state is WeatherLoading) {
                     return Container();
                   } else if (state is WeatherLoaded) {
-                    MyLocation myLocation = state.myLocation!;
-                    String textAddress =
-                        '${myLocation.address!.city}, ${myLocation.address!.country}';
-                    return Text(
-                      UIUtils.convertNameCity(textAddress),
-                      style: const TextStyle(color: Colors.white, fontSize: 14),
+                    return FutureBuilder(
+                      builder: (context, snapshot) {
+                        return Text(
+                          snapshot.data!,
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 14),
+                        );
+                      },
+                      initialData: '',
+                      future: fetchNameCity(lat, lon),
                     );
                   } else {
                     return Container();
@@ -125,6 +146,20 @@ class _OverviewLocationScreenState extends State<OverviewLocationScreen> {
         ),
       ),
     );
+  }
+}
+
+Future<String> fetchNameCity(double lat, double lon) async {
+  var recipesUrl = Uri.parse(
+      'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=$lat&lon=$lon');
+  final response = await http.get(recipesUrl);
+  if (response.statusCode == 200) {
+    final body = json.decode(response.body);
+    MyLocation myLocation = MyLocation.fromJson(body);
+    return UIUtils.convertNameCity(
+        '${myLocation.address!.city}, ${myLocation.address!.country}');
+  } else {
+    throw Exception('Failed to load data from API');
   }
 }
 
@@ -700,8 +735,8 @@ class Details extends StatelessWidget {
                       'Visibility',
                       SettingUtits.getDistanceUnit(
                           current!.visibility!, checkDistance)),
-                  ItemDetail('UV Index', '${current?.uvi?.round()}'),
-                  ItemDetail('Dew point', '${current?.dewPoint?.round()}°'),
+                  ItemDetail('UV Index', '${current.uvi?.round()}'),
+                  ItemDetail('Dew point', '${current.dewPoint?.round()}°'),
                 ],
               ),
             )
@@ -1242,14 +1277,14 @@ class TodayForecast extends StatelessWidget {
                     children: <TextSpan>[
                       TextSpan(
                           text: SettingUtits.getDegreeUnit(
-                              current?.feelsLike, true, checkDegree),
+                              current.feelsLike, true, checkDegree),
                           style: AppStyles.h5.copyWith(color: Colors.white)),
                     ],
                   ),
                 ),
                 Text(
                     UIUtils.capitalizeAllWord(
-                        current?.weather?[0].description ?? ''),
+                        current.weather?[0].description ?? ''),
                     style: AppStyles.h5.copyWith(color: Colors.white)),
               ],
             )
@@ -1267,11 +1302,11 @@ class TodayForecast extends StatelessWidget {
                   AppAssets.sunCloudy,
                   'Wind speed',
                   SettingUtits.getSpeedUnit(
-                      current?.windSpeed ?? 0, checkSpeed)),
+                      current.windSpeed ?? 0, checkSpeed)),
               Padding(
                 padding: const EdgeInsets.only(top: 16, bottom: 29),
                 child: ItemTodayForecast(AppAssets.sunCloudy, 'Wind gust',
-                    SettingUtits.getSpeedUnit(current?.windGust, checkSpeed)),
+                    SettingUtits.getSpeedUnit(current.windGust, checkSpeed)),
               ),
             ],
           ),
@@ -1279,11 +1314,11 @@ class TodayForecast extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ItemTodayForecast(
-                  AppAssets.sunCloudy, 'Humidity', '${current?.humidity}%'),
+                  AppAssets.sunCloudy, 'Humidity', '${current.humidity}%'),
               Padding(
                 padding: const EdgeInsets.only(top: 16, bottom: 29),
                 child: ItemTodayForecast(
-                    AppAssets.sunCloudy, 'Clouds', '${current?.clouds}%'),
+                    AppAssets.sunCloudy, 'Clouds', '${current.clouds}%'),
               ),
             ],
           )

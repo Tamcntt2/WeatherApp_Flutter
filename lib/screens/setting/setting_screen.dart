@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+import 'package:weather_app/bloc/weather_bloc/weather_bloc.dart';
+import 'package:weather_app/bloc/weather_bloc/weather_event.dart';
 import 'package:weather_app/screens/setting/default_location_setting_screen.dart';
 import 'package:weather_app/screens/setting/notification_setting_screen.dart';
 import 'package:weather_app/utils/ui_utils.dart';
 import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
 import 'dart:math';
+
+import '../../bloc/weather_bloc/weather_state.dart';
+import '../home/home_screen.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -40,7 +46,25 @@ class _SettingScreenState extends State<SettingScreen> {
             elevation: 0,
             leading: IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => BlocProvider(
+                              create: (BuildContext context) {
+                                WeatherBloc weatherBloc = WeatherBloc();
+                                return weatherBloc
+                                  ..add(WeatherCurrentFetched());
+                              },
+                              child: BlocListener<WeatherBloc, WeatherState>(
+                                  listener: (context, state) {
+                                    if (state is WeatherError) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text(state.message!)));
+                                    }
+                                  },
+                                  child: const HomeScreen()))),
+                      (route) => false);
                 },
                 icon: const Icon(
                   Icons.arrow_back_ios,

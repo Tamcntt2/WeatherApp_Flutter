@@ -24,24 +24,29 @@ class _RadarPageState extends State<RadarPage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WeatherBloc, WeatherState>(builder: (context, state) {
-      return GoogleMap(
-        onMapCreated: _onMapCreated,
-        markers: {
-          Marker(
-            markerId: const MarkerId("Demo"),
-            position: LatLng(data["lat"] as double, data["lon"] as double),
-            visible: true,
-            infoWindow: InfoWindow(
-              title: "Ha Noi",
-              snippet: "${state.forecast!.current!.temp.toString()} °C",
-            ),
-          )
-        },
-        initialCameraPosition: CameraPosition(
-          target: LatLng(data["lat"] as double, data["lon"] as double),
-          zoom: 12,
-        ),
-      );
+      if (state is WeatherLoaded) {
+        int temp = state.forecast!.current!.temp.round();
+        return GoogleMap(
+          onMapCreated: _onMapCreated,
+          markers: {
+            Marker(
+              markerId: const MarkerId("Demo"),
+              position: LatLng(data["lat"] as double, data["lon"] as double),
+              visible: true,
+              infoWindow: InfoWindow(
+                title: "Ha Noi",
+                snippet: "${temp.toString()}°C",
+              ),
+            )
+          },
+          initialCameraPosition: CameraPosition(
+            target: LatLng(data["lat"] as double, data["lon"] as double),
+            zoom: 12,
+          ),
+        );
+      } else {
+        return Container();
+      }
     });
     // return const Placeholder();
   }

@@ -56,13 +56,13 @@ class Daily {
   int? sunset;
   int? moonrise;
   int? moonset;
-  double? moonPhase;
+  dynamic moonPhase;
   Temp? temp;
   FeelsLike? feelsLike;
   int? pressure;
   int? humidity;
   dynamic dewPoint;
-  double? windSpeed;
+  dynamic windSpeed;
   int? windDeg;
   dynamic windGust;
   List<Weather2>? weather;
@@ -172,9 +172,9 @@ class Weather2 {
 
 class FeelsLike {
   dynamic day;
-  double? night;
-  double? eve;
-  double? morn;
+  dynamic night;
+  dynamic eve;
+  dynamic morn;
 
   FeelsLike({this.day, this.night, this.eve, this.morn});
 
@@ -197,11 +197,11 @@ class FeelsLike {
 
 class Temp {
   dynamic day;
-  double? min;
-  double? max;
-  double? night;
-  double? eve;
-  double? morn;
+  dynamic min;
+  dynamic max;
+  dynamic night;
+  dynamic eve;
+  dynamic morn;
 
   Temp({this.day, this.min, this.max, this.night, this.eve, this.morn});
 
@@ -236,7 +236,7 @@ class Hourly {
   dynamic uvi;
   int? clouds;
   int? visibility;
-  double? windSpeed;
+  dynamic windSpeed;
   int? windDeg;
   dynamic windGust;
   List<Weather1>? weather;
@@ -338,7 +338,7 @@ class Current {
   dynamic uvi;
   int? clouds;
   int? visibility;
-  double? windSpeed;
+  dynamic windSpeed;
   int? windDeg;
   dynamic windGust;
   List<Weather>? weather;

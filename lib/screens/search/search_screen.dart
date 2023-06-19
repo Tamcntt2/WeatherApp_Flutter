@@ -1,57 +1,79 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:intl/intl.dart';
+import 'package:weather_app/bloc/local_location_bloc/location_bloc.dart';
+import 'package:weather_app/bloc/local_location_bloc/location_event.dart';
+import 'package:weather_app/bloc/weather_bloc/weather_event.dart';
 import 'package:weather_app/models/forecast.dart';
 import 'package:weather_app/models/location2.dart';
 import 'package:weather_app/utils/setting_utits.dart';
 import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
-
+import '../../bloc/local_location_bloc/location_state.dart';
 import '../../bloc/weather_bloc/weather_bloc.dart';
 import '../../bloc/weather_bloc/weather_state.dart';
 import '../../models/location.dart';
 import '../../resources/api/api_repository.dart';
+import 'overview_forecast_screen.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
-      child: SafeArea(
-          child: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-              colors: [Color(0xff484B5B), Color(0xff2C2D35)],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter),
-        ),
-        child:
-            BlocBuilder<WeatherBloc, WeatherState>(builder: (context, state) {
-          if (state is WeatherInitial || state is WeatherLoading) {
-            return Container();
-          } else if (state is WeatherLoaded) {
-            MyLocation myLocation = state.myLocation!;
-            int checkDegree = state.checkDegree!;
-            int checkDistance = state.checkDistance!;
-            int checkSpeed = state.checkSpeed!;
-            Forecast forecast = state.forecast!;
-            return SearchPage(
-                myLocation: myLocation,
-                checkDegree: checkDegree,
-                checkDistance: checkDistance,
-                checkSpeed: checkSpeed,
-                forecast: forecast);
-          } else {
-            return Container();
-          }
-        }),
-      )),
-    );
+    // MultiBlocProvider(
+    // providers: [
+    //   BlocProvider<LocationBloc>(
+    //       create: (BuildContext context) => LocationBloc()),
+    //   BlocProvider<WeatherBloc>(
+    //       create: (BuildContext context) => WeatherBloc()),
+    // ],
+    return BlocProvider(
+        create: (BuildContext context) {
+          LocationBloc locationBloc = LocationBloc();
+          return locationBloc..add(LocationFetched());
+        },
+        child: BlocListener<LocationBloc, LocationState>(
+          listener: (context, state) {
+            if (state is LocationError) {
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(state.message!)));
+            }
+          },
+          child: GestureDetector(
+            onTap: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            child: SafeArea(
+                child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [Color(0xff484B5B), Color(0xff2C2D35)],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter),
+              ),
+              child: BlocBuilder<WeatherBloc, WeatherState>(
+                  builder: (context, state) {
+                if (state is WeatherInitial || state is WeatherLoading) {
+                  return Container();
+                } else if (state is WeatherLoaded) {
+                  MyLocation myLocation = state.myLocation!;
+                  int checkDegree = state.checkDegree!;
+                  int checkDistance = state.checkDistance!;
+                  int checkSpeed = state.checkSpeed!;
+                  // Forecast forecast = state.forecast!;
+                  return SearchPage(
+                      myLocation: myLocation,
+                      checkDegree: checkDegree,
+                      checkDistance: checkDistance,
+                      checkSpeed: checkSpeed);
+                } else {
+                  return Container();
+                }
+              }),
+            )),
+          ),
+        ));
   }
 }
 
@@ -60,11 +82,12 @@ class SearchPage extends StatelessWidget {
   int checkDegree;
   int checkDistance;
   int checkSpeed;
-  Forecast forecast;
+
+  // Forecast forecast;
 
   SearchPage(
       {super.key,
-      required this.forecast,
+      // required this.forecast,
       required this.myLocation,
       required this.checkDistance,
       required this.checkDegree,
@@ -114,7 +137,7 @@ class SearchPage extends StatelessWidget {
           Expanded(
               child: LocationView(
                   currentLocation: myLocation,
-                  forecast: forecast,
+                  // forecast: forecast,
                   checkDegree: checkDegree))
         ]),
       ),
@@ -136,11 +159,6 @@ class _SearchViewState extends State<SearchView> {
   Widget build(BuildContext context) {
     return TypeAheadField(
         textFieldConfiguration: TextFieldConfiguration(
-          // onChanged: (value) {
-          //   setState(() {
-          //     _text = value;
-          //   });
-          // },
           textCapitalization: TextCapitalization.words,
           decoration: InputDecoration(
             hintText: 'Enter the city name',
@@ -175,8 +193,21 @@ class _SearchViewState extends State<SearchView> {
           return suggestionsBox;
         },
         itemBuilder: (context, suggestion) {
-          return ListTile(
-            title: Text(suggestion.displayName!),
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => OverviewLocationScreen(
+                          isFavorite: false,
+                          lat: double.parse(suggestion.lat!),
+                          lon: double.parse(
+                            suggestion.lon!,
+                          ))));
+            },
+            child: ListTile(
+              title: Text(suggestion.displayName!),
+            ),
           );
         },
         onSuggestionSelected: (suggestion) {
@@ -188,28 +219,63 @@ class _SearchViewState extends State<SearchView> {
 
 class LocationView extends StatelessWidget {
   MyLocation currentLocation;
-  Forecast forecast;
+
+  // Forecast forecast;
   int checkDegree;
 
-  LocationView(
-      {super.key,
-      required this.checkDegree,
-      required this.currentLocation,
-      required this.forecast});
+  LocationView({
+    super.key,
+    required this.checkDegree,
+    required this.currentLocation,
+  });
 
   @override
   Widget build(BuildContext context) {
     List<MyLocation> listLocation = [];
     listLocation.add(currentLocation);
 
-    return ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: listLocation.length,
-        itemBuilder: (BuildContext context, int index) {
-          // return const Placeholder();
-          return ItemLocation(
-              listLocation[index], index == 0, forecast, checkDegree);
-        });
+    return BlocBuilder<LocationBloc, LocationState>(builder: (context, state) {
+      if (state is LocationLoaded) {
+        listLocation.addAll(state.list!);
+        return ListView.builder(
+            scrollDirection: Axis.vertical,
+            itemCount: listLocation.length,
+            itemBuilder: (BuildContext context, int index) {
+              // return const Placeholder();
+              MyLocation locationSelected = listLocation[index];
+              return BlocProvider(
+                  create: (BuildContext context) {
+                    WeatherBloc weatherBloc = WeatherBloc();
+                    return weatherBloc
+                      ..add(WeatherLocationFetched(
+                          lat: double.parse(locationSelected.lat!),
+                          lon: double.parse(locationSelected.lon!)));
+                  },
+                  child: BlocListener<WeatherBloc, WeatherState>(
+                    listener: (context, state) {
+                      if (state is WeatherError) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(state.message!)));
+                      }
+                    },
+                    child: BlocBuilder<WeatherBloc, WeatherState>(
+                        builder: (context, state) {
+                      if (state is WeatherLoaded) {
+                        Forecast forecast = state.forecast!;
+                        return ItemLocation(locationSelected, index == 0,
+                            forecast, checkDegree, listLocation);
+                      } else {
+                        return Container();
+                      }
+                    }),
+                  ));
+            });
+      } else {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+    });
   }
 }
 
@@ -218,14 +284,24 @@ class ItemLocation extends StatelessWidget {
   bool isCurrent;
   Forecast forecast;
   int checkDegree;
+  List<MyLocation> listLocation;
 
   ItemLocation(this.location, this.isCurrent, this.forecast, this.checkDegree,
-      {super.key});
+      this.listLocation);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {},
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OverviewLocationScreen(
+                  isFavorite: validateFavorite(listLocation, location),
+                  lat: double.parse(location.lat!),
+                  lon: double.parse(location.lon!)),
+            ));
+      },
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -246,12 +322,12 @@ class ItemLocation extends StatelessWidget {
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                   Container(
-                    height: 3,
+                    height: 5,
                   ),
-                  Text(
-                    DateFormat('hh:mm').format(DateTime.now()),
-                    style: AppStyles.h3.copyWith(color: Colors.white),
-                  )
+                  // Text(
+                  //   DateFormat('hh:mm').format(DateTime.now()),
+                  //   style: AppStyles.h3.copyWith(color: Colors.white),
+                  // )
                 ],
               ),
               Text(
@@ -281,6 +357,15 @@ class ItemLocation extends StatelessWidget {
       ),
     );
   }
+}
+
+bool validateFavorite(List<MyLocation> listLocation, MyLocation location) {
+  for (var item in listLocation) {
+    if (item.address!.city == location.address!.city) {
+      return true;
+    }
+  }
+  return false;
 }
 
 class StateService {

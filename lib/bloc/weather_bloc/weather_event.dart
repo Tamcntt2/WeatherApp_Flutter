@@ -19,17 +19,23 @@ class WeatherLocationFetched extends WeatherEvent {
   List<Object?> get props => [lat, lon];
 }
 
-class WeatherSetting extends WeatherEvent {
-  int checkDegree;
-  int checkSpeed;
-  int checkDistance;
+// class LocalLocationsFetched extends WeatherEvent {
+//   LocalLocation location;
+//
+//   LocalLocationsFetched({required this.location});
+//
+//   @override
+//   // TODO: implement props
+//   List<Object?> get props => [location];
+// }
 
-  WeatherSetting(
-      {required this.checkDegree,
-      required this.checkSpeed,
-      required this.checkDistance});
+class LocationFavorite extends WeatherEvent {
+  String? lat;
+  String? lon;
+
+  LocationFavorite(this.lat, this.lon);
 
   @override
   // TODO: implement props
-  List<Object?> get props => [checkDegree, checkSpeed, checkDistance];
+  List<Object?> get props => [lat, lon];
 }

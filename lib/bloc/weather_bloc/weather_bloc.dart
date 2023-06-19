@@ -19,7 +19,8 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   WeatherBloc() : super(const WeatherState()) {
     on<WeatherCurrentFetched>(_onFetchWeather);
     on<WeatherLocationFetched>(_onFetchWeatherLocation);
-    on<WeatherSetting>(_onSettingWeather);
+    // on<LocalLocationsFetched>(_onFetchLocalLocation);
+    on<LocationFavorite>(_onFavoriteLocation);
   }
 
   Future<void> _onFetchWeather(
@@ -77,8 +78,22 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
         checkSpeed: checkSpeed));
   }
 
-  FutureOr<void> _onSettingWeather(
-      WeatherSetting event, Emitter<WeatherState> emit) {
-
+  Future<void> _onFavoriteLocation(
+      LocationFavorite event, Emitter<WeatherState> emit) async {
+    emit(WeatherLoading());
+    final List<MyLocation> list = await apiRepository.fetchListLocation();
+    bool isFavorite = false;
+    MyLocation locationSelected = await apiRepository.fetchAddressFromLocation(
+        double.parse(event.lat!), double.parse(event.lon!));
+    for (var item in list) {
+      if (item.name == locationSelected.name) {
+        isFavorite = true;
+        break;
+      }
+    }
+    emit(WeatherLoaded(isFavorite: isFavorite));
   }
+
+// Future<void> _onFetchLocalLocation(
+//     LocalLocationsFetched event, Emitter<WeatherState> emit) async {}
 }

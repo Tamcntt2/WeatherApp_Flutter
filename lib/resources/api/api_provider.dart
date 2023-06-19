@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_app/models/forecast.dart';
 import 'package:http/http.dart' as http;
 import 'package:weather_app/models/location.dart';
+import 'package:weather_app/models/local_notification.dart';
 
 import '../../models/air_quality.dart';
 import '../../models/forecast_daily.dart';
@@ -12,16 +14,16 @@ import 'demo_data2.dart';
 
 class ApiProvider {
   Future<Forecast> fetchForecastOneCall(double lat, double lon) async {
-    //   String key = '1b5dcb72d707f1eca07003b425497af6';
-    //   var recipesUrl = Uri.parse(
-    //       'https://api.openweathermap.org/data/3.0/onecall?exclude=minutely&units=metric&lat=$lat&lon=$lon&appid=$key');
-    //   final response = await http.get(recipesUrl);
-    //   if (response.statusCode == 200) {
-    //     final body = json.decode(response.body);
-    //     return Forecast.fromJson(body);
-    //   } else {
-    //     throw Exception('Failed to load data from API');
-    //   }
+    // String key = '1b5dcb72d707f1eca07003b425497af6';
+    // var recipesUrl = Uri.parse(
+    //     'https://api.openweathermap.org/data/3.0/onecall?exclude=minutely&units=metric&lat=$lat&lon=$lon&appid=$key');
+    // final response = await http.get(recipesUrl);
+    // if (response.statusCode == 200) {
+    //   final body = json.decode(response.body);
+    //   return Forecast.fromJson(body);
+    // } else {
+    //   throw Exception('Failed to load data from API');
+    // }
     return Forecast.fromJson(data);
   }
 
@@ -77,5 +79,39 @@ class ApiProvider {
     } else {
       throw Exception('Failed to load data from API');
     }
+  }
+
+  Future<List<LocalNotification>> fetchListNotification() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String title = 'notification';
+    String stringKeys = prefs.getString(title) ?? '';
+
+    List<LocalNotification> list = [];
+
+    if (stringKeys.isNotEmpty) {
+      final body = json.decode(stringKeys) as List;
+      list = body.map((dynamic json) {
+        final map = json as Map<String, dynamic>;
+        return LocalNotification.fromJson(map);
+      }).toList();
+    }
+    return list;
+  }
+
+  Future<List<MyLocation>> fetchListLocation() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String title = 'location';
+    String stringKeys = prefs.getString(title) ?? '';
+
+    List<MyLocation> list = [];
+
+    if (stringKeys.isNotEmpty) {
+      final body = json.decode(stringKeys) as List;
+      list = body.map((dynamic json) {
+        final map = json as Map<String, dynamic>;
+        return MyLocation.fromJson(map);
+      }).toList();
+    }
+    return list;
   }
 }
