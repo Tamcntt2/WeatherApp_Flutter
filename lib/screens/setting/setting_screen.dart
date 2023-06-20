@@ -9,7 +9,6 @@ import 'package:weather_app/screens/setting/notification_setting_screen.dart';
 import 'package:weather_app/utils/ui_utils.dart';
 import 'package:weather_app/values/app_colors.dart';
 import 'package:weather_app/values/app_styles.dart';
-import 'dart:math';
 
 import '../../bloc/weather_bloc/weather_state.dart';
 import '../home/home_screen.dart';
