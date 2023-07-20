@@ -1,16 +1,8 @@
-# weather_app
+# Weather_app Flutter
 
-A new Flutter project.
+Project được sử dụng trong đồ án tốt nghiệp
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- File hướng dẫn cài đặt, hướng dẫn sử dụng:
+  https://docs.google.com/document/d/1rp_dVMUO5m1cQ51H9JkONoXIfA3hwL0G/edit?usp=sharing&ouid=111318900582118684601&rtpof=true&sd=true
+- File báo cáo đồ án:
+  https://docs.google.com/document/d/11ZFtAVPTi2Tk3gt_xSBNXM6FR2pCbjcN/edit?rtpof=true
